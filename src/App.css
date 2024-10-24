@@ -125,17 +125,24 @@ td, th {
   padding: 10px;
   border: 1px solid black;
 }
+
 .apptxt {
-  position: fixed; /* Fixes the position relative to the viewport */
-  top: 20px; /* Adjust as necessary */
-  left: 20px; /* Adjust as necessary */
+  position: fixed;
+  top: 20px;
+  left: 20px;
   margin: 0;
   padding: 0;
   font-size: 50px;
   font-weight: bold;
-  z-index: 1000; /* Ensures it stays on top of other elements */
+  z-index: 1000;
+  width: calc(100% - 40px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-
-
+.searchBar {
+  margin: 20px;
+  margin-bottom: 50px;
+}
 
