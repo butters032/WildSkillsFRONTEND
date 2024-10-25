@@ -9,7 +9,13 @@ const App = () => {
     return (
         <Router>
             <div style={{ textAlign: 'center', margin: '20px' }}>
-            <div className="apptxt">WildSkills</div>
+                <div className="apptxt">
+                    <span style={{ alignSelf: 'start', display: 'flex'}}>WildSkills</span>
+                    <span style={{ alignSelf: 'end', display: 'flex' }}>
+                        <img src={UserIcon} alt="User Icon" style={{width: '65px', height:'65px'}}/>
+                    </span>
+                </div>
+
                 <nav>
                     <Link to="/categories" style={{ margin: '10px', textDecoration: 'none' }}>Categories</Link>
                     <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none' }}>Skill Offerings</Link>
