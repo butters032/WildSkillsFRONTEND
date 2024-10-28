@@ -74,6 +74,8 @@ export default function Registration() {
                             onChange={setBirthdate} 
                             value={birthdate} 
                             maxDate={new Date()}
+                            disableCalendar={true}
+                            
                         />
                     </div>
                 </div>
