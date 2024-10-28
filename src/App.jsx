@@ -4,6 +4,12 @@ import Category from './Components/Category';
 import SkillOffering from './Components/SkillOffering';
 import './App.css'; 
 import Registration from './Components/Registration';
+import Divider from '@mui/material/Divider';
+import UserIcon from './assets/images/UserIcon.png'
+import TextField from '@mui/material/TextField';
+
+// Usbon pani
+// Need himuon nga component ang home page para limpyo
 
 const App = () => {
     return (
