@@ -26,7 +26,7 @@ const App = () => {
                     <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Skill Offerings</Link>
                     <Link to="/registration" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Registration</Link>
                     <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Skill Exchange</Link>
-                    <Link to="/chat" style={{ margin: '10px', textDecoration: 'none'}}>Chat</Link>
+                    <Link to="/chat" style={{ margin: '10px', textDecoration: 'none', color: 'black'}}>Chat</Link>
                 </nav>
                 </div>
                 <Routes>
