@@ -19,14 +19,16 @@ const App = () => {
                     </span>
                 </div>
 
+                <div className="routetxt" >
                 <nav>
-                    <Link to="/categories" style={{ margin: '10px', textDecoration: 'none' }}>Categories</Link>
-                    <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none' }}>Skill Offerings</Link>
-                    <Link to="/registration" style={{ margin: '10px', textDecoration: 'none' }}>Registration</Link>
-                    <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none' }}>Skill Exchange</Link>
+                {/*<Link to="/categories" style={{ margin: '10px', textDecoration: 'none' }}>Categories</Link>*/}
+                    <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Skill Offerings</Link>
+                    <Link to="/registration" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Registration</Link>
+                    <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Skill Exchange</Link>
                 </nav>
+                </div>
                 <Routes>
-                    <Route path="/categories" element={<Category/>} />
+                    {/*<Route path="/categories" element={<Category/>} />*/}
                     <Route path="/skill-offerings" element={<SkillOffering />} />
                     <Route path="/registration" element={<Registration />} />
                     <Route path="/skill-exchange" element={<SkillExchange/>}/>

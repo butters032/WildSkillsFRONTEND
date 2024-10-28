@@ -89,7 +89,7 @@ const SkillOffering = () => {
     };
 
     return (
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center',color:'black' }}>
             <h1>My Gigs</h1>
             <Button variant="contained" color="primary" onClick={() => setOpenDialog(true)}>Add Gig</Button>
             <IconButton
@@ -98,7 +98,7 @@ const SkillOffering = () => {
                     setShowCheckboxes(prev => !prev);
                     setSelectedIds([]);
                 }}
-                style={{ color: 'red' }} // Set the trash bin icon color to red
+                style={{ color: 'red' }} 
             >
                 <DeleteIcon />
             </IconButton>
@@ -109,8 +109,8 @@ const SkillOffering = () => {
                     {skillOfferings.map((offering) => (
                         <Card key={offering.skillOfferingId} style={{ width: '250px', margin: '10px' }}>
                             <CardActionArea
-                                onClick={() => !showCheckboxes && handleNavigate(offering)} // Only navigate if checkboxes are not shown
-                                style={{ cursor: showCheckboxes ? 'default' : 'pointer' }} // Adjust cursor based on checkbox visibility
+                                onClick={() => !showCheckboxes && handleNavigate(offering)}
+                                style={{ cursor: showCheckboxes ? 'default' : 'pointer' }} 
                             >
                                 <CardContent>
                                     {showCheckboxes && (
@@ -131,9 +131,6 @@ const SkillOffering = () => {
                                     <Typography variant="body2" color="textSecondary">
                                         {offering.description || 'No Description'}
                                     </Typography>
-                                    <Typography variant="body2" color="textSecondary">{offering.status}</Typography>
-                                    <Typography variant="body2" color="textSecondary">Category: {offering.category || 'Uncategorized'}</Typography>
-                                    <Typography variant="body2" color="textSecondary">Skills: {offering.skills?.join(', ') || 'None'}</Typography>
                                 </CardContent>
                             </CardActionArea>
                         </Card>
@@ -161,7 +158,6 @@ const SkillOffering = () => {
                     <Button onClick={handleDeleteSelected} color="primary">Delete</Button>
                 </DialogActions>
             </Dialog>
-            {/* Dialog for adding/editing skill offering */}
             <Dialog open={openDialog} onClose={handleCloseDialog} fullWidth maxWidth="sm">
                 <DialogTitle>{editingSkillOfferingId ? "Edit Gig" : "Add Gig"}</DialogTitle>
                 <DialogContent>
