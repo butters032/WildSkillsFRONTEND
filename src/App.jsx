@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import SkillExchange from './Components/SkillExchange';
 import Category from './Components/Category';
 import SkillOffering from './Components/SkillOffering';
 import './App.css'; 
@@ -25,6 +26,7 @@ const App = () => {
                     <Route path="/categories" element={<Category/>} />
                     <Route path="/skill-offerings" element={<SkillOffering />} />
                     <Route path="/registration" element={<Registration />} />
+                    <Route path="/skill-exchange" element={<SkillExchange/>}/>
                 </Routes>
             </div>
         </Router>
