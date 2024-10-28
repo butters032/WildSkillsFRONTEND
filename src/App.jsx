@@ -22,30 +22,21 @@ const App = () => {
 
                 <div className="routetxt" >
                 <nav>
-<<<<<<< HEAD
-                    <Link to="/categories" style={{ margin: '10px', textDecoration: 'none' }}>Categories</Link>
-                    <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none' }}>Skill Offerings</Link>
-                    <Link to="/chat" style={{ margin: '10px', textDecoration: 'none'}}>Chat</Link>
-=======
-                {/*<Link to="/categories" style={{ margin: '10px', textDecoration: 'none' }}>Categories</Link>*/}
+                    {/*<Link to="/categories" style={{ margin: '10px', textDecoration: 'none' }}>Categories</Link>*/}
                     <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Skill Offerings</Link>
                     <Link to="/registration" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Registration</Link>
                     <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Skill Exchange</Link>
->>>>>>> 9aaa6d67ab55ec23f98bc2055998f4a10b440ede
+                    <Link to="/chat" style={{ margin: '10px', textDecoration: 'none'}}>Chat</Link>
                 </nav>
                 </div>
                 <Routes>
                     {/*<Route path="/categories" element={<Category/>} />*/}
                     <Route path="/skill-offerings" element={<SkillOffering />} />
-<<<<<<< HEAD
-                    <Route path="/chat" element={<Chat/>}/>
-                </Routes>
-=======
                     <Route path="/registration" element={<Registration />} />
                     <Route path="/skill-exchange" element={<SkillExchange/>}/>
                     <Route path="/gig/:id" element={<Gig />} />
-                    </Routes>
->>>>>>> 9aaa6d67ab55ec23f98bc2055998f4a10b440ede
+                    <Route path="/chat" element={<Chat/>}/>
+                </Routes>
             </div>
         </Router>
     );
