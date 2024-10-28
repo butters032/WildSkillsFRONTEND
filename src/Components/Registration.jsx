@@ -1,76 +1,105 @@
-import { Grid2, Stack, Typography } from "@mui/material";
+import { Card, Grid2, Stack, Typography } from "@mui/material";
 import axios from "axios";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
-export default function Registration(){
+//ICONS
+import '../LoginRegister.css'
+import user_icon from '../assets/images/LoginRegistrationAssets/user_icon.png'
+import user_password from '../assets/images/LoginRegistrationAssets/user_password.png'
+import user_email from '../assets/images/LoginRegistrationAssets/user_email.png'
+import user_calendar from '../assets/images/LoginRegistrationAssets/user_calendar.png'
+
+//CALENDAR THINGY
+import 'react-date-picker/dist/DatePicker.css';
+import DatePicker from 'react-date-picker';
+import { Padding } from "@mui/icons-material";
+
+export default function Registration() {
     const nameRef = useRef();
-    const birthdayRef = useRef();
     const ageRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
-    
+    const confirmpasswordRef = useRef();
+
+    const [birthdate, setBirthdate] = useState(new Date());
+
     const api = axios.create({
         baseURL: 'http://localhost:8080/api/wildSkills/student',
         timeout: 1000,
-        headers:{
+        headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
-    })
+    });
 
-    const newStudent = () =>{
-        api.post('/postStudentRecord',{
-            name: nameRef.current.value,
-            birthdate: birthdayRef.current.value,  
-            age: ageRef.current.value,
-            email: emailRef.current.value,
-            password: passwordRef.current.value       
-        })
-        .then((req) => {
-            console.log(req.data);
-        })
-        .catch((error) =>{
-            console.log('ENK ENK',error)
-        })
-    }
+    const newStudent = () => {
+        if(confirmpasswordRef.current.value === passwordRef.current.value){
+            api.post('/postStudentRecord', {
+                name: nameRef.current.value,
+                birthdate: birthdate.toISOString().split('T')[0], // Format to 'YYYY-MM-DD'
+                email: emailRef.current.value,
+                password: passwordRef.current.value
+            })
+            .then((req) => {
+                console.log(req.data);
+            })
+            .catch((error) => {
+                console.log('ENK ENK', error);
+            });
+        }
+        else{
+            alert("Password Dont Match")
+        }
+    };
 
     return (
-        <>
-            <Typography variant="h1">REGISTER</Typography>
-            <Grid2 sx={{backgroundColor: "white"}}>
-                <Stack direction={"row"}>
-                    <Grid2 sx={{minWidth: 1000, minHeight: 100, border: 'solid 1px', borderRadius:5,padding: 5}}>
-                        <Stack direction={"row"}>
-                            <Grid2 sx={{minWidth: 1000, minHeight: 100}}>
-                                <Stack direction={"column"}sx={{alignContent:"center"}}>
-                                    <Stack direction={"row"} spacing={3}>
-                                        <Grid2 sx={{border:'solid 1px',padding:1, borderRadius:2}}>
-                                            <input type="text" id ='studName' ref={nameRef} placeholder="Enter First Name" ></input>
-                                        </Grid2>
-                                        <Grid2 sx={{border:'solid 1px',padding:1, borderRadius:2}}>
-                                            <input type="text" id ='studName' ref={nameRef} placeholder="Enter Last Name" ></input>
-                                        </Grid2>
-                                    </Stack>
+        <Card sx={{maxHeight:600, maxWidth: 400, padding: 4}}>
+            <>
+                <div className="container">
+                    <div className="header">
+                        <Typography variant="h5">Sign Up</Typography>
+                        <div className="underline"></div>
+                    </div>
+                </div>
+                <div className="inputs">
+                    <div className="input">
+                        <img src={user_icon} alt="User Icon" />
+                        <input ref={nameRef} type="text" placeholder="Name" />
+                    </div>
+                </div>
+                <div className="inputs">
+                    <div className="input">
+                        <img src={user_calendar} alt="Calendar Icon" />
+                        <DatePicker 
+                            onChange={setBirthdate} 
+                            value={birthdate} 
+                            maxDate={new Date()}
+                        />
+                    </div>
+                </div>
+                <div className="inputs">
+                    <div className="input">
+                        <img src={user_email} alt="Email Icon" />
+                        <input ref={emailRef} type="email" placeholder="Email" />
+                    </div>
+                </div>
+                <div className="inputs">
+                    <div className="input">
+                        <img src={user_password} alt="Password Icon" />
+                        <input ref={passwordRef} type="password" placeholder="Password" />
+                    </div>
+                </div>
+                <div className="inputs">
+                    <div className="input">
+                        <img src={user_password} alt="Password Icon" />
+                        <input ref={confirmpasswordRef} type="confirmpassword" placeholder="Confirm Password" />
+                    </div>
+                </div>
+                <Grid2 sx={{paddingTop:1}}>
+                    <button onClick={newStudent}>Submit</button>
+                </Grid2>            
+            </>
+        </Card>
 
-                                <label for="studBirthDate">Birth Date: </label>
-                                <input type="text" id ='studName' ref={nameRef} placeholder="Enter Birthdate" ></input>
-
-
-                                <label for="studEmail">Email: </label>
-                                <input type="text" id ='studEmail' ref={emailRef} placeholder="Enter email"></input>
-
-                                <label for="studPassword">Password: </label>
-                                <input type="text" id ='studPassword' ref={passwordRef} placeholder="Enter paswword"></input>
-
-                                <label for="studConfirmPassword">Confirm Password: </label>
-                                <input type="text" id ='studConfirmPassword' ref={nameRef} placeholder="Confirm password"></input>
-                                </Stack>
-                            </Grid2>
-                        </Stack>
-                    </Grid2>
-                </Stack>
-            </Grid2>
-        </>
-    )
-
+    );
 }
