@@ -4,8 +4,8 @@ import axios from 'axios'
 
 export default function SkillExchange() {
     const [exchange, setExchange] = useState([])
-    const nexcdescRef = useRef()
-    const excdescRef = useRef()
+    const nexctitleRef = useRef()
+    const exctitleRef = useRef()
     const excstatRef = useRef()
     const excidRef = useRef()
 
@@ -31,7 +31,7 @@ export default function SkillExchange() {
     const editExchange = () => {
         api.put(`/putSkillExchangeDetails?id=${excidRef.current.value}`, {
             status: excstatRef.current.value,
-            description: excdescRef.current.value,
+            title: exctitleRef.current.value,
         })
         .then(() =>{
             exchangeReload();
@@ -41,11 +41,11 @@ export default function SkillExchange() {
         })
     }
 
-    const handleEditExchange = (id, status, description) =>{
+    const handleEditExchange = (id, status, title) =>{
         if (excidRef.current){
             excidRef.current.value = id;
             excstatRef.current.value = status;
-            excdescRef.current.value = description;
+            nexctitleRef.current.value = title;
         }
     }
 
@@ -63,7 +63,7 @@ export default function SkillExchange() {
     const newExchange = () =>{
         api.post('/postSkillExchangeRecord', {
             status: 'Ongoing',
-            description: nexcdescRef.current.value,
+            title: exctitleRef.current.value,
         })
         .then((exc) =>{
             console.log(exc.data);
@@ -97,9 +97,9 @@ export default function SkillExchange() {
                             borderRadius: 3,
                             backgroundColor:"#D2B450",
                             padding:1 }}>
-                            <Typography variant="h5">{exc.description}</Typography>
+                            <Typography variant="h5">{exc.title}</Typography>
                             <Typography variant="body1" justifySelf={"left"}>Status: {exc.status}</Typography>
-                            <Button variant="contained" color="success" onClick={() =>{handleEditExchange(exc.skillExchangeID, exc.status, exc.description)}}>Edit</Button>
+                            <Button variant="contained" color="success" onClick={() =>{handleEditExchange(exc.skillExchangeID, exc.status, exc.title)}}>Edit</Button>
                             <Button variant="contained" color="error" onClick={() => {deleteExchange(exc.skillExchangeID)}}>Delete</Button>
                         </Grid2>
                     ))}
@@ -110,14 +110,16 @@ export default function SkillExchange() {
                     <Stack direction={"column"} spacing={2}>
                         <Stack direction={"column"} spacing={1}>
                             <Typography variant="h6">Create Exchange</Typography>
-                            <input type="text" id="description" ref={nexcdescRef} placeholder="Description"/>
+                            <input type="text" id="description" ref={exctitleRef} placeholder="Title"/>
                             <Button variant="contained" color="success" onClick={newExchange}>Initialize Exchange</Button>
                         </Stack>
                         <Stack direction={"column"} spacing={1}>
                         <Typography variant="h6">Edit Exchange</Typography>
                             <input type="hidden" id="id" ref={excidRef}/>
+                            <label htmlFor="estatus">Update Status</label>
                             <input type="text" id="estatus" ref={excstatRef} placeholder="Status"/>
-                            <input type="text" id="edescription" ref={excdescRef} placeholder="Description"/>
+                            <label htmlFor="edescription">Update Title</label>
+                            <input type="text" id="edescription" ref={nexctitleRef} placeholder="Title"/>
                             <Button variant="contained" color="success" onClick={editExchange}>Edit Exchange</Button>
                         </Stack>
                     </Stack>
