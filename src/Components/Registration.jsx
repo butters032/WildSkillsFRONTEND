@@ -47,19 +47,19 @@ export default function Registration(){
                                 <input type="text" id ='studName' ref={nameRef} placeholder="Enter name"></input>
 
                                 <label for="studBirthDate">Birth Date: </label>
-                                <input type="text" id ='studName' ref={nameRef} placeholder="Enter name" ></input>
+                                <input type="text" id ='studName' ref={nameRef} placeholder="Enter Birthdate" ></input>
 
                                 <label for="studName">Age: </label>
-                                <input type="text" id ='studName' ref={nameRef} placeholder="Enter name"></input>
+                                <input type="text" id ='studName' ref={nameRef} placeholder="Enter age"></input>
 
                                 <label for="studEmail">Email: </label>
-                                <input type="text" id ='studEmail' ref={emailRef} placeholder="Enter name"></input>
+                                <input type="text" id ='studEmail' ref={emailRef} placeholder="Enter email"></input>
 
                                 <label for="studPassword">Password: </label>
-                                <input type="text" id ='studPassword' ref={passwordRef} placeholder="Enter name"></input>
+                                <input type="text" id ='studPassword' ref={passwordRef} placeholder="Enter paswword"></input>
 
                                 <label for="studConfirmPassword">Confirm Password: </label>
-                                <input type="text" id ='studConfirmPassword' ref={nameRef} placeholder="Enter name"></input>
+                                <input type="text" id ='studConfirmPassword' ref={nameRef} placeholder="Confirm password"></input>
                                 </Stack>
                             </Grid2>
                         </Stack>
