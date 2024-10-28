@@ -1,15 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import SkillExchange from './Components/SkillExchange';
 import Category from './Components/Category';
 import SkillOffering from './Components/SkillOffering';
 import Chat from './Components/Chat';
 import './App.css'; 
-import Divider from '@mui/material/Divider';
+import Registration from './Components/Registration';
 import UserIcon from './assets/images/UserIcon.png'
-import TextField from '@mui/material/TextField';
-
-// Usbon pani
-// Need himuon nga component ang home page para limpyo
+import Gig from './Components/Gig';
 
 const App = () => {
     return (
@@ -22,16 +20,32 @@ const App = () => {
                     </span>
                 </div>
 
+                <div className="routetxt" >
                 <nav>
+<<<<<<< HEAD
                     <Link to="/categories" style={{ margin: '10px', textDecoration: 'none' }}>Categories</Link>
                     <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none' }}>Skill Offerings</Link>
                     <Link to="/chat" style={{ margin: '10px', textDecoration: 'none'}}>Chat</Link>
+=======
+                {/*<Link to="/categories" style={{ margin: '10px', textDecoration: 'none' }}>Categories</Link>*/}
+                    <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Skill Offerings</Link>
+                    <Link to="/registration" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Registration</Link>
+                    <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Skill Exchange</Link>
+>>>>>>> 9aaa6d67ab55ec23f98bc2055998f4a10b440ede
                 </nav>
+                </div>
                 <Routes>
-                    <Route path="/categories" element={<Category/>} />
+                    {/*<Route path="/categories" element={<Category/>} />*/}
                     <Route path="/skill-offerings" element={<SkillOffering />} />
+<<<<<<< HEAD
                     <Route path="/chat" element={<Chat/>}/>
                 </Routes>
+=======
+                    <Route path="/registration" element={<Registration />} />
+                    <Route path="/skill-exchange" element={<SkillExchange/>}/>
+                    <Route path="/gig/:id" element={<Gig />} />
+                    </Routes>
+>>>>>>> 9aaa6d67ab55ec23f98bc2055998f4a10b440ede
             </div>
         </Router>
     );
