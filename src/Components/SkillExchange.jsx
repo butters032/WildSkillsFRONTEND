@@ -114,6 +114,7 @@ export default function SkillExchange() {
                             <Button variant="contained" color="success" onClick={newExchange}>Initialize Exchange</Button>
                         </Stack>
                         <Stack direction={"column"} spacing={1}>
+                        <Typography variant="h6">Edit Exchange</Typography>
                             <input type="hidden" id="id" ref={excidRef}/>
                             <input type="text" id="estatus" ref={excstatRef} placeholder="Status"/>
                             <input type="text" id="edescription" ref={excdescRef} placeholder="Description"/>
