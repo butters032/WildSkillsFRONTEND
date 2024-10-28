@@ -6,6 +6,7 @@ import SkillOffering from './Components/SkillOffering';
 import './App.css'; 
 import Registration from './Components/Registration';
 import UserIcon from './assets/images/UserIcon.png'
+import Gig from './Components/Gig';
 
 const App = () => {
     return (
@@ -29,7 +30,8 @@ const App = () => {
                     <Route path="/skill-offerings" element={<SkillOffering />} />
                     <Route path="/registration" element={<Registration />} />
                     <Route path="/skill-exchange" element={<SkillExchange/>}/>
-                </Routes>
+                    <Route path="/gig/:id" element={<Gig />} />
+                    </Routes>
             </div>
         </Router>
     );
