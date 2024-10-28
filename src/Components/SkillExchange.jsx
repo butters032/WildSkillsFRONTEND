@@ -81,7 +81,6 @@ export default function SkillExchange() {
 
     return(
         <>
-            <Typography variant="h3" sx={{ justifySelf: "left" }}>Wild Skills</Typography>
             <Grid2 container spacing={2} direction={"row"}>
                 <Grid2 sx={{ border: "2px solid", minWidth: 500, minHeight: 700, maxHeight: 700,borderRadius: 5, backgroundColor:"#E7BC40", overflow: "auto"  }}>
                     <Typography variant="h4">Active Exchange</Typography>

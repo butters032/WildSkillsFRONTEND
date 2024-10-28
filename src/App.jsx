@@ -5,6 +5,7 @@ import Category from './Components/Category';
 import SkillOffering from './Components/SkillOffering';
 import './App.css'; 
 import Registration from './Components/Registration';
+import UserIcon from './assets/images/UserIcon.png'
 
 const App = () => {
     return (
@@ -21,6 +22,7 @@ const App = () => {
                     <Link to="/categories" style={{ margin: '10px', textDecoration: 'none' }}>Categories</Link>
                     <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none' }}>Skill Offerings</Link>
                     <Link to="/registration" style={{ margin: '10px', textDecoration: 'none' }}>Registration</Link>
+                    <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none' }}>Skill Exchange</Link>
                 </nav>
                 <Routes>
                     <Route path="/categories" element={<Category/>} />
