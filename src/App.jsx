@@ -1,15 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import SkillExchange from './Components/SkillExchange';
 import Category from './Components/Category';
 import SkillOffering from './Components/SkillOffering';
 import './App.css'; 
 import Registration from './Components/Registration';
-import Divider from '@mui/material/Divider';
 import UserIcon from './assets/images/UserIcon.png'
-import TextField from '@mui/material/TextField';
-
-// Usbon pani
-// Need himuon nga component ang home page para limpyo
+import Gig from './Components/Gig';
 
 const App = () => {
     return (
@@ -26,12 +23,15 @@ const App = () => {
                     <Link to="/categories" style={{ margin: '10px', textDecoration: 'none' }}>Categories</Link>
                     <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none' }}>Skill Offerings</Link>
                     <Link to="/registration" style={{ margin: '10px', textDecoration: 'none' }}>Registration</Link>
+                    <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none' }}>Skill Exchange</Link>
                 </nav>
                 <Routes>
                     <Route path="/categories" element={<Category/>} />
                     <Route path="/skill-offerings" element={<SkillOffering />} />
                     <Route path="/registration" element={<Registration />} />
-                </Routes>
+                    <Route path="/skill-exchange" element={<SkillExchange/>}/>
+                    <Route path="/gig/:id" element={<Gig />} />
+                    </Routes>
             </div>
         </Router>
     );
