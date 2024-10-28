@@ -145,4 +145,7 @@ td, th {
   margin: 20px;
   margin-bottom: 50px;
 }
+input{
+  width: 200px;
+}
 

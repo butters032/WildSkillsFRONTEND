@@ -37,20 +37,24 @@ export default function Registration(){
     return (
         <>
             <Typography variant="h1">REGISTER</Typography>
-            <Grid2>
-                <Stack direction={"column"}>
+            <Grid2 sx={{backgroundColor: "white"}}>
+                <Stack direction={"row"}>
                     <Grid2 sx={{minWidth: 1000, minHeight: 100, border: 'solid 1px', borderRadius:5,padding: 5}}>
-                        <Stack direction={"column"}>
+                        <Stack direction={"row"}>
                             <Grid2 sx={{minWidth: 1000, minHeight: 100}}>
-                                <Stack direction={"column"}>
-                                <label for="studName">Name: </label>
-                                <input type="text" id ='studName' ref={nameRef} placeholder="Enter name"></input>
+                                <Stack direction={"column"}sx={{alignContent:"center"}}>
+                                    <Stack direction={"row"} spacing={3}>
+                                        <Grid2 sx={{border:'solid 1px',padding:1, borderRadius:2}}>
+                                            <input type="text" id ='studName' ref={nameRef} placeholder="Enter First Name" ></input>
+                                        </Grid2>
+                                        <Grid2 sx={{border:'solid 1px',padding:1, borderRadius:2}}>
+                                            <input type="text" id ='studName' ref={nameRef} placeholder="Enter Last Name" ></input>
+                                        </Grid2>
+                                    </Stack>
 
                                 <label for="studBirthDate">Birth Date: </label>
                                 <input type="text" id ='studName' ref={nameRef} placeholder="Enter Birthdate" ></input>
 
-                                <label for="studName">Age: </label>
-                                <input type="text" id ='studName' ref={nameRef} placeholder="Enter age"></input>
 
                                 <label for="studEmail">Email: </label>
                                 <input type="text" id ='studEmail' ref={emailRef} placeholder="Enter email"></input>
