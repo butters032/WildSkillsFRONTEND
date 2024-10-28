@@ -8,6 +8,7 @@ import './App.css';
 import Registration from './Components/Registration';
 import UserIcon from './assets/images/UserIcon.png'
 import Gig from './Components/Gig';
+import Review from './Components/Review';
 
 const App = () => {
     return (
@@ -27,6 +28,7 @@ const App = () => {
                     <Link to="/registration" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Registration</Link>
                     <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Skill Exchange</Link>
                     <Link to="/chat" style={{ margin: '10px', textDecoration: 'none', color: 'black'}}>Chat</Link>
+                    <Link to="/reviews" style={{ margin: '10px', textDecoration: 'none', color: 'black'}}>Reviews</Link>
                 </nav>
                 </div>
                 <Routes>
@@ -36,6 +38,7 @@ const App = () => {
                     <Route path="/skill-exchange" element={<SkillExchange/>}/>
                     <Route path="/gig/:id" element={<Gig />} />
                     <Route path="/chat" element={<Chat/>}/>
+                    <Route path="/reviews" element={<Review />}/>
                 </Routes>
             </div>
         </Router>
