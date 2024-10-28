@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Category from './Components/Category';
 import SkillOffering from './Components/SkillOffering';
+import Chat from './Components/Chat';
 import './App.css'; 
 import Divider from '@mui/material/Divider';
 import UserIcon from './assets/images/UserIcon.png'
@@ -24,10 +25,12 @@ const App = () => {
                 <nav>
                     <Link to="/categories" style={{ margin: '10px', textDecoration: 'none' }}>Categories</Link>
                     <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none' }}>Skill Offerings</Link>
+                    <Link to="/chat" style={{ margin: '10px', textDecoration: 'none'}}>Chat</Link>
                 </nav>
                 <Routes>
                     <Route path="/categories" element={<Category/>} />
                     <Route path="/skill-offerings" element={<SkillOffering />} />
+                    <Route path="/chat" element={<Chat/>}/>
                 </Routes>
             </div>
         </Router>
