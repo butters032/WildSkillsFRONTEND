@@ -103,8 +103,8 @@ const Chat = () => {
 
     return (
       <>
-      <Grid2 container spacing={2} direction={"row"} sx={{justifyContent: 'Center', marginTop:'10%'}}>
-        <Grid2 sx={{border: "2px solid", minWidth: 700, minHeight: 700, maxHeight: 700, maxWidth: 700, borderRadius: 5, backgroundColor:"#E7BC40", overflow: "auto" }}>
+      <Grid2 container spacing={2} direction={"row"} sx={{justifyContent: 'Center', marginTop:'5%'}}>
+        <Grid2 sx={{border: "2px solid", minWidth: 750, minHeight: 700, maxHeight: 700, maxWidth: 700, borderRadius: 5, backgroundColor:"#DEDEDE", overflow: "auto" }}>
           {messages.map((msg, index) => (
             <Grid2 key={index} 
               sx={{
