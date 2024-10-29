@@ -11,6 +11,7 @@ const Chat = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [currentMessageId, setCurrentMessageId] = useState(null);
     const [clickedMessages, setClickedMessages] = useState({});
+    const [originalMessage, setOriginalMessage] = useState('');
 
     const api = axios.create({
       baseURL: 'http://localhost:8080/api/wildSkills/message/',
@@ -50,9 +51,12 @@ const Chat = () => {
     };
 
     const sendMessage = () => {
-      api.post('postMessageRecord',{
-          message: messageRef.current.value,
-      })
+          const message = messageRef.current.value.trim();
+          if(message==""){
+           console.log('Message is blank');
+            return;
+          }
+          api.post('postMessageRecord',{message})
       .then((response)=>{
           console.log(response.data);
           messageRef.current.value='';
@@ -64,9 +68,15 @@ const Chat = () => {
     };
 
     const editMessage = () => {
-      api.put(`/putMessageDetails?id=${currentMessageId}`,{
-        message: messageRef.current.value,
-      })
+      const message = messageRef.current.value.trim();
+      if (message==""){
+        console.log("Message is blank"); 
+        return;
+    }else if (message==originalMessage){
+      console.log("message did not change");
+      return;
+    }
+      api.put(`/putMessageDetails?id=${currentMessageId}`,{message})
       .then((response) => {
         console.log(response.data)
         messageRef.current.value='';
@@ -81,6 +91,7 @@ const Chat = () => {
 
     const handleEditMessage =(messageId, message) =>{
       setCurrentMessageId(messageId);
+      setOriginalMessage(message);
       messageRef.current.value = message;
       setIsEditing(true);
     }
@@ -144,7 +155,7 @@ const Chat = () => {
             placeholder="Write a message"
           />
           <Button variant="contained"  
-            onClick={messages ? editMessage : sendMessage} 
+            onClick={isEditing ? editMessage : sendMessage} 
             style={{backgroundColor: '#333', color: '#fff', '&:hover': { backgroundColor: '#555' }, borderRadius: '20px',alignItems: 'center',}}>
             {isEditing ? 'Update' : 'Send'}
             </Button>
