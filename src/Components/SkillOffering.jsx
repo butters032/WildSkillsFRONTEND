@@ -2,42 +2,48 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
-    Card, CardContent, Button, Typography, TextField, Select, MenuItem, FormControl, InputLabel, Switch,
-    FormControlLabel, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, IconButton, CardActionArea
+    Card, CardContent, Button, Typography, TextField, Select, MenuItem, FormControl, InputLabel,
+    Switch, FormControlLabel, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, IconButton, CardActionArea
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const SkillOffering = () => {
     const [skillOfferings, setSkillOfferings] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openDialog, setOpenDialog] = useState(false);
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
     const [showCheckboxes, setShowCheckboxes] = useState(false);
-    const [newStatus, setNewStatus] = useState(false);
+    const [newIsActive, setNewIsActive] = useState(false);
     const [newDescription, setNewDescription] = useState('');
     const [newCategory, setNewCategory] = useState('');
     const [newSkills, setNewSkills] = useState('');
     const [editingSkillOfferingId, setEditingSkillOfferingId] = useState(null);
     const [newTitle, setNewTitle] = useState('');
-    const categories = [
-        "Graphics & Design", "Programming & Tech", "Digital Marketing", "Video & Animation",
-        "Writing & Translation", "Music & Audio", "Business", "Finance", "AI Services"
-    ];
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchSkillOfferings();
+        fetchCategories();
     }, []);
 
     const fetchSkillOfferings = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/skilloffering/getAllSkillOfferingRecord');
+            const response = await axios.get('http://localhost:8080/api/wildSkills/skilloffering/getAllSkillOfferingRecord');
             setSkillOfferings(response.data);
+            setLoading(false);
         } catch (error) {
             console.error('Error fetching skill offerings:', error);
-        } finally {
-            setLoading(false);
+        }
+    };
+
+    const fetchCategories = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/wildSkills/category/getAllCategory');
+            setCategories(response.data);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
         }
     };
 
@@ -47,7 +53,7 @@ const SkillOffering = () => {
 
     const handleDeleteSelected = async () => {
         try {
-            await Promise.all(selectedIds.map(id => axios.delete(`http://localhost:8080/api/skilloffering/deleteSkillOfferingDetails/${id}`)));
+            await Promise.all(selectedIds.map(id => axios.delete(`http://localhost:8080/api/wildSkills/skilloffering/deleteSkillOfferingDetails/${id}`)));
             fetchSkillOfferings();
             setSelectedIds([]);
             setShowCheckboxes(false);
@@ -60,18 +66,27 @@ const SkillOffering = () => {
     const handleSave = async () => {
         const skillOfferingData = {
             title: newTitle,
-            status: newStatus ? 'Online' : 'Offline',
+            isActive: newIsActive,
             description: newDescription,
             category: newCategory,
             skills: newSkills.split(',').map(skill => skill.trim())
         };
+
         try {
+            let response;
             if (editingSkillOfferingId) {
-                await axios.put(`http://localhost:8080/api/skilloffering/putSkillOfferingDetails?id=${editingSkillOfferingId}`, skillOfferingData);
+                response = await axios.put(`http://localhost:8080/api/wildSkills/skilloffering/putSkillOfferingDetails?id=${editingSkillOfferingId}`, skillOfferingData);
             } else {
-                await axios.post('http://localhost:8080/api/skilloffering/postSkillOfferingRecord', skillOfferingData);
+                response = await axios.post('http://localhost:8080/api/wildSkills/skilloffering/postSkillOfferingRecord', skillOfferingData);
             }
-            fetchSkillOfferings();
+
+            const savedOffering = response.data;
+            setSkillOfferings(prevOfferings => 
+                editingSkillOfferingId 
+                    ? prevOfferings.map(offering => offering.skillOfferingId === editingSkillOfferingId ? savedOffering : offering)
+                    : [...prevOfferings, savedOffering]
+            );
+
             handleCloseDialog();
         } catch (error) {
             console.error('Error saving skill offering:', error);
@@ -81,15 +96,21 @@ const SkillOffering = () => {
     const handleCloseDialog = () => {
         setOpenDialog(false);
         setEditingSkillOfferingId(null);
-        setNewStatus(false);
+        setNewIsActive(false);
         setNewDescription('');
         setNewCategory('');
         setNewSkills('');
         setNewTitle('');
     };
 
+    const toggleDeleteConfirmation = () => {
+        if (selectedIds.length > 0) {
+            setOpenConfirmDialog(true);
+        }
+    };
+
     return (
-        <div style={{ textAlign: 'center',color:'black' }}>
+        <div style={{ textAlign: 'center', color: 'black' }}>
             <h1>My Gigs</h1>
             <Button variant="contained" color="primary" onClick={() => setOpenDialog(true)}>Add Gig</Button>
             <IconButton
@@ -98,7 +119,8 @@ const SkillOffering = () => {
                     setShowCheckboxes(prev => !prev);
                     setSelectedIds([]);
                 }}
-                style={{ color: 'red' }} 
+                onDoubleClick={toggleDeleteConfirmation}
+                style={{ color: 'red' }}
             >
                 <DeleteIcon />
             </IconButton>
@@ -110,7 +132,7 @@ const SkillOffering = () => {
                         <Card key={offering.skillOfferingId} style={{ width: '250px', margin: '10px' }}>
                             <CardActionArea
                                 onClick={() => !showCheckboxes && handleNavigate(offering)}
-                                style={{ cursor: showCheckboxes ? 'default' : 'pointer' }} 
+                                style={{ cursor: showCheckboxes ? 'default' : 'pointer' }}
                             >
                                 <CardContent>
                                     {showCheckboxes && (
@@ -126,10 +148,10 @@ const SkillOffering = () => {
                                         />
                                     )}
                                     <Typography variant="h6">
-                                        {offering.title || 'No Title'}
+                                        {offering.title}
                                     </Typography>
                                     <Typography variant="body2" color="textSecondary">
-                                        {offering.description || 'No Description'}
+                                        {offering.description || "No description available"}
                                     </Typography>
                                 </CardContent>
                             </CardActionArea>
@@ -137,14 +159,14 @@ const SkillOffering = () => {
                     ))}
                 </div>
             )}
-            {showCheckboxes && (
+            {showCheckboxes && selectedIds.length > 0 && (
                 <Button
-                    variant="contained"
+                    variant="text"
                     color="secondary"
                     onClick={() => setOpenConfirmDialog(true)}
-                    style={{ marginTop: '20px' }}
+                    style={{ marginTop: '20px', color: 'red' }}
                 >
-                    Delete Selected
+                    Delete
                 </Button>
             )}
             {/* Confirmation Dialog for Deletion */}
@@ -184,7 +206,7 @@ const SkillOffering = () => {
                             onChange={(e) => setNewCategory(e.target.value)}
                         >
                             {categories.map((category) => (
-                                <MenuItem key={category} value={category}>{category}</MenuItem>
+                                <MenuItem key={category.categoryId} value={category.name}>{category.name}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>
@@ -198,12 +220,12 @@ const SkillOffering = () => {
                     <FormControlLabel
                         control={
                             <Switch
-                                checked={newStatus}
-                                onChange={(e) => setNewStatus(e.target.checked)}
+                                checked={newIsActive}
+                                onChange={(e) => setNewIsActive(e.target.checked)}
                                 color="primary"
                             />
                         }
-                        label={newStatus ? "Online" : "Offline"}
+                        label={newIsActive ? "Online" : "Offline"}
                     />
                 </DialogContent>
                 <DialogActions>

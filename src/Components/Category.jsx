@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const CategoryTable = () => {
+const Category = ({ onCategoriesChange }) => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [newCategoryName, setNewCategoryName] = useState('');
@@ -13,8 +13,11 @@ const CategoryTable = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/category/getAllCategory');
+            const response = await axios.get('http://localhost:8080/api/wildSkills/category/getAllCategory');
             setCategories(response.data);
+            if (onCategoriesChange) {
+                onCategoriesChange(response.data); 
+            }
         } catch (error) {
             console.error('Error fetching categories:', error);
         } finally {
@@ -29,30 +32,28 @@ const CategoryTable = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:8080/api/category/deleteCourseDetails/${id}`);
-            fetchCategories(); // Refresh the table
+            await axios.delete(`http://localhost:8080/api/wildSkills/category/deleteCourseDetails/${id}`);
+            fetchCategories(); 
         } catch (error) {
             console.error('Error deleting category:', error);
         }
     };
 
     const handleAddOrUpdate = async (e) => {
-        e.preventDefault(); // Prevent default form submission
+        e.preventDefault(); 
 
         if (editingCategoryId) {
-            // Update category
             try {
-                await axios.put(`http://localhost:8080/api/category/putCategoryDetails?id=${editingCategoryId}`, {
+                await axios.put(`http://localhost:8080/api/wildSkills/category/putCategoryDetails?id=${editingCategoryId}`, {
                     name: newCategoryName,
                 });
-                setEditingCategoryId(null); // Reset editing state
+                setEditingCategoryId(null); 
             } catch (error) {
                 console.error('Error updating category:', error);
             }
         } else {
-            // Add new category
             try {
-                await axios.post('http://localhost:8080/api/category/postCategoryRecord', {
+                await axios.post('http://localhost:8080/api/wildSkills/category/postCategoryRecord', {
                     name: newCategoryName,
                 });
             } catch (error) {
@@ -60,14 +61,12 @@ const CategoryTable = () => {
             }
         }
 
-        setNewCategoryName(''); // Clear input field
-        fetchCategories(); // Refresh the table
+        setNewCategoryName('');
+        fetchCategories(); 
     };
-
-    // Function to handle canceling the edit
     const handleCancelEdit = () => {
         setEditingCategoryId(null);
-        setNewCategoryName(''); // Clear the input field
+        setNewCategoryName('');
     };
 
     return (
@@ -102,7 +101,7 @@ const CategoryTable = () => {
                     </tbody>
                 </table>
             )}
-            <br/>
+            <br />
             <form onSubmit={handleAddOrUpdate} style={{ textAlign: 'center', marginTop: '20px' }}>
                 <input
                     type="text"
@@ -110,7 +109,7 @@ const CategoryTable = () => {
                     value={newCategoryName}
                     onChange={(e) => setNewCategoryName(e.target.value)}
                     required
-                    className="input-field" 
+                    className="input-field"
                 />
                 <br />
                 <br />
@@ -125,4 +124,4 @@ const CategoryTable = () => {
     );
 };
 
-export default CategoryTable;
+export default Category;
