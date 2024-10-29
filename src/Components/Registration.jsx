@@ -2,13 +2,18 @@ import { Card, Grid2, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import { useRef, useState } from "react";
 
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
+
 //ICONS
 import '../LoginRegister.css'
 import user_icon from '../assets/images/LoginRegistrationAssets/user_icon.png'
 import user_password from '../assets/images/LoginRegistrationAssets/user_password.png'
 import user_email from '../assets/images/LoginRegistrationAssets/user_email.png'
 import user_calendar from '../assets/images/LoginRegistrationAssets/user_calendar.png'
-
+import user_gender from '../assets/images/LoginRegistrationAssets/user_gender.png'
 //CALENDAR THINGY
 import 'react-date-picker/dist/DatePicker.css';
 import DatePicker from 'react-date-picker';
@@ -16,12 +21,13 @@ import { Padding } from "@mui/icons-material";
 
 export default function Registration() {
     const nameRef = useRef();
-    const ageRef = useRef();
+    //const ageRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
     const confirmpasswordRef = useRef();
 
     const [birthdate, setBirthdate] = useState(new Date());
+    const [gender, setGender] = useState('');
 
     const api = axios.create({
         baseURL: 'http://localhost:8080/api/wildSkills/student',
@@ -32,13 +38,19 @@ export default function Registration() {
         }
     });
 
+    const handleGenderInputChange = (e) => { 
+        setGender(e.target.value);
+        console.log(gender);
+    };
+
     const newStudent = () => {
         if(confirmpasswordRef.current.value === passwordRef.current.value){
             api.post('/postStudentRecord', {
                 name: nameRef.current.value,
                 birthdate: birthdate.toISOString().split('T')[0], // Format to 'YYYY-MM-DD'
                 email: emailRef.current.value,
-                password: passwordRef.current.value
+                password: passwordRef.current.value,
+                gender: gender,
             })
             .then((req) => {
                 console.log(req.data);
@@ -48,7 +60,7 @@ export default function Registration() {
             });
         }
         else{
-            alert("Password Dont Match")
+            alert("Passwords Don't Match")
         }
     };
 
@@ -70,13 +82,34 @@ export default function Registration() {
                 <div className="inputs">
                     <div className="input">
                         <img src={user_calendar} alt="Calendar Icon" />
+                        <Typography variant="body2">Date of Birth</Typography>
                         <DatePicker 
+                            placeholder="Birth Date"
                             onChange={setBirthdate} 
                             value={birthdate} 
                             maxDate={new Date()}
                             disableCalendar={true}
                             
                         />
+                    </div>
+                </div>
+                <div className="inputs">
+                    <div className="input">
+                        <img src={user_gender} alt= "Gender" />
+                        <Typography variant="body2">Gender</Typography>
+                        <Grid2 size={{ xs: 12, md: 6 }}>
+                        <RadioGroup sx={{marginLeft:'2rem'}}
+                                    row
+                                    value={gender}
+                                    onChange={handleGenderInputChange}
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="gender"
+                                >
+                                    <FormControlLabel value="female" control={<Radio />} label="Female" />
+                                    <FormControlLabel value="male" control={<Radio />} label="Male" />
+                                    <FormControlLabel value="other" control={<Radio />} label="Other" />
+                        </RadioGroup>
+                        </Grid2>
                     </div>
                 </div>
                 <div className="inputs">
@@ -94,7 +127,7 @@ export default function Registration() {
                 <div className="inputs">
                     <div className="input">
                         <img src={user_password} alt="Password Icon" />
-                        <input ref={confirmpasswordRef} type="confirmpassword" placeholder="Confirm Password" />
+                        <input ref={confirmpasswordRef} type="password" placeholder="Confirm Password" />
                     </div>
                 </div>
                 <Grid2 sx={{paddingTop:1}}>
