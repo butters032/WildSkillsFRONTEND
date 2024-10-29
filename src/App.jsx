@@ -9,6 +9,7 @@ import Registration from './Components/Registration';
 import UserIcon from './assets/images/UserIcon.png'
 import Gig from './Components/Gig';
 import Review from './Components/Review';
+import Home from './Components/Home';
 
 const App = () => {
     return (
@@ -33,6 +34,7 @@ const App = () => {
                 </div>
                 <Routes>
                     {/*<Route path="/categories" element={<Category/>} />*/}
+                    <Route path="/" element={<Home />} />
                     <Route path="/skill-offerings" element={<SkillOffering />} />
                     <Route path="/registration" element={<Registration />} />
                     <Route path="/skill-exchange" element={<SkillExchange/>}/>
