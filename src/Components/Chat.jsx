@@ -1,54 +1,100 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Button, Grid2, Stack, Typography } from "@mui/material";
 import axios from 'axios';
 
 const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
+    const messageRef=useRef()
+    const messageIdRef=useRef()
+    const newMessageIdRef=useRef()
+    const [isEditing, setIsEditing] = useState(false);
+    const [currentMessageId, setCurrentMessageId] = useState(null);
+    const [clickedMessages, setClickedMessages] = useState({});
+
+    const api = axios.create({
+      baseURL: 'http://localhost:8080/api/wildSkills/message/',
+      timeout: 1000,
+      headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+      }
+  });
+
 
     useEffect(() => {
         fetchMessages();
     }, []);
 
-    const deleteMessage = async (id) =>{
-      try {
-        const response = await axios.delete(`http://localhost:8080/api/message/deleteMessageDetails/${id}`);
-        console.log('Message deleted:', response.data);
-    } catch (error) {
-        console.error('Error deleting message:', error);
-    }
-    }
-  
-    const fetchMessages = async () => {
-      try{
-        const response = await axios.get('http://localhost:8080/api/message/getAllMessage');
-        setMessages(response.data);
-      }catch (error) {
-        console.error('Error fetching messages:', error);
-      }
+    const deleteMessage = (id) =>{
+      api.delete(`deleteMessageDetails/${id}`)
+      .then((response)=>{
+        fetchMessages();
+        console.log("Deleted Successfully",response);
+        })
+        .catch ((error) => {
+        console.log('Error deleting message:', error);
+      })
     };
 
-    const sendMessage = async (e) => {
-        e.preventDefault();
-        if (input.trim()) {
-          const newMessage = {
-            message: input,
-            timeStamp: new Date().toISOString(), 
-            };
-            try{
-              const response = await axios.post('http://localhost:8080/api/message/postMessageRecord', newMessage);
-              setMessages((prevMessages) => [...prevMessages, response.data]);
-              setInput('');
-            }catch (error) {
-              console.error('Error posting message:', error);
-            }
-        };
+    const fetchMessages = () => {
+       api.get('/getAllMessage') 
+       .then((response) => {
+        setMessages(response.data);
+        console.log(response.data);
+       })
+        
+      .catch ((error)=> {
+        console.log('Error fetching messages:', error);
+      });
+    };
+
+    const sendMessage = () => {
+      api.post('postMessageRecord',{
+          message: messageRef.current.value,
+      })
+      .then((response)=>{
+          console.log(response.data);
+          messageRef.current.value='';
+          fetchMessages();
+      })
+      .catch((error)=>{
+        console.log('Error Sending Messages',error)
+      })  
+    };
+
+    const editMessage = () => {
+      api.put(`/putMessageDetails?id=${currentMessageId}`,{
+        message: messageRef.current.value,
+      })
+      .then((response) => {
+        console.log(response.data)
+        messageRef.current.value='';
+        setIsEditing(false);
+        setCurrentMessageId(null);
+        fetchMessages();
+      })
+      .catch((error) => {
+        console.log('Error editing Message',error)
+      })
+    }
+
+    const handleEditMessage =(messageId, message) =>{
+      setCurrentMessageId(messageId);
+      messageRef.current.value = message;
+      setIsEditing(true);
+    }
+
+    const handleClickMessage = (id) =>{
+      setClickedMessages(prevState => ({
+        ...prevState,
+        [id]: !prevState[id]
+      }));
     };
 
     return (
       <>
-      <Typography variant="h4">Chat</Typography>
-      <Grid2 container spacing={2} direction={"row"} sx={{justifyContent: 'Center'}}>
+      <Grid2 container spacing={2} direction={"row"} sx={{justifyContent: 'Center', marginTop:'10%'}}>
         <Grid2 sx={{border: "2px solid", minWidth: 700, minHeight: 700, maxHeight: 700, maxWidth: 700, borderRadius: 5, backgroundColor:"#E7BC40", overflow: "auto" }}>
           {messages.map((msg, index) => (
             <Grid2 key={index} 
@@ -59,7 +105,7 @@ const Chat = () => {
                 textAlign:'left',
                 border: '2px solid',
                 minWidth:10,
-                maxWidth:10000, 
+                maxWidth:275, 
                 minHeight: 20, 
                 maxHeight: 10000, 
                 marginLeft:'60%', 
@@ -70,30 +116,38 @@ const Chat = () => {
                 paddingTop: .5,
                 paddingBottom:.5
               }}
+              onClick={()=>handleClickMessage(msg.messageId)}
             >
-              <Typography style={{ color: 'white' }} variant="body1" justifySelf={"left"}>{msg.message} ({msg.timeStamp})</Typography>
+              <Typography style={{ color: 'white' }} variant="body1" justifySelf={"left"}>{msg.message} {clickedMessages[msg.messageId] && (
+                <>
+                  <br/>
+                  <span style={{color: 'lightgray',marginLeft: '10px'}}>{msg.timeStamp}</span>
+                </>
+                
+              )}
+              </Typography>
+              
               <Button variant="text" color="error" 
-              onClick={deleteMessage}>
+              onClick={()=>{deleteMessage(msg.messageId)}}>
               Delete
+              </Button>
+              <Button variant="text" color="error" 
+              onClick={()=>{handleEditMessage(msg.messageId,msg.message)}}>
+              Edit
               </Button>    
               </Grid2>
           ))}
         </Grid2>
-        <form onSubmit={sendMessage}>
           <input style={{width: '500px', height: '35px', borderRadius: '30px', paddingLeft: '20px', marginRight: '10px',paddingRight:'100px'}}
+            ref={messageRef}
             type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
             placeholder="Write a message"
-            
           />
           <Button variant="contained"  
-            style={{backgroundColor: '#333', color: '#fff', '&:hover': { backgroundColor: '#555' }, borderRadius: '20px',alignItems: 'center',}}
-            type="submit" 
-            onClick={sendMessage}>
-            Send
+            onClick={messages ? editMessage : sendMessage} 
+            style={{backgroundColor: '#333', color: '#fff', '&:hover': { backgroundColor: '#555' }, borderRadius: '20px',alignItems: 'center',}}>
+            {isEditing ? 'Update' : 'Send'}
             </Button>
-        </form>
     </Grid2>
     </>
   );
