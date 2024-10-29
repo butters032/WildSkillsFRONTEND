@@ -6,8 +6,6 @@ const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const messageRef=useRef()
-    const messageIdRef=useRef()
-    const newMessageIdRef=useRef()
     const [isEditing, setIsEditing] = useState(false);
     const [currentMessageId, setCurrentMessageId] = useState(null);
     const [clickedMessages, setClickedMessages] = useState({});
