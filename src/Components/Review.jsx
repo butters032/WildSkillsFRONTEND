@@ -51,7 +51,7 @@ const Review = () => {
                                 <Rating
                                     name="half-rating"
                                     value={rating}
-                                    precision={0.5}
+                                    precision={0.25}
                                     onChange={(event, newValue) => setRating(newValue)}
                                     style={{fontSize: '75px'}}
                                 />
