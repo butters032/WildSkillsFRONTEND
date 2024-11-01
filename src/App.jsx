@@ -11,6 +11,7 @@ import Gig from './Components/Gig';
 import Review from './Components/Review';
 import Home from './Components/Home';
 import Profile from './Components/Profile';
+import Login from './Components/Login';
 
 const App = () => {
     return (
@@ -32,7 +33,8 @@ const App = () => {
                     <Link to="/chat" style={{ margin: '10px', textDecoration: 'none', color: 'black'}}>Chat</Link>
                     <Link to="/reviews" style={{ margin: '10px', textDecoration: 'none', color: 'black'}}>Reviews</Link>
                     
-                    <Link to="/profile" style={{ margin: '10px', textDecoration: 'none', color: 'black'}}>Reviews</Link>
+                    <Link to="/profile" style={{ margin: '10px', textDecoration: 'none', color: 'black'}}>Profile</Link>
+                    <Link to="/login" style={{ margin: '10px', textDecoration: 'none', color: 'black'}}>Login</Link>
                 </nav>
                 </div>
                 <Routes>
@@ -46,6 +48,7 @@ const App = () => {
                     <Route path="/reviews" element={<Review />}/>
 
                     <Route path="/profile" element={<Profile />}/>
+                    <Route path="/login" element={<Login />}/>
                 </Routes>
             </div>
         </Router>

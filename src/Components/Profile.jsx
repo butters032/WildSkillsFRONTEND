@@ -1,5 +1,6 @@
+import { Card, Typography } from "@mui/material";
 import axios from "axios";
-
+import '../LoginRegister.css'
 
 export default function Profile(){
 
@@ -13,8 +14,16 @@ export default function Profile(){
     });
 
     return (
-        <div >
+        <Card sx={{maxHeight:600, minWidth: 1000, padding: 4}}>
+            <>
+                <div class="container">
+                    <div class="header">
+                        <Typography> Profile</Typography>
+                    </div>
 
-        </div>
+                </div>
+            </>
+
+        </Card>
     )
 }
