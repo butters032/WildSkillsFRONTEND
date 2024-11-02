@@ -78,6 +78,7 @@ export default function Registration() {
             });
 
             console.log(req.data);
+            alert("Registration Success");
             nameRef.current.value = null;
             birthdate.value = null;
             emailRef.current.value = null;
@@ -91,7 +92,7 @@ export default function Registration() {
     };
 
     return (
-        <Card c>
+        <Card sx={{minWidth:500, minHeight:500}}>
             <>
                 <div className="container">
                     <div className="header">

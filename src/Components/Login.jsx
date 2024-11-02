@@ -1,6 +1,7 @@
 import { Card, CardContent, Grid2, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import { useRef, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -25,6 +26,7 @@ export default function Login() {
 
     const emailRef = useRef();
     const passwordRef = useRef();
+    const navigate = useNavigate();
 
     const api = axios.create({
         baseURL: 'http://localhost:8080/api/wildSkills/student',
@@ -40,38 +42,33 @@ export default function Login() {
         console.log(gender);
     };
 
-    const validateDetails = () => {
-        if(confirmpasswordRef.current.value === passwordRef.current.value){
-            api.post('/postStudentRecord', {
-                name: nameRef.current.value,
-                birthdate: birthdate.toISOString().split('T')[0],
+
+    const handleLogin = async () => {
+        try {
+            const response = await api.post('/login', {
                 email: emailRef.current.value,
                 password: passwordRef.current.value,
-                gender: gender,
-            })
-            .then((req) => {
-                console.log(req.data);
-                nameRef.current.value=null;
-                birthdate.value=null;
-                emailRef.current.value=null;
-                passwordRef.current.value=null;
-                confirmpasswordRef.current.value=null;
-                setGender(null);
-                setBirthdate(null);
-
-                
-            })
-            .catch((error) => {
-                console.log('ENK ENK', error);
             });
-        }
-        else{
-            alert("Passwords Don't Match")
+            console.log(response.data);
+            if (response.data.status==="Login Successful") {
+                const studentId = response.data.studentId;  // Ensure this is how studentId is received
+                if (studentId) {
+                    alert("Login Successful");
+                    navigate('/profile', { state: { studentId: studentId } });
+                } else {
+                    alert("Login failed, no studentId received.");
+                }
+            } else {
+                alert("Login Failed: " + response.data.message);
+            }
+        } catch (error) {
+            console.error('Error during login', error);
+            alert('Error during login: ' + error.message);
         }
     };
-
+    
     return (
-        <Card c>
+        <Card >
             <>
                 <div className="container">
                     <div className="header">
@@ -92,12 +89,10 @@ export default function Login() {
                     </div>
                 </div>
                 <Grid2 sx={{paddingTop:1}}>
-                    <button onClick={validateDetails}>Submit</button>
+                    <button onClick={handleLogin}>Submit</button>
                 </Grid2>
                          
             </>
         </Card>
-        
-
     );
 }
