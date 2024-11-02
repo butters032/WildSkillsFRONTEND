@@ -19,19 +19,17 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Review = () => {
-    // Step 1: State for rating and comment
     const [rating, setRating] = useState(2.5);
     const [comment, setComment] = useState('');
 
-    // Step 2: Handle form submission
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/api/review/postReviewRecord', {
+            const response = await axios.post('http://localhost:8080/api/wildSkills/review/postReviewRecord', {
                 rating: rating,
                 comment: comment
             });
             alert('Review submitted successfully!');
-            setRating(2.5); // Reset form
+            setRating(2.5);
             setComment('');
         } catch (error) {
             console.error('Error submitting review:', error);
@@ -47,16 +45,14 @@ const Review = () => {
                     <Grid item size={12}>
                         <Item>
                             <div>
-                                {/* Step 3: Rating component */}
                                 <Rating
                                     name="half-rating"
                                     value={rating}
-                                    precision={0.25}
+                                    precision={0.5}
                                     onChange={(event, newValue) => setRating(newValue)}
                                     style={{fontSize: '75px'}}
                                 />
                                 <br />
-                                {/* Step 4: Comment input field */}
                                 <TextField
                                     id="outlined-multiline-static"
                                     multiline
@@ -67,7 +63,6 @@ const Review = () => {
                                     style={{marginTop: '10px', width: '380px'}}
                                 />
                                 <br />
-                                {/* Step 5: Submit button */}
                                 <Button
                                     variant="contained"
                                     color="primary"

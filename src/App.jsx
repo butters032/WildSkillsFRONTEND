@@ -13,6 +13,8 @@ import Home from './Components/Home';
 import { Typography } from '@mui/material';
 import Profile from './Components/Profile';
 import Login from './Components/Login';
+import ReviewList from './Components/ReviewList';
+import UpdateReview from './Components/ReviewUpdate';
 
 const App = () => {
 
@@ -36,7 +38,7 @@ const App = () => {
                     <Link to="/registration" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Registration</Link>
                     <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none',color:'black' }}>Skill Exchange</Link>
                     <Link to="/chat" style={{ margin: '10px', textDecoration: 'none', color: 'black'}}>Chat</Link>
-                    <Link to="/reviews" style={{ margin: '10px', textDecoration: 'none', color: 'black'}}>Reviews</Link>
+                    <Link to="/reviewList" style={{ margin: '10px', textDecoration: 'none', color: 'black'}}>Reviews</Link>
                     
                     <Link to="/profile" style={{ margin: '10px', textDecoration: 'none', color: 'black'}}>Profile</Link>
                     <Link to="/login" style={{ margin: '10px', textDecoration: 'none', color: 'black'}}>Login</Link>
@@ -51,6 +53,8 @@ const App = () => {
                     <Route path="/gig/:id" element={<Gig />} />
                     <Route path="/chat" element={<Chat/>}/>
                     <Route path="/reviews" element={<Review />}/>
+                    <Route path="/reviewList" element={<ReviewList />}/>
+                    <Route path="/update-review/:id" element={<UpdateReview />} />
 
                     <Route path="/profile" element={<Profile />}/>
                     <Route path="/login" element={<Login />}/>

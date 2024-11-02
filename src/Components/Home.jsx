@@ -15,8 +15,8 @@ const Home = () => {
 
     const fetchStudents = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/wildSkills/student/getStudentRecord'); // Use full URL
-            console.log("API response:", response.data); // Check structure
+            const response = await axios.get('http://localhost:8080/api/wildSkills/student/getStudentRecord');
+            console.log("API response:", response.data);
             setStudents(response.data);
         } catch (error) {
             console.error("Error fetching students:", error);
