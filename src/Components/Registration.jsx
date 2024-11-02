@@ -1,4 +1,4 @@
-import { Card, Grid2, Stack, Typography } from "@mui/material";
+import { Card, CardContent, Grid2, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import { useRef, useState } from "react";
 
@@ -18,6 +18,8 @@ import user_gender from '../assets/images/LoginRegistrationAssets/user_gender.pn
 import 'react-date-picker/dist/DatePicker.css';
 import DatePicker from 'react-date-picker';
 import { Padding } from "@mui/icons-material";
+
+import RegistrationSuccess from "./RegistrationSuccess";
 
 export default function Registration() {
     const nameRef = useRef();
@@ -43,29 +45,53 @@ export default function Registration() {
         console.log(gender);
     };
 
-    const newStudent = () => {
-        if(confirmpasswordRef.current.value === passwordRef.current.value){
-            api.post('/postStudentRecord', {
+    const checkEmailExists = async (email) => {
+        try {
+            const response = await api.get(`/checkEmailExists?email=${email}`);
+            return response.data.exists;
+        } catch (error) {
+            console.error('Error checking email', error);
+            return false;
+        }
+    };
+
+    const newStudent = async () => {
+        if (confirmpasswordRef.current.value !== passwordRef.current.value) {
+            alert("Passwords Don't Match");
+            return;
+        }
+
+        const emailExists = await checkEmailExists(emailRef.current.value);
+
+        if (emailExists) {
+            alert("Email has already been used");
+            return;
+        }
+
+        try {
+            const req = await api.post('/postStudentRecord', {
                 name: nameRef.current.value,
-                birthdate: birthdate.toISOString().split('T')[0], // Format to 'YYYY-MM-DD'
+                birthdate: birthdate.toISOString().split('T')[0],
                 email: emailRef.current.value,
                 password: passwordRef.current.value,
                 gender: gender,
-            })
-            .then((req) => {
-                console.log(req.data);
-            })
-            .catch((error) => {
-                console.log('ENK ENK', error);
             });
-        }
-        else{
-            alert("Passwords Don't Match")
+
+            console.log(req.data);
+            nameRef.current.value = null;
+            birthdate.value = null;
+            emailRef.current.value = null;
+            passwordRef.current.value = null;
+            confirmpasswordRef.current.value = null;
+            setGender(null);
+            setBirthdate(null);
+        } catch (error) {
+            console.log('ENK ENK', error);
         }
     };
 
     return (
-        <Card sx={{maxHeight:600, maxWidth: 400, padding: 4}}>
+        <Card c>
             <>
                 <div className="container">
                     <div className="header">
@@ -82,7 +108,7 @@ export default function Registration() {
                 <div className="inputs">
                     <div className="input">
                         <img src={user_calendar} alt="Calendar Icon" />
-                        <Typography variant="body2">Date of Birth</Typography>
+                        <Typography variant="body2" sx={{paddingRight:1}}>Date of Birth</Typography>
                         <DatePicker 
                             placeholder="Birth Date"
                             onChange={setBirthdate} 
@@ -132,9 +158,11 @@ export default function Registration() {
                 </div>
                 <Grid2 sx={{paddingTop:1}}>
                     <button onClick={newStudent}>Submit</button>
-                </Grid2>            
+                </Grid2>
+                         
             </>
         </Card>
+        
 
     );
 }
