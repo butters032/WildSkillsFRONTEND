@@ -51,7 +51,7 @@ export default function Login() {
             });
             console.log(response.data);
             if (response.data.status==="Login Successful") {
-                const studentId = response.data.studentId;  // Ensure this is how studentId is received
+                const studentId = response.data.studentId;
                 if (studentId) {
                     alert("Login Successful");
                     navigate('/profile', { state: { studentId: studentId } });
@@ -68,7 +68,7 @@ export default function Login() {
     };
     
     return (
-        <Card >
+        <Card sx={{minWidth:500, minHeight:500}}>
             <>
                 <div className="container">
                     <div className="header">
