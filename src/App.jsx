@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
 import SkillExchange from './Components/SkillExchange';
 import Category from './Components/Category';
 import SkillOffering from './Components/SkillOffering';
@@ -10,13 +10,18 @@ import UserIcon from './assets/images/UserIcon.png'
 import Gig from './Components/Gig';
 import Review from './Components/Review';
 import Home from './Components/Home';
+import { Typography } from '@mui/material';
 
 const App = () => {
+
     return (
         <Router>
             <div style={{ textAlign: 'center', margin: '20px' }}>
-                <div className="apptxt">
-                    <span style={{ alignSelf: 'start', display: 'flex'}}>WildSkills</span>
+                <div className="apptxt" style={{borderBottom: "solid 2px", paddingBottom: 10}}>
+                    <span style={{ alignSelf: 'start', display: 'flex'}}>
+                        {/*<Typography class='apptxt' onClick={handleClick()}>WildSkills</Typography>*/}
+                        <Link to="/" class="apptxt">WildSkills</Link>
+                    </span>
                     <span style={{ alignSelf: 'end', display: 'flex' }}>
                         <img src={UserIcon} alt="User Icon" style={{width: '65px', height:'65px'}}/>
                     </span>

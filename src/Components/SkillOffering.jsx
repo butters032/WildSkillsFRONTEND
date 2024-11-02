@@ -32,7 +32,7 @@ const SkillOffering = () => {
 
     const fetchSkillOfferings = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/skilloffering/getAllSkillOfferingRecord');
+            const response = await axios.get('http://localhost:8080/api/wildSkills/skilloffering/getAllSkillOfferingRecord');
             setSkillOfferings(response.data);
         } catch (error) {
             console.error('Error fetching skill offerings:', error);
@@ -47,7 +47,7 @@ const SkillOffering = () => {
 
     const handleDeleteSelected = async () => {
         try {
-            await Promise.all(selectedIds.map(id => axios.delete(`http://localhost:8080/api/skilloffering/deleteSkillOfferingDetails/${id}`)));
+            await Promise.all(selectedIds.map(id => axios.delete(`http://localhost:8080/api/wildSkills/skilloffering/deleteSkillOfferingDetails/${id}`)));
             fetchSkillOfferings();
             setSelectedIds([]);
             setShowCheckboxes(false);
@@ -67,9 +67,9 @@ const SkillOffering = () => {
         };
         try {
             if (editingSkillOfferingId) {
-                await axios.put(`http://localhost:8080/api/skilloffering/putSkillOfferingDetails?id=${editingSkillOfferingId}`, skillOfferingData);
+                await axios.put(`http://localhost:8080/api/wildSkills/skilloffering/putSkillOfferingDetails?id=${editingSkillOfferingId}`, skillOfferingData);
             } else {
-                await axios.post('http://localhost:8080/api/skilloffering/postSkillOfferingRecord', skillOfferingData);
+                await axios.post('http://localhost:8080/api/wildSkills/skilloffering/postSkillOfferingRecord', skillOfferingData);
             }
             fetchSkillOfferings();
             handleCloseDialog();
