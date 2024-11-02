@@ -71,6 +71,7 @@ const Category = ({ onCategoriesChange }) => {
 
     return (
         <div>
+            <br></br>
             <h1>Category</h1>
             {loading ? (
                 <p>Loading...</p>

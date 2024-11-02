@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import {
-    Card, CardContent, Button, Typography, TextField, Select, MenuItem, FormControl, InputLabel,
-    Switch, FormControlLabel, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, IconButton, CardActionArea
-} from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Button, IconButton, Checkbox, Card, CardActionArea, CardContent, Typography, Dialog, DialogTitle, DialogContent, DialogActions, FormControl, TextField, Select, MenuItem, FormControlLabel, Switch, InputLabel } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const SkillOffering = () => {
     const [skillOfferings, setSkillOfferings] = useState([]);
@@ -68,31 +65,36 @@ const SkillOffering = () => {
             title: newTitle,
             isActive: newIsActive,
             description: newDescription,
-            category: newCategory,
-            skills: newSkills.split(',').map(skill => skill.trim())
+            skills: newSkills,
         };
-
+    
         try {
             let response;
             if (editingSkillOfferingId) {
-                response = await axios.put(`http://localhost:8080/api/wildSkills/skilloffering/putSkillOfferingDetails?id=${editingSkillOfferingId}`, skillOfferingData);
+                // Include the category name in the PUT request
+                response = await axios.put(`http://localhost:8080/api/wildSkills/skilloffering/putSkillOfferingDetails?id=${editingSkillOfferingId}`, skillOfferingData, {
+                    params: { categoryName: newCategory } // Send category name as a query parameter
+                });
             } else {
-                response = await axios.post('http://localhost:8080/api/wildSkills/skilloffering/postSkillOfferingRecord', skillOfferingData);
+                // Include the category name in the POST request
+                response = await axios.post('http://localhost:8080/api/wildSkills/skilloffering/postSkillOfferingRecord', skillOfferingData, {
+                    params: { categoryName: newCategory } // Send category name as a query parameter
+                });
             }
-
+    
             const savedOffering = response.data;
             setSkillOfferings(prevOfferings => 
                 editingSkillOfferingId 
                     ? prevOfferings.map(offering => offering.skillOfferingId === editingSkillOfferingId ? savedOffering : offering)
                     : [...prevOfferings, savedOffering]
             );
-
+    
             handleCloseDialog();
         } catch (error) {
-            console.error('Error saving skill offering:', error);
+            console.error('Error saving skill offering:', error.response || error.message || error);
         }
     };
-
+    
     const handleCloseDialog = () => {
         setOpenDialog(false);
         setEditingSkillOfferingId(null);
