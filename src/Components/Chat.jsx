@@ -101,6 +101,13 @@ const Chat = () => {
       }));
     };
 
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        isEditing ? editMessage() : sendMessage();
+      }
+    };
+
     return (
       <>
       <Grid2 container spacing={2} direction={"row"} sx={{justifyContent: 'Center', marginTop:'5%'}}>
@@ -130,20 +137,14 @@ const Chat = () => {
               <Typography style={{ color: 'white' }} variant="body1" justifySelf={"left"}>{msg.message} {clickedMessages[msg.messageId] && (
                 <>
                   <br/>
-                  <span style={{color: 'lightgray',marginLeft: '10px'}}>{msg.timeStamp}</span>
+                  <span style={{color: 'lightgray',marginLeft: '10px'}}>{new Date(msg.timeStamp).toLocaleDateString([],{ hour: 'numeric', minute: '2-digit', hour12: true })}</span>
+                  <br/>
+                  <span style={{color: 'lightgray',marginLeft: '10px'}}><Button variant="text" color="error" onClick={()=>{handleEditMessage(msg.messageId,msg.message)}}>Edit</Button> </span>
+                  <span style={{color: 'lightgray',marginLeft: '10px'}}><Button variant="text" color="error" onClick={()=>{deleteMessage(msg.messageId)}}>Delete</Button></span>
                 </>
                 
               )}
               </Typography>
-              
-              <Button variant="text" color="error" 
-              onClick={()=>{deleteMessage(msg.messageId)}}>
-              Delete
-              </Button>
-              <Button variant="text" color="error" 
-              onClick={()=>{handleEditMessage(msg.messageId,msg.message)}}>
-              Edit
-              </Button>    
               </Grid2>
           ))}
         </Grid2>
@@ -151,6 +152,7 @@ const Chat = () => {
             ref={messageRef}
             type="text"
             placeholder="Write a message"
+            onKeyDown={handleKeyDown}
           />
           <Button variant="contained"  
             onClick={isEditing ? editMessage : sendMessage} 

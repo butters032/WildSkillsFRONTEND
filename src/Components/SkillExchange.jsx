@@ -39,6 +39,10 @@ export default function SkillExchange() {
         })
         .then(() =>{
             exchangeReload();
+            excstatRef.current.value = '';
+            nexctitleRef.current.value = '';
+            excscstartRef.current.value = '';
+            excscendRef.current.value = '';
         })
         .catch((error) =>{
             console.log('Error editing Skill Exchange',error);
@@ -76,6 +80,7 @@ export default function SkillExchange() {
         .then((exc) =>{
             console.log(exc.data);
             exchangeReload();
+            exctitleRef.current.value = '';
         })
         .catch((error) =>{
             console.log('Error creating Skill Exchange',error)
@@ -89,7 +94,7 @@ export default function SkillExchange() {
 
     return(
         <>
-            <Grid2 container spacing={2} direction={"row"}>
+            <Grid2 container spacing={2} direction={"row"} marginTop={10}>
                 <Grid2 sx={{ border: "2px solid", minWidth: 500, minHeight: 700, maxHeight: 700,borderRadius: 5, /*backgroundColor:"#E7BC40",*/ overflow: "auto"  }}>
                     <Typography variant="h4">Active Exchange</Typography>
                     
@@ -109,7 +114,7 @@ export default function SkillExchange() {
                             <Typography variant="body1" justifySelf={"left"}>Status: {exc.status}</Typography>
                             <Typography variant="body2" justifySelf={"left"}>Scheduled Start: {new Date(exc.scheduledStart).toLocaleString("en-US", {dateStyle: "medium", timeStyle: "short"})}</Typography>
                             <Typography variant="body2" justifySelf={"left"}>Scheduled End: {new Date(exc.scheduledEnd).toLocaleString("en-US", {dateStyle: "medium", timeStyle: "short"})}</Typography>
-                            <Button variant="contained" color="success" onClick={() =>{handleEditExchange(exc.skillExchangeID, exc.status, exc.title)}}>Edit</Button>
+                            <Button variant="contained" color="success" onClick={() =>{handleEditExchange(exc.skillExchangeID, exc.status, exc.title, exc.scheduledStart, exc.scheduledEnd)}}>Edit</Button>
                             <Button variant="contained" color="error" onClick={() => {deleteExchange(exc.skillExchangeID)}}>Delete</Button>
                         </Grid2>
                     ))}
