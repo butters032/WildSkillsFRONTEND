@@ -4,13 +4,11 @@ import SkillExchange from './Components/SkillExchange';
 import Category from './Components/Category';
 import SkillOffering from './Components/SkillOffering';
 import Chat from './Components/Chat';
-import './App.css'; 
 import Registration from './Components/Registration';
 import UserIcon from './assets/images/UserIcon.png'
 import Gig from './Components/Gig';
 import Review from './Components/Review';
 import Home from './Components/Home';
-import { Typography } from '@mui/material';
 import Profile from './Components/Profile';
 import Login from './Components/Login';
 import ReviewList from './Components/ReviewList';
