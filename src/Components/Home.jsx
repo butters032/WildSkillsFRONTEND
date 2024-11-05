@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate, useLocation } from 'react-router-dom';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid2';
@@ -8,10 +8,30 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 
+
+
 const Home = () => {
     const [students, setStudents] = useState([]);
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
+
+    const [student, setStudent] = useState({});
+    const location = useLocation();
+    const id = location.state?.studentId; 
+
+    const api = axios.create({
+        baseURL: 'http://localhost:8080/api/wildSkills/student',
+        timeout: 1000,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    });
+    
+    const parseDate = (dateString) => {
+        if (!dateString) return new Date();
+        return new Date(dateString);
+    };
 
     const fetchStudents = async () => {
         try {
@@ -25,8 +45,23 @@ const Home = () => {
     };
 
     useEffect(() => {
-        fetchStudents();
-    }, []);
+        //fetchStudents();
+
+        const currentUser = async (id) => {
+            try {
+                const response = await api.get(`/getUserStudentRecord?id=${id}`);
+                console.log(response.data);
+                const fetchedStudent = response.data;
+                fetchedStudent.birthdate = parseDate(fetchedStudent.birthdate);
+                setStudent(fetchedStudent);
+            } catch (error) {
+                console.error('Error fetching student data', error);
+            }
+        };
+        if (id) {
+            currentUser(id);
+        }
+    }, [id]);
 
     const handleClick = (studentId) => {
         navigate(`/skill-offerings/${studentId}`);
@@ -34,6 +69,7 @@ const Home = () => {
 
     return (
         <>
+            <Typography>Test {student.name}</Typography>
             <h1>What Service do you Need?</h1>
             <TextField id="outlined-basic" variant="outlined" size="small" style={{width: '500px', marginBottom: '10px'}} />
             <Divider style={{marginBottom: '50px', backgroundColor: 'black'}}/>

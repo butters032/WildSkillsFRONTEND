@@ -22,8 +22,7 @@ import { Padding } from "@mui/icons-material";
 
 import RegistrationSuccess from "./RegistrationSuccess";
 
-export default function Login() {
-
+export default function Login({ setAuthenticated }) {
     const emailRef = useRef();
     const passwordRef = useRef();
     const navigate = useNavigate();
@@ -37,12 +36,6 @@ export default function Login() {
         }
     });
 
-    const handleGenderInputChange = (e) => { 
-        setGender(e.target.value);
-        console.log(gender);
-    };
-
-
     const handleLogin = async () => {
         try {
             const response = await api.post('/login', {
@@ -50,11 +43,12 @@ export default function Login() {
                 password: passwordRef.current.value,
             });
             console.log(response.data);
-            if (response.data.status==="Login Successful") {
+            if (response.data.status === "Login Successful") {
                 const studentId = response.data.studentId;
                 if (studentId) {
                     alert("Login Successful");
-                    navigate('/profile', { state: { studentId: studentId } });
+                    setAuthenticated(true);
+                    navigate('/', { state: { studentId: studentId } });
                 } else {
                     alert("Login failed, no studentId received.");
                 }
@@ -91,7 +85,6 @@ export default function Login() {
                 <Grid2 sx={{paddingTop:1}}>
                     <button onClick={handleLogin}>Submit</button>
                 </Grid2>
-                         
             </>
         </Card>
     );
