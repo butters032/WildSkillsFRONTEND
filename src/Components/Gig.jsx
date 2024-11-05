@@ -1,18 +1,50 @@
-import React from 'react';
-import { Card, CardContent, Typography, IconButton, Chip } from '@mui/material';
-import { Chat } from '@mui/icons-material';
+import React, { useEffect, useState } from 'react';
+import { Card, CardContent, Typography, Chip, IconButton } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Chat from '@mui/icons-material/Chat';
+import axios from 'axios';
 
 const Gig = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { title, description, category, skills = [], status } = location.state || {};
+    const { title, description, skills = [], status, studentId, categoryId } = location.state || {};
+    const [studentName, setStudentName] = useState('');
+    const [categoryName, setCategoryName] = useState('');
 
-    console.log('Gig Data:', location.state); 
+    useEffect(() => {
+        const fetchStudentName = async (id) => {
+            try {
+                const response = await axios.get(`http://localhost:8080/api/wildSkills/student/getUserStudentRecord?id=${id}`);
+                setStudentName(response.data.name);
+            } catch (error) {
+                console.error('Error fetching student name', error);
+            }
+        };
+
+        if (studentId) {
+            fetchStudentName(studentId);
+        }
+    }, [studentId]);
+
+    useEffect(() => {
+        const fetchCategoryName = async (id) => {
+            try {
+                const response = await axios.get(`http://localhost:8080/api/wildSkills/category/getAllCategory?id=${id}`);
+                setCategoryName(response.data.name);
+            } catch (error) {
+                console.error('Error fetching category name', error);
+            }
+        };
+
+        if (categoryId) {
+            fetchCategoryName(categoryId);
+        }
+    }, [categoryId]);
 
     const handleChatClick = () => {
         navigate('/chat');
     };
+
     const skillArray = skills ? skills.split(',') : [];
     return (
         <Card style={{ height: '670px', width: '900px', margin: '20px', padding: '10px', borderRadius: '8px' }}>
@@ -21,7 +53,7 @@ const Gig = () => {
                     {title}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" style={{ display: 'flex', justifyContent: 'flex-start', fontSize: '30px' }} gutterBottom>
-                    (Name)
+                    {studentName || '(Name)'}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                     <Chip label={status === true ? "Online" : "Offline"} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
@@ -33,12 +65,11 @@ const Gig = () => {
                 >
                     <Chat style={{ textAlign: 'left' }} />
                 </IconButton>
-                <br></br>
-                <br></br>
+                <br />
                 <Typography variant="body1" style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                     {description}
                 </Typography>
-                <br></br>
+                <br />
                 <Typography variant="body2" color="textSecondary" style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>Skills</Typography>
                 <Typography variant="body2" color="textSecondary" style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                     {skillArray.slice(0, 10).map((skill, index) => (
@@ -46,12 +77,9 @@ const Gig = () => {
                     ))}
                 </Typography>
 
-                {category && (
-                    <Typography variant="body2" color="textSecondary" style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
-                        <Chip label={`Category: ${category}`} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
-                    </Typography>
-                )}
-
+                <Typography variant="body2" color="textSecondary" style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
+                    <Chip label={`Category: ${categoryId}`} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
+                </Typography>
             </CardContent>
         </Card>
     );
