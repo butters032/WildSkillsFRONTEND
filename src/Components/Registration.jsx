@@ -19,7 +19,7 @@ import 'react-date-picker/dist/DatePicker.css';
 import DatePicker from 'react-date-picker';
 import { Padding } from "@mui/icons-material";
 
-import RegistrationSuccess from "./RegistrationSuccess";
+import RegistrationSuccess from "./RegistrationSuccess.jsx";
 
 export default function Registration() {
     const nameRef = useRef();
@@ -27,6 +27,7 @@ export default function Registration() {
     const emailRef = useRef();
     const passwordRef = useRef();
     const confirmpasswordRef = useRef();
+    const [isSuccessful, setIsSuccessful] = useState(false);
 
     const [birthdate, setBirthdate] = useState(new Date());
     const [gender, setGender] = useState('');

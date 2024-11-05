@@ -1,6 +1,7 @@
 import { Button, Grid2, Stack, Typography } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import axios from 'axios'
+import Chat from './Chat.jsx'
 
 export default function SkillExchange() {
     const [exchange, setExchange] = useState([])
@@ -94,7 +95,7 @@ export default function SkillExchange() {
 
     return(
         <>
-            <Grid2 container spacing={2} direction={"row"} marginTop={10}>
+            <Grid2 container spacing={2} direction={"row"} marginTop={15}>
                 <Grid2 sx={{ border: "2px solid", minWidth: 500, minHeight: 700, maxHeight: 700,borderRadius: 5, /*backgroundColor:"#E7BC40",*/ overflow: "auto"  }}>
                     <Typography variant="h4">Active Exchange</Typography>
                     
@@ -147,6 +148,7 @@ export default function SkillExchange() {
                         </Stack>
                     </Stack>
                 </Grid2>
+                {/*<Chat/>*/}
             </Grid2>
         </>
     )

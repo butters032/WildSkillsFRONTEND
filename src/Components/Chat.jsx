@@ -109,8 +109,8 @@ const Chat = () => {
     };
 
     return (
-      <>
-      <Grid2 container spacing={2} direction={"row"} sx={{justifyContent: 'Center', marginTop:'5%'}}>
+      <>{/*minWidth:750px*/}
+      <Grid2 container spacing={2} direction={"row"} sx={{justifyContent: 'right', marginTop:'5%'}}>
         <Grid2 sx={{border: "2px solid", minWidth: 750, minHeight: 700, maxHeight: 700, maxWidth: 700, borderRadius: 5, backgroundColor:"#DEDEDE", overflow: "auto" }}>
           {messages.map((msg, index) => (
             <Grid2 key={index} 
@@ -147,7 +147,7 @@ const Chat = () => {
               </Typography>
               </Grid2>
           ))}
-        </Grid2>
+        </Grid2> {/*width:500px*/}
           <input style={{width: '500px', height: '35px', borderRadius: '30px', paddingLeft: '20px', marginRight: '10px',paddingRight:'100px'}}
             ref={messageRef}
             type="text"
