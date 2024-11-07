@@ -22,7 +22,7 @@ import { Padding } from "@mui/icons-material";
 
 import RegistrationSuccess from "./RegistrationSuccess";
 
-export default function Login({ setAuthenticated }) {
+export default function Login({ setAuthenticated, setUserId, setAuthId}) {
     const emailRef = useRef();
     const passwordRef = useRef();
     const navigate = useNavigate();
@@ -36,19 +36,41 @@ export default function Login({ setAuthenticated }) {
         }
     });
 
+    const apiAuth = axios.create({
+        baseURL: 'http://localhost:8080/api/wildSkills/authentication',
+        timeout: 1000,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    });
     const handleLogin = async () => {
         try {
             const response = await api.post('/login', {
                 email: emailRef.current.value,
                 password: passwordRef.current.value,
             });
-            console.log(response.data);
+            //const authResponse = await apiAuth.post('/getAuthenticationDetails');
+
+            //const authResponse = await apiAuth.put(`/putAuthenticationDetails?authId=${response.data.authId.authId}`);
+            //console.log(authResponse.data);
+
             if (response.data.status === "Login Successful") {
                 const studentId = response.data.studentId;
+                const authId = response.data.authId.authId;
                 if (studentId) {
                     alert("Login Successful");
                     setAuthenticated(true);
+                    const authResponse = await apiAuth.put(`/putIncrementAuthenticationDetails?authId=${authId}`);
+                    console.log('Sud sa authResponse: ',authResponse);
+
                     navigate('/', { state: { studentId: studentId } });
+                    setUserId(studentId);
+                    setAuthId(authId);
+
+
+
+                    
                 } else {
                     alert("Login failed, no studentId received.");
                 }

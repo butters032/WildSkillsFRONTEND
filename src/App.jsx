@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, useNavigate, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import SkillExchange from './Components/SkillExchange';
 import Category from './Components/Category';
@@ -18,25 +18,52 @@ import UpdateReview from './Components/ReviewUpdate';
 
 const App = () => {
     const [authenticated, setAuthenticated] = useState(false);
+    const [userId, setUserId] = useState('blank');
+    const [authId, setAuthId] = useState('blank');
+
+    const [sessionEnd, setSessionEnd] = useState(() => {
+        const storedSessionEnd = localStorage.getItem('sessionEnd');
+        return storedSessionEnd ? new Date(storedSessionEnd) : new Date();
+    });
+
+    console.log('This is the auth id:', authId);
+    console.log(authenticated);
+    console.log(userId);
+
+    const apiAuth = axios.create({
+        baseURL: 'http://localhost:8080/api/wildSkills/authentication',
+        timeout: 1000,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    });
 
     useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/wildSkills/student/check-auth', {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+        
+        const checkAuth = async (authId) => {
+            if (authId !== 'blank') {
+                try {
+                    const authResponse = await apiAuth.get(`/getAuthenticationDetails?authId=${authId}`);
+                    const sessionEndTime = new Date(authResponse.data.sessionDurationEnd);
+                    console.log('Session END TIME:', sessionEndTime);
+                    const currTime = new Date();
+                    localStorage.setItem('sessionEnd', sessionEndTime.toISOString());
+                    setSessionEnd(sessionEndTime);
+                    console.log('Session duration:', currTime);
+                    if(sessionEndTime<currTime){
+                        setAuthenticated(false);
                     }
-                });
-                setAuthenticated(response.data.authenticated);
-            } catch (error) {
-                console.error('Error checking authentication status', error);
-                setAuthenticated(false);
+                } catch (error) {
+                    console.error('Error checking authentication status', error);
+                    setAuthenticated(false);
+                }
             }
         };
 
-        checkAuth();
-    }, []);
+        checkAuth(authId);
+    }, [authId]);
+
 
     return (
         <>
@@ -77,7 +104,7 @@ const App = () => {
                         <Route path="/reviewList" element={authenticated ? <ReviewList /> : <Navigate to="/login" />} />
                         <Route path="/update-review/:id" element={authenticated ? <UpdateReview /> : <Navigate to="/login" />} />
                         <Route path="/profile" element={authenticated ? <Profile /> : <Navigate to="/login" />} />
-                        <Route path="/login" element={<Login setAuthenticated={setAuthenticated} />} />
+                        <Route path="/login" element={<Login setAuthenticated={setAuthenticated} setUserId={setUserId} setAuthId={setAuthId}/>} />
                     </Routes>
                 </div>
             </Router>
