@@ -26,6 +26,9 @@ const App = () => {
         return storedSessionEnd ? new Date(storedSessionEnd) : new Date();
     });
 
+    
+
+
     console.log('This is the auth id:', authId);
     console.log(authenticated);
     console.log(userId);
@@ -38,6 +41,8 @@ const App = () => {
             'Accept': 'application/json'
         }
     });
+
+    
 
     useEffect(() => {
         

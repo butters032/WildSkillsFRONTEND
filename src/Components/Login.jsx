@@ -64,7 +64,7 @@ export default function Login({ setAuthenticated, setUserId, setAuthId}) {
                     const authResponse = await apiAuth.put(`/putIncrementAuthenticationDetails?authId=${authId}`);
                     console.log('Sud sa authResponse: ',authResponse);
 
-                    navigate('/', { state: { studentId: studentId } });
+                    navigate('/profile', { state: { studentId: studentId } });
                     setUserId(studentId);
                     setAuthId(authId);
 
