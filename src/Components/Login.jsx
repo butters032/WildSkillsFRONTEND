@@ -22,7 +22,7 @@ import { Padding } from "@mui/icons-material";
 
 import RegistrationSuccess from "./RegistrationSuccess";
 
-export default function Login({ setAuthenticated, setUserId, setAuthId}) {
+export default function Login({ setUserId, setNewAuthId}) {
     const emailRef = useRef();
     const passwordRef = useRef();
     const navigate = useNavigate();
@@ -60,13 +60,12 @@ export default function Login({ setAuthenticated, setUserId, setAuthId}) {
                 const authId = response.data.authId.authId;
                 if (studentId) {
                     alert("Login Successful");
-                    setAuthenticated(true);
                     const authResponse = await apiAuth.put(`/putIncrementAuthenticationDetails?authId=${authId}`);
                     console.log('Sud sa authResponse: ',authResponse);
 
                     navigate('/profile', { state: { studentId: studentId } });
                     setUserId(studentId);
-                    setAuthId(authId);
+                    setNewAuthId(authId);
 
 
 

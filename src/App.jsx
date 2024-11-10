@@ -19,7 +19,12 @@ import UpdateReview from './Components/ReviewUpdate';
 const App = () => {
     const [authenticated, setAuthenticated] = useState(false);
     const [userId, setUserId] = useState('blank');
-    const [authId, setAuthId] = useState('blank');
+    //const [authId, setAuthId] = useState('blank');
+    const [newAuthId, setNewAuthId] = useState('blank');
+
+
+    const [authId, setAuthId] = useState(() => { 
+        return localStorage.getItem('authId') || 'blank';});
 
     const [sessionEnd, setSessionEnd] = useState(() => {
         const storedSessionEnd = localStorage.getItem('sessionEnd');
@@ -27,11 +32,15 @@ const App = () => {
     });
 
     
+    useEffect(() => { localStorage.setItem('authId', authId);
+     }, [authId]);
+
 
 
     console.log('This is the auth id:', authId);
-    console.log(authenticated);
+    
     console.log(userId);
+    console.log('THIS IS THE NEW AUTH ID: ',newAuthId);
 
     const apiAuth = axios.create({
         baseURL: 'http://localhost:8080/api/wildSkills/authentication',
@@ -42,23 +51,44 @@ const App = () => {
         }
     });
 
-    
+
+    useEffect(()=>{
+        if (newAuthId==authId){
+            setAuthenticated(true);
+         }
+    })
+    console.log('New AuthId and Local AuthId Sync...',authenticated);
+
 
     useEffect(() => {
         
-        const checkAuth = async (authId) => {
-            if (authId !== 'blank') {
+        const checkAuth = async (authenticated,authId) => {
+            if (authenticated == true) {
                 try {
                     const authResponse = await apiAuth.get(`/getAuthenticationDetails?authId=${authId}`);
-                    const sessionEndTime = new Date(authResponse.data.sessionDurationEnd);
-                    console.log('Session END TIME:', sessionEndTime);
-                    const currTime = new Date();
-                    localStorage.setItem('sessionEnd', sessionEndTime.toISOString());
-                    setSessionEnd(sessionEndTime);
-                    console.log('Session duration:', currTime);
-                    if(sessionEndTime<currTime){
+                    const currStatus = authResponse.data.authStatus;
+                    if(currStatus==true){
+                        setAuthenticated(true);
+                        console.log('current Status: ', currStatus);
+                        const sessionEndTime = new Date(authResponse.data.sessionDurationEnd);
+                        console.log('Session END TIME:', sessionEndTime);
+                        console.log('TEst:', authResponse);
+                        const currTime = new Date();
+                        localStorage.setItem('sessionEnd', sessionEndTime.toISOString());
+                        setSessionEnd(sessionEndTime);
+                        console.log('Session duration:', currTime);
+                        if(sessionEndTime<currTime){
+                            setAuthenticated(false);
+                        }
+                        else{
+                            setAuthenticated(true);
+                            console.log('Successfully Logged In');
+                        }
+                    }
+                    else{
                         setAuthenticated(false);
                     }
+                    
                 } catch (error) {
                     console.error('Error checking authentication status', error);
                     setAuthenticated(false);
@@ -66,8 +96,8 @@ const App = () => {
             }
         };
 
-        checkAuth(authId);
-    }, [authId]);
+        checkAuth(authenticated,authId);
+    }, [authenticated]);
 
 
     return (
@@ -109,7 +139,7 @@ const App = () => {
                         <Route path="/reviewList" element={authenticated ? <ReviewList /> : <Navigate to="/login" />} />
                         <Route path="/update-review/:id" element={authenticated ? <UpdateReview /> : <Navigate to="/login" />} />
                         <Route path="/profile" element={authenticated ? <Profile /> : <Navigate to="/login" />} />
-                        <Route path="/login" element={<Login setAuthenticated={setAuthenticated} setUserId={setUserId} setAuthId={setAuthId}/>} />
+                        <Route path="/login" element={<Login setUserId={setUserId} setNewAuthId={setNewAuthId}/>} />
                     </Routes>
                 </div>
             </Router>
