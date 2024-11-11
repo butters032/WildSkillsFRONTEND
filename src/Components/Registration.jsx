@@ -19,6 +19,8 @@ import 'react-date-picker/dist/DatePicker.css';
 import DatePicker from 'react-date-picker';
 import { Padding } from "@mui/icons-material";
 
+import { useNavigate } from "react-router-dom";
+
 import RegistrationSuccess from "./RegistrationSuccess.jsx";
 
 export default function Registration() {
@@ -31,6 +33,7 @@ export default function Registration() {
 
     const [birthdate, setBirthdate] = useState(new Date());
     const [gender, setGender] = useState('');
+    const navigate = useNavigate();
 
     const api = axios.create({
         baseURL: 'http://localhost:8080/api/wildSkills/student',
@@ -78,6 +81,10 @@ export default function Registration() {
                 gender: gender,
             });
 
+            setTimeout(() => {
+                navigate('/login');
+            }, 100);
+
             console.log(req.data);
             alert("Registration Success");
             nameRef.current.value = null;
@@ -91,6 +98,10 @@ export default function Registration() {
             console.log('ENK ENK', error);
         }
     };
+
+    const redirectToReg = async () => {
+        navigate('/login');
+    }
 
     return (
         <Card sx={{minWidth:500, minHeight:500}}>
@@ -160,6 +171,9 @@ export default function Registration() {
                 </div>
                 <Grid2 sx={{paddingTop:1}}>
                     <button onClick={newStudent}>Submit</button>
+                </Grid2>
+                <Grid2 sx={{paddingTop:1}}>
+                    <button onClick={redirectToReg} >Already Have An Account? Login now</button>
                 </Grid2>
                          
             </>

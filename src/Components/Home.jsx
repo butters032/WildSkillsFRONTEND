@@ -10,14 +10,14 @@ import axios from 'axios';
 
 
 
-const Home = () => {
+const Home = ({userId}) => {
     const [students, setStudents] = useState([]);
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
 
     const [student, setStudent] = useState({});
     const location = useLocation();
-    const id = location.state?.studentId; 
+    const id = userId; 
 
     const api = axios.create({
         baseURL: 'http://localhost:8080/api/wildSkills/student',

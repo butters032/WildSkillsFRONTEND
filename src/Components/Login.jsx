@@ -22,7 +22,7 @@ import { Padding } from "@mui/icons-material";
 
 import RegistrationSuccess from "./RegistrationSuccess";
 
-export default function Login({ setUserId, setNewAuthId}) {
+export default function Login({ setUserId, setAuthId}) {
     const emailRef = useRef();
     const passwordRef = useRef();
     const navigate = useNavigate();
@@ -63,9 +63,12 @@ export default function Login({ setUserId, setNewAuthId}) {
                     const authResponse = await apiAuth.put(`/putIncrementAuthenticationDetails?authId=${authId}`);
                     console.log('Sud sa authResponse: ',authResponse);
 
-                    navigate('/profile', { state: { studentId: studentId } });
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 100);
+
                     setUserId(studentId);
-                    setNewAuthId(authId);
+                    setAuthId(authId);
 
 
 
@@ -81,6 +84,10 @@ export default function Login({ setUserId, setNewAuthId}) {
             alert('Error during login: ' + error.message);
         }
     };
+
+    const redirectToReg = async () => {
+        navigate('/registration');
+    }
     
     return (
         <Card sx={{minWidth:500, minHeight:500}}>
@@ -103,8 +110,11 @@ export default function Login({ setUserId, setNewAuthId}) {
                         <input ref={passwordRef} type="password" placeholder="Password" />
                     </div>
                 </div>
-                <Grid2 sx={{paddingTop:1}}>
+                <Grid2 sx={{paddingTop:5}}>
                     <button onClick={handleLogin}>Submit</button>
+                </Grid2>
+                <Grid2 sx={{paddingTop:1}}>
+                    <button onClick={redirectToReg} >No Account Yet? Register now</button>
                 </Grid2>
             </>
         </Card>

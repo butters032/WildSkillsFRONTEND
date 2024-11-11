@@ -15,32 +15,65 @@ import Profile from './Components/Profile';
 import Login from './Components/Login';
 import ReviewList from './Components/ReviewList';
 import UpdateReview from './Components/ReviewUpdate';
+import { Button } from '@mui/material';
 
 const App = () => {
     const [authenticated, setAuthenticated] = useState(false);
-    const [userId, setUserId] = useState('blank');
-    //const [authId, setAuthId] = useState('blank');
-    const [newAuthId, setNewAuthId] = useState('blank');
-
-
-    const [authId, setAuthId] = useState(() => { 
-        return localStorage.getItem('authId') || 'blank';});
+    const [userId, setUserId] = useState(() => localStorage.getItem('userId') || 'blank');
+    
+    const [authId, setAuthId] = useState(() => localStorage.getItem('authId') || 'blank');
 
     const [sessionEnd, setSessionEnd] = useState(() => {
         const storedSessionEnd = localStorage.getItem('sessionEnd');
         return storedSessionEnd ? new Date(storedSessionEnd) : new Date();
     });
 
+    const defaultVal = 'blank';
+
+    useEffect(() => {
+        localStorage.setItem('authId', authId);
+        localStorage.setItem('userId', userId);
+
+        console.log('Auth Id: ',authId);
+        console.log('User Id: ',authId);
+
+        if (authId !== 'blank') {
+            setAuthenticated(true);
+        }
+        else {
+            setAuthenticated(false);
+        }
+
+    }, [authId,userId]);
+
     
-    useEffect(() => { localStorage.setItem('authId', authId);
-     }, [authId]);
 
+    useEffect(() => {
+        const checkAuth = async (authId) => {
+            if (authId !== 'blank') {
+                try {
+                    const authResponse = await apiAuth.get(`/getAuthenticationDetails?authId=${authId}`);
+                    const currStatus = authResponse.data.authStatus;
+                    const sessionEndTime = new Date(authResponse.data.sessionDurationEnd);
+                    const currTime = new Date();
 
+                    localStorage.setItem('sessionEnd', sessionEndTime.toISOString());
+                    setSessionEnd(sessionEndTime);
 
-    console.log('This is the auth id:', authId);
-    
-    console.log(userId);
-    console.log('THIS IS THE NEW AUTH ID: ',newAuthId);
+                    if (currStatus && sessionEndTime > currTime) {
+                        setAuthenticated(true);
+                    } else {
+                        setAuthenticated(false);
+                    }
+                } catch (error) {
+                    console.error('Error checking authentication status', error);
+                    setAuthenticated(false);
+                }
+            }
+        };
+
+        checkAuth(authId);
+    }, [authId]);
 
     const apiAuth = axios.create({
         baseURL: 'http://localhost:8080/api/wildSkills/authentication',
@@ -51,95 +84,62 @@ const App = () => {
         }
     });
 
-
-    useEffect(()=>{
-        if (newAuthId==authId){
-            setAuthenticated(true);
-         }
-    })
-    console.log('New AuthId and Local AuthId Sync...',authenticated);
-
-
-    useEffect(() => {
+    const logoutHandle = async () => {
+        localStorage.removeItem('authId');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('sessionEnd');
         
-        const checkAuth = async (authenticated,authId) => {
-            if (authenticated == true) {
-                try {
-                    const authResponse = await apiAuth.get(`/getAuthenticationDetails?authId=${authId}`);
-                    const currStatus = authResponse.data.authStatus;
-                    if(currStatus==true){
-                        setAuthenticated(true);
-                        console.log('current Status: ', currStatus);
-                        const sessionEndTime = new Date(authResponse.data.sessionDurationEnd);
-                        console.log('Session END TIME:', sessionEndTime);
-                        console.log('TEst:', authResponse);
-                        const currTime = new Date();
-                        localStorage.setItem('sessionEnd', sessionEndTime.toISOString());
-                        setSessionEnd(sessionEndTime);
-                        console.log('Session duration:', currTime);
-                        if(sessionEndTime<currTime){
-                            setAuthenticated(false);
-                        }
-                        else{
-                            setAuthenticated(true);
-                            console.log('Successfully Logged In');
-                        }
-                    }
-                    else{
-                        setAuthenticated(false);
-                    }
-                    
-                } catch (error) {
-                    console.error('Error checking authentication status', error);
-                    setAuthenticated(false);
-                }
-            }
-        };
-
-        checkAuth(authenticated,authId);
-    }, [authenticated]);
-
+        setAuthId(defaultVal);
+        setUserId(defaultVal);
+        setSessionEnd(null);
+        setAuthenticated(false);
+    
+        console.log('Logout successful');
+    };
+    
 
     return (
         <>
             <Router>
                 <div style={{ textAlign: 'center', margin: '20px' }}>
-                    <div className="apptxt" style={{borderBottom: "solid 2px", paddingBottom: 10, backgroundColor: "#800000"}}>
+                    <div className="apptxt" style={{ borderBottom: "solid 2px", paddingBottom: 10, backgroundColor: "#800000" }}>
                         <span style={{ alignSelf: 'start', display: 'flex'}}>
-                            <Link to="/" class="apptxt">WildSkills</Link>
+                            <Link to="/" className="apptxt">WildSkills</Link>
                         </span>
                         <span style={{ alignSelf: 'end', display: 'flex' }}>
                             <img src={UserIcon} alt="User Icon" style={{ width: '65px', height: '65px' }} />
                         </span>
                     </div>
 
-                    <div className="routetxt" >
-                    <nav>
-                        <Link to="/categories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Categories</Link>
-                        <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none',color:'white' }}>Skill Offerings</Link>
-                        <Link to="/registration" style={{ margin: '10px', textDecoration: 'none',color:'white' }}>Registration</Link>
-                        <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none',color:'white' }}>Skill Exchange</Link>
-                        <Link to="/chat" style={{ margin: '10px', textDecoration: 'none', color: 'white'}}>Chat</Link>
-                        <Link to="/reviewList" style={{ margin: '10px', textDecoration: 'none', color: 'white'}}>Reviews</Link>
-                        
-                        <Link to="/profile" style={{ margin: '10px', textDecoration: 'none', color: 'white'}}>Profile</Link>
-                        <Link to="/login" style={{ margin: '10px', textDecoration: 'none', color: 'white'}}>Login</Link>
-                    </nav>
+                    <div className="routetxt">
+                        <nav>
+                            {authenticated && (
+                                <>
+                                    <Link to="/categories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Categories</Link>
+                                    <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Offerings</Link>
+                                    <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Exchange</Link>
+                                    <Link to="/chat" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Chat</Link>
+                                    <Link to="/reviewList" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Reviews</Link>
+                                    <Link to="/profile" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Profile</Link>
+                                    <Button onClick={logoutHandle} style={{ color: 'white' }}>Logout</Button>
+                                </>
+                            )}
+                            
+                        </nav>
                     </div>
-
                     <Routes>
-                        <Route path="/categories" element={authenticated ? <Category /> : <Navigate to="/login" />} />
-                        <Route path="/" element={authenticated ? <Home /> : <Navigate to="/login" />} />
-                        <Route path="/skill-offerings" element={authenticated ? <SkillOffering /> : <Navigate to="/login" />} />
-                        <Route path="/registration" element={<Registration />} />
-                        <Route path="/skill-exchange" element={authenticated ? <SkillExchange /> : <Navigate to="/login" />} />
-                        <Route path="/gig/:id" element={authenticated ? <Gig /> : <Navigate to="/login" />} />
-                        <Route path="/chat" element={authenticated ? <Chat /> : <Navigate to="/login" />} />
-                        <Route path="/reviews" element={authenticated ? <Review /> : <Navigate to="/login" />} />
-                        <Route path="/reviewList" element={authenticated ? <ReviewList /> : <Navigate to="/login" />} />
-                        <Route path="/update-review/:id" element={authenticated ? <UpdateReview /> : <Navigate to="/login" />} />
-                        <Route path="/profile" element={authenticated ? <Profile /> : <Navigate to="/login" />} />
-                        <Route path="/login" element={<Login setUserId={setUserId} setNewAuthId={setNewAuthId}/>} />
+                        <Route path="/categories" element={authenticated ? <Category userId={userId}/> : <Navigate to="/login" />} />
+                        <Route path="/" element={authenticated ? <Home userId={userId}/> : <Navigate to="/login" />} />
+                        <Route path="/skill-offerings" element={authenticated ? <SkillOffering userId={userId}/> : <Navigate to="/login" />} />
+                        <Route path="/registration" element={<Registration userId={userId}/>} />
+                        <Route path="/skill-exchange" element={authenticated ? <SkillExchange userId={userId}/> : <Navigate to="/login" />} />
+                        <Route path="/gig/:id" element={authenticated ? <Gig userId={userId}/> : <Navigate to="/login" />} />
+                        <Route path="/chat" element={authenticated ? <Chat userId={userId}/> : <Navigate to="/login" />} />
+                        <Route path="/reviews" element={authenticated ? <Review userId={userId}/> : <Navigate to="/login" />} />
+                        <Route path="/reviewList" element={authenticated ? <ReviewList userId={userId}/> : <Navigate to="/login" />} />
+                        <Route path="/update-review/:id" element={authenticated ? <UpdateReview userId={userId}/> : <Navigate to="/login" />} />
+                        <Route path="/profile" element={authenticated ? <Profile userId={userId}/> : <Navigate to="/login" />} />
+                        <Route path="/login" element={<Login setUserId={setUserId} setAuthId={setAuthId}/>} />
                     </Routes>
                 </div>
             </Router>

@@ -21,13 +21,13 @@ const parseDate = (dateString) => {
     return new Date(dateString);
 };
 
-export default function Profile() {
+export default function Profile({userId}) {
     const [student, setStudent] = useState({});
     const [isEditing, setIsEditing] = useState(false);
     const location = useLocation();
-    const id = location.state?.studentId; 
+    //const id = location.state?.studentId; 
 
-    //const id = 22;
+    const id = userId;
 
     
 
@@ -41,7 +41,7 @@ export default function Profile() {
     });
 
     useEffect(() => {
-
+        
         const fetchStudent = async (id) => {
             try {
                 const response = await api.get(`/getUserStudentRecord?id=${id}`);
