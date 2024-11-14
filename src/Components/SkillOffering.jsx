@@ -14,7 +14,7 @@ const SkillOffering = () => {
     const [showCheckboxes, setShowCheckboxes] = useState(false);
     const [newIsActive, setNewIsActive] = useState(false);
     const [newDescription, setNewDescription] = useState('');
-    const [newCategory, setNewCategory] = useState('');
+    const [newCategoryId, setNewCategoryId] = useState('');
     const [newSkills, setNewSkills] = useState('');
     const [editingSkillOfferingId, setEditingSkillOfferingId] = useState(null);
     const [newTitle, setNewTitle] = useState('');
@@ -66,41 +66,36 @@ const SkillOffering = () => {
             isActive: newIsActive,
             description: newDescription,
             skills: newSkills,
+            categoryId: newCategoryId // add categoryId to the data payload
         };
-    
+
         try {
             let response;
             if (editingSkillOfferingId) {
-                // Include the category name in the PUT request
-                response = await axios.put(`http://localhost:8080/api/wildSkills/skilloffering/putSkillOfferingDetails?id=${editingSkillOfferingId}`, skillOfferingData, {
-                    params: { categoryName: newCategory } // Send category name as a query parameter
-                });
+                response = await axios.put(`http://localhost:8080/api/wildSkills/skilloffering/putSkillOfferingDetails?id=${editingSkillOfferingId}`, skillOfferingData);
             } else {
-                // Include the category name in the POST request
-                response = await axios.post('http://localhost:8080/api/wildSkills/skilloffering/postSkillOfferingRecord', skillOfferingData, {
-                    params: { categoryName: newCategory } // Send category name as a query parameter
-                });
+                response = await axios.post('http://localhost:8080/api/wildSkills/skilloffering/postSkillOfferingRecord', skillOfferingData);
             }
-    
+
             const savedOffering = response.data;
             setSkillOfferings(prevOfferings => 
                 editingSkillOfferingId 
                     ? prevOfferings.map(offering => offering.skillOfferingId === editingSkillOfferingId ? savedOffering : offering)
                     : [...prevOfferings, savedOffering]
             );
-    
+
             handleCloseDialog();
         } catch (error) {
             console.error('Error saving skill offering:', error.response || error.message || error);
         }
     };
-    
+
     const handleCloseDialog = () => {
         setOpenDialog(false);
         setEditingSkillOfferingId(null);
         setNewIsActive(false);
         setNewDescription('');
-        setNewCategory('');
+        setNewCategoryId('');
         setNewSkills('');
         setNewTitle('');
     };
@@ -171,7 +166,6 @@ const SkillOffering = () => {
                     Delete
                 </Button>
             )}
-            {/* Confirmation Dialog for Deletion */}
             <Dialog open={openConfirmDialog} onClose={() => setOpenConfirmDialog(false)}>
                 <DialogTitle>Confirm Deletion</DialogTitle>
                 <DialogContent>
@@ -204,11 +198,13 @@ const SkillOffering = () => {
                     <FormControl fullWidth margin="normal">
                         <InputLabel>Category</InputLabel>
                         <Select
-                            value={newCategory}
-                            onChange={(e) => setNewCategory(e.target.value)}
+                            value={newCategoryId}
+                            onChange={(e) => setNewCategoryId(e.target.value)}
                         >
                             {categories.map((category) => (
-                                <MenuItem key={category.categoryId} value={category.name}>{category.name}</MenuItem>
+                                <MenuItem key={category.categoryId} value={category.categoryId}>
+                                    {category.name}
+                                </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
