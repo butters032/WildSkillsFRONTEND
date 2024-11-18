@@ -45,6 +45,7 @@ const App = () => {
         }
 
     }, [authId,userId]);
+    //authId,userId
 
     
 
@@ -127,9 +128,10 @@ const App = () => {
                             
                         </nav>
                     </div>
+                    
                     <Routes>
-                        <Route path="/categories" element={authenticated ? <Category userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/" element={authenticated ? <Home userId={userId}/> : <Navigate to="/login" />} />
+                        <Route path="/categories" element={authenticated ? <Category userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/skill-offerings" element={authenticated ? <SkillOffering userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/registration" element={<Registration userId={userId}/>} />
                         <Route path="/skill-exchange" element={authenticated ? <SkillExchange userId={userId}/> : <Navigate to="/login" />} />
@@ -139,7 +141,7 @@ const App = () => {
                         <Route path="/reviewList" element={authenticated ? <ReviewList userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/update-review/:id" element={authenticated ? <UpdateReview userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/profile" element={authenticated ? <Profile userId={userId}/> : <Navigate to="/login" />} />
-                        <Route path="/login" element={<Login setUserId={setUserId} setAuthId={setAuthId}/>} />
+                        <Route path="/login" element={authenticated ?  <Navigate to="/" /> :<Login setUserId={setUserId} setAuthId={setAuthId}/>} />
                     </Routes>
                 </div>
             </Router>

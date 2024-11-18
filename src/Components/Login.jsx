@@ -59,7 +59,7 @@ export default function Login({ setUserId, setAuthId}) {
                 const studentId = response.data.studentId;
                 const authId = response.data.authId.authId;
                 if (studentId) {
-                    alert("Login Successful");
+                    //alert("Login Successful");
                     const authResponse = await apiAuth.put(`/putIncrementAuthenticationDetails?authId=${authId}`);
                     console.log('Sud sa authResponse: ',authResponse);
 

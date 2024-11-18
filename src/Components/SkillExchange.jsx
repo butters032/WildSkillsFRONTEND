@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from 'axios'
 import Chat from './Chat.jsx'
 
-export default function SkillExchange() {
+export default function SkillExchange({userId}) {
     const [exchange, setExchange] = useState([])
     const nexctitleRef = useRef()
     const exctitleRef = useRef()
@@ -11,9 +11,10 @@ export default function SkillExchange() {
     const excidRef = useRef()
     const excscstartRef = useRef()
     const excscendRef = useRef()
+    const [isEditing, setIsEditing] = useState(false)
 
     const api = axios.create({
-        baseURL: 'http://localhost:8080/api/wildSkills/skillExchange/',
+        baseURL: `http://localhost:8080/api/wildSkills/skillExchange/student/${userId}`,
         timeout: 1000,
         headers: {
             'Content-Type': 'application/json',
@@ -22,7 +23,7 @@ export default function SkillExchange() {
     });
 
     const deleteExchange = (id) =>{
-        api.delete(`deleteSkillExchange/${id}`)
+        api.delete(`/deleteSkillExchange/${id}`)
         .then(() =>{
             exchangeReload();
         })
@@ -57,11 +58,13 @@ export default function SkillExchange() {
             nexctitleRef.current.value = title;
             excscstartRef.current.value = scheduledStart;
             excscendRef.current.value = scheduledEnd;
+            setIsEditing(true);
+            console.log(isEditing)
         }
     }
 
     const exchangeReload = () => {
-        api.get('/getAllSkillExchange')
+        api.get('')
         .then((exc) => {
             setExchange(exc.data);
             console.log(exc);
@@ -72,7 +75,7 @@ export default function SkillExchange() {
     }
 
     const newExchange = () =>{
-        api.post('/postSkillExchangeRecord', {
+        api.post('/postSkillExchange', {
             status: 'Ongoing',
             title: exctitleRef.current.value,
             scheduledStart: excscstartRef.current.value,
@@ -121,7 +124,8 @@ export default function SkillExchange() {
                     ))}
 
                 </Grid2>
-
+                
+                
                 <Grid2>
                     <Stack direction={"column"} spacing={2}>
                         <Stack direction={"column"} spacing={1}>
@@ -148,6 +152,8 @@ export default function SkillExchange() {
                         </Stack>
                     </Stack>
                 </Grid2>
+                
+                
                 {/*<Chat/>*/}
             </Grid2>
         </>
