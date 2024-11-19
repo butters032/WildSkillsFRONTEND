@@ -76,28 +76,6 @@ const App = () => {
         checkAuth(authId);
     }, [authId]);
 
-    const apiAuth = axios.create({
-        baseURL: 'http://localhost:8080/api/wildSkills/authentication',
-        timeout: 1000,
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-    });
-
-    const logoutHandle = async () => {
-        localStorage.removeItem('authId');
-        localStorage.removeItem('userId');
-        localStorage.removeItem('sessionEnd');
-        
-        setAuthId(defaultVal);
-        setUserId(defaultVal);
-        setSessionEnd(null);
-        setAuthenticated(false);
-    
-        console.log('Logout successful');
-    };
-    
 
     return (
         <>
