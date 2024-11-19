@@ -6,11 +6,11 @@ import Edit from '@mui/icons-material/Edit';
 import Save from '@mui/icons-material/Save';
 import axios from 'axios';
 
-const Gig = () => {
+const Gig = ({userId}) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { title, description, skills = [], isActive, studentId, categoryId, skillOfferingId, categories = [] } = location.state || {};
-    const [studentName, setStudentName] = useState('');
+    const [student, setStudent] = useState({});;
+    const { title, description, skills = [], isActive, categoryId, skillOfferingId, categories = [] } = location.state || {};
     const [categoryName, setCategoryName] = useState('Unknown Category');
     const [editTitle, setEditTitle] = useState(title);
     const [editDescription, setEditDescription] = useState(description);
@@ -21,20 +21,52 @@ const Gig = () => {
     const category = categories.find(cat => cat.categoryId === categoryId);
     const resolvedCategoryName = category ? category.name : categoryName;
 
-    useEffect(() => {
+    const id = userId;
+    
+
+    /*useEffect(() => {
         const fetchStudentName = async (id) => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/wildSkills/student/getUserStudentRecord?id=${id}`);
                 setStudentName(response.data.name);
+                console.log(userId)
             } catch (error) {
                 console.error('Error fetching student name', error);
             }
         };
 
-        if (studentId) {
-            fetchStudentName(studentId);
+        if (userId) {
+            fetchStudentName(userId);
         }
-    }, [studentId]);
+    }, []);*/
+
+    const api = axios.create({
+        baseURL: 'http://localhost:8080/api/wildSkills/student',
+        timeout: 1000,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    });
+    useEffect(() => {
+        
+        const fetchStudent = async (id) => {
+            try {
+                const response = await api.get(`/getUserStudentRecord?id=${id}`);
+                console.log(response.data);
+                const fetchedStudent = response.data;
+                setStudent(fetchedStudent);
+                console.log(student)
+            } catch (error) {
+                console.error('Error fetching student data', error);
+            }
+        };
+
+        if (id) {
+            fetchStudent(id);
+        }
+    }, [id]);
+    console.log(student.name)
 
     useEffect(() => {
         const fetchCategoryName = async (categoryId) => {
@@ -87,8 +119,8 @@ const Gig = () => {
                                 <Edit />
                             </IconButton>
                         </Typography>
-                        <Typography variant="body2" color="textSecondary" style={{ display: 'flex', justifyContent: 'flex-start', fontSize: '30px' }} gutterBottom>
-                            {studentId || '(Name)'}
+                        <Typography variant="h6" color="textPrimary" style={{ display: 'flex', justifyContent: 'flex-start' }} gutterBottom>
+                            {student.name}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                             <Chip label={editIsActive ? "Online" : "Offline"} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
