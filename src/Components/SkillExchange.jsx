@@ -99,12 +99,13 @@ export default function SkillExchange({userId}) {
     return(
         <>
             <Grid2 container spacing={2} direction={"row"} marginTop={15}>
-                <Grid2 sx={{ border: "2px solid", minWidth: 500, minHeight: 700, maxHeight: 700,borderRadius: 5, /*backgroundColor:"#E7BC40",*/ overflow: "auto"  }}>
-                    <Typography variant="h4">Active Exchange</Typography>
+                <Grid2 sx={{ boxShadow: 3, minWidth: 500, minHeight: 700, maxHeight: 700,borderRadius: 5, /*backgroundColor:"#E7BC40",*/ overflow: "auto"  }}>
+                    <Typography variant="h4" justifySelf={"left"} >Active Exchange</Typography>
                     
                     {exchange.map((exc, index) =>(
                         <Grid2 key={index} 
-                            sx={{ border: "2px solid", 
+                            sx={{ //border: "2px solid", 
+                            boxShadow: 4,
                             minWidth: 480, 
                             maxWidth:480, 
                             minHeight: 100, 
@@ -113,6 +114,7 @@ export default function SkillExchange({userId}) {
                             marginTop:1,
                             borderRadius: 3,
                             //backgroundColor:"#D2B450",
+                            //backgroundColor:"#ff7f7f",
                             padding:1 }}>
                             <Typography variant="h5">{exc.title}</Typography>
                             <Typography variant="body1" justifySelf={"left"}>Status: {exc.status}</Typography>
@@ -151,10 +153,8 @@ export default function SkillExchange({userId}) {
                             <Button variant="contained" color="success" onClick={editExchange}>Edit Exchange</Button>
                         </Stack>
                     </Stack>
-                </Grid2>
-                
-                
-                {/*<Chat/>*/}
+                </Grid2>        
+                <Chat/>
             </Grid2>
         </>
     )
