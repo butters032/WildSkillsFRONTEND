@@ -10,16 +10,15 @@ const Gig = ({userId}) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [student, setStudent] = useState({});;
-    const { title, description, skills = [], isActive, categoryId, skillOfferingId, categories = [] } = location.state || {};
-    const [categoryName, setCategoryName] = useState('Unknown Category');
+    const { title, description, skills = [], isActive, category, skillOfferingId } = location.state || {};
+    console.log(location.state);
+    const categoryId = category?.categoryId || null;
+    const resolvedCategoryName = category ? category.name : 'Unknown Category';
     const [editTitle, setEditTitle] = useState(title);
     const [editDescription, setEditDescription] = useState(description);
     const [editSkills, setEditSkills] = useState(skills);
     const [isEditing, setIsEditing] = useState(false);
-    const [editIsActive, setEditIsActive] = useState(isActive);
-
-    const category = categories.find(cat => cat.categoryId === categoryId);
-    const resolvedCategoryName = category ? category.name : categoryName;
+    const [editIsActive, setEditIsActive] = useState(isActive); 
 
     const id = userId;
     
@@ -69,18 +68,17 @@ const Gig = ({userId}) => {
     console.log(student.name)
 
     useEffect(() => {
-        const fetchCategoryName = async (categoryId) => {
-            try {
-                const response = await axios.get(`http://localhost:8080/api/wildSkills/getCategory/${categoryId}`);
-                setCategoryName(response.data.name);
-            } catch (error) {
-                console.error('Error fetching category name:', error);
+        const fetchCategoryName = async () => {
+            if (categoryId && !category) {
+                try {
+                    const response = await axios.get(`http://localhost:8080/api/wildSkills/category/getCategory/${categoryId}`);
+                    setCategoryName(response.data.name);
+                } catch (error) {
+                    console.error('Error fetching category name:', error);
+                }
             }
         };
-
-        if (!category) {
-            fetchCategoryName();
-        }
+        fetchCategoryName();
     }, [categoryId, category]);
 
     const handleChatClick = () => {
