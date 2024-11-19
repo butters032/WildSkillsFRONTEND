@@ -69,8 +69,7 @@ const Home = ({userId}) => {
 
     return (
         <>
-            <Typography variant='h3'>Hello, {student.name}</Typography>
-            <h1>What Service do you Need?</h1>
+
             <TextField id="outlined-basic" variant="outlined" size="small" style={{width: '500px', marginBottom: '10px'}} />
             <Divider style={{marginBottom: '50px', backgroundColor: 'black'}}/>
 
