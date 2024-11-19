@@ -2,6 +2,7 @@ import { Button, Grid2, Stack, Typography } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import axios from 'axios'
 import Chat from './Chat.jsx'
+import { useNavigate } from "react-router-dom";
 
 export default function SkillExchange({userId}) {
     const [exchange, setExchange] = useState([])
@@ -12,6 +13,8 @@ export default function SkillExchange({userId}) {
     const excscstartRef = useRef()
     const excscendRef = useRef()
     const [isEditing, setIsEditing] = useState(false)
+
+    const navigate = useNavigate();
 
     const api = axios.create({
         baseURL: `http://localhost:8080/api/wildSkills/skillExchange/student/${userId}`,
@@ -96,11 +99,15 @@ export default function SkillExchange({userId}) {
         exchangeReload();
     }, [])
 
+    const handleReviewClick = () => {
+        navigate(`/reviews`);
+    };
+
     return(
         <>
             <Grid2 container spacing={2} direction={"row"} marginTop={15}>
                 <Grid2 sx={{ boxShadow: 3, minWidth: 500, minHeight: 700, maxHeight: 700,borderRadius: 5, /*backgroundColor:"#E7BC40",*/ overflow: "auto"  }}>
-                    <Typography variant="h4" justifySelf={"left"} >Active Exchange</Typography>
+                    <Typography variant="h5" sx={{justifySelf: "left", paddingLeft: 2}}>Active Exchange</Typography>
                     
                     {exchange.map((exc, index) =>(
                         <Grid2 key={index} 
@@ -122,6 +129,8 @@ export default function SkillExchange({userId}) {
                             <Typography variant="body2" justifySelf={"left"}>Scheduled End: {new Date(exc.scheduledEnd).toLocaleString("en-US", {dateStyle: "medium", timeStyle: "short"})}</Typography>
                             <Button variant="contained" color="success" onClick={() =>{handleEditExchange(exc.skillExchangeID, exc.status, exc.title, exc.scheduledStart, exc.scheduledEnd)}}>Edit</Button>
                             <Button variant="contained" color="error" onClick={() => {deleteExchange(exc.skillExchangeID)}}>Delete</Button>
+
+                            <Button variant="contained" color="info" onClick={() => {handleReviewClick()}}>Review User</Button>
                         </Grid2>
                     ))}
 
