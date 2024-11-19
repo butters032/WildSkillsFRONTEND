@@ -69,6 +69,8 @@ const Home = ({userId}) => {
 
     return (
         <>
+            <h3>Hello, {student.name}!</h3>
+            <h1>What service do you need?</h1>
 
             <TextField id="outlined-basic" variant="outlined" size="small" style={{width: '500px', marginBottom: '10px'}} />
             <Divider style={{marginBottom: '50px', backgroundColor: 'black'}}/>

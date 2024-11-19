@@ -143,7 +143,7 @@ const App = () => {
                                     <Link to="/categories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Categories</Link>
                                     <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Offerings</Link>
                                     <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Exchange</Link>
-                                    <Link to="/chat" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Chat</Link>
+                                    {/*<Link to="/chat" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Chat</Link>*/}
                                     <Link to="/reviewList" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Reviews</Link>
                                     <Link to="/profile" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Profile</Link>
                                     <Button onClick={()=>updateAuthentication(false)} style={{ color: 'white' }}>Logout</Button>
