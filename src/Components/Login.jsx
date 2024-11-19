@@ -63,6 +63,9 @@ export default function Login({ setUserId, setAuthId}) {
                     const authResponse = await apiAuth.put(`/putIncrementAuthenticationDetails?authId=${authId}`);
                     console.log('Sud sa authResponse: ',authResponse);
 
+                    const authStatusUpdate = await apiAuth.put(`/putUpdateAuthenticationStatus?authId=${authId}`);
+                    console.log('Sud sa Auth Status Update: ',authStatusUpdate);
+
                     setTimeout(() => {
                         navigate('/');
                     }, 100);

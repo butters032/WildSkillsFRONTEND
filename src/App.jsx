@@ -23,10 +23,12 @@ const App = () => {
     
     const [authId, setAuthId] = useState(() => localStorage.getItem('authId') || 'blank');
 
+    /*
     const [sessionEnd, setSessionEnd] = useState(() => {
         const storedSessionEnd = localStorage.getItem('sessionEnd');
         return storedSessionEnd ? new Date(storedSessionEnd) : new Date();
     });
+    */
 
     const defaultVal = 'blank';
 
@@ -37,17 +39,31 @@ const App = () => {
         console.log('Auth Id: ',authId);
         console.log('User Id: ',authId);
 
-        if (authId !== 'blank') {
-            setAuthenticated(true);
-        }
-        else {
-            setAuthenticated(false);
-        }
+        
 
     }, [authId,userId]);
     //authId,userId
 
+    const updateAuthentication = (choice) =>{
+        console.log('choice: ',choice);
+        if(choice==true){
+            setAuthenticated(true);
+            setTimeout(100);
+        }
+        else{
+            localStorage.removeItem('authId');
+        localStorage.removeItem('userId');
+        //localStorage.removeItem('sessionEnd');
+        
+        setAuthId(defaultVal);
+        setUserId(defaultVal);
+        //setSessionEnd(null);
+        setAuthenticated(false);
     
+        console.log('Logout successfulz');
+        }
+
+    }
 
     useEffect(() => {
         const checkAuth = async (authId) => {
@@ -59,16 +75,23 @@ const App = () => {
                     const currTime = new Date();
 
                     localStorage.setItem('sessionEnd', sessionEndTime.toISOString());
-                    setSessionEnd(sessionEndTime);
+                    //setSessionEnd(sessionEndTime);
 
-                    if (currStatus && sessionEndTime > currTime) {
-                        setAuthenticated(true);
-                    } else {
-                        setAuthenticated(false);
+                    if (currStatus===true && sessionEndTime > currTime) {
+                        console.log('test');
+                        updateAuthentication(true);
+                    } 
+                    else {
+                        updateAuthentication(false);
+                        //setAuthenticated(false);
+                        setTimeout(() => {
+                            logoutHandle;
+                        }, 100);
                     }
                 } catch (error) {
                     console.error('Error checking authentication status', error);
-                    setAuthenticated(false);
+                    updateAuthentication(false);
+                    //setAuthenticated(false);
                 }
             }
         };
@@ -76,6 +99,29 @@ const App = () => {
         checkAuth(authId);
     }, [authId]);
 
+    const apiAuth = axios.create({
+        baseURL: 'http://localhost:8080/api/wildSkills/authentication',
+        timeout: 1000,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    });
+
+    /*
+    const logoutHandle = async () => {
+        localStorage.removeItem('authId');
+        localStorage.removeItem('userId');
+        //localStorage.removeItem('sessionEnd');
+        
+        setAuthId(defaultVal);
+        setUserId(defaultVal);
+        //setSessionEnd(null);
+        setAuthenticated(false);
+    
+        console.log('Logout successful');
+    };
+    */
 
     return (
         <>
@@ -100,7 +146,7 @@ const App = () => {
                                     <Link to="/chat" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Chat</Link>
                                     <Link to="/reviewList" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Reviews</Link>
                                     <Link to="/profile" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Profile</Link>
-                                    <Button onClick={logoutHandle} style={{ color: 'white' }}>Logout</Button>
+                                    <Button onClick={()=>updateAuthentication(false)} style={{ color: 'white' }}>Logout</Button>
                                 </>
                             )}
                             
