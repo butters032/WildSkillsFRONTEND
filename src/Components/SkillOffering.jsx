@@ -45,8 +45,12 @@ const SkillOffering = () => {
     };
 
     const handleNavigate = (offering) => {
-        navigate(`/gig/${offering.skillOfferingId}`, { state: { ...offering } });
+        const category = categories.find(cat => cat.categoryId === offering.categoryId);
+        console.log('Final State:', { ...offering, category }); 
+        navigate(`/gig/${offering.skillOfferingId}`, { state: { ...offering, category } });
     };
+    
+    
 
     const handleDeleteSelected = async () => {
         try {
@@ -66,7 +70,7 @@ const SkillOffering = () => {
             isActive: newIsActive,
             description: newDescription,
             skills: newSkills,
-            categoryId: newCategoryId // add categoryId to the data payload
+            categoryId: newCategoryId 
         };
 
         try {
