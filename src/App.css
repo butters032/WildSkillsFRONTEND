@@ -1,8 +1,8 @@
 #root {
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  margin-left: 15%;
+  /*padding: 2rem;
+  /*text-align: center;*/
 }
 
 .logo {
@@ -125,31 +125,32 @@ td, th {
 
 .apptxt {
   position: fixed;
-  top: 20px;
-  left: 20px;
+  top: 0px;
+  left: 0px;
   margin: 0;
   padding: 0;
   font-size: 50px;
   font-weight: bold;
   z-index: 1000;
-  width: calc(100% - 40px);
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: white;
+  height: 70px;
 }
 
 .routetxt {
   position: fixed;
-  top: 60px;
-  left: 50%;  /* Use 50% for centering */
+  top: 40px;
+  left: 40%;  /* Use 50% for centering */
   transform: translateX(-10%);  /* Center align */
   margin: 0;
   padding: 0;
   font-size: 20px;
   font-weight: bold;
   z-index: 1000;
-  width: calc(100% - 40px);
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;

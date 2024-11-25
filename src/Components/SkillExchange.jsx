@@ -105,7 +105,7 @@ export default function SkillExchange({userId}) {
 
     return(
         <>
-            <Grid2 container spacing={2} direction={"row"} marginTop={15}>
+            <Grid2 container spacing={2} direction={"row"} marginTop={2}>
                 <Grid2 sx={{ boxShadow: 3, minWidth: 500, minHeight: 700, maxHeight: 700,borderRadius: 5, /*backgroundColor:"#E7BC40",*/ overflow: "auto"  }}>
                     <Typography variant="h5" sx={{justifySelf: "left", paddingLeft: 2}}>Active Exchange</Typography>
                     
