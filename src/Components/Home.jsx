@@ -3,9 +3,12 @@ import { BrowserRouter as Router, Route, Routes, Link, useNavigate, useLocation 
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid2';
-import { Card, CardContent, CardActionArea, Typography } from '@mui/material';
+import { Card, CardContent, CardActionArea, Typography, Grid2 } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { blue } from '@mui/material/colors';
+import wiski_banner from '../assets/images/HomeAssets/wiski-banner.jpg'
+
 
 
 
@@ -21,7 +24,7 @@ const Home = ({userId}) => {
 
     //---------------------------
 
-    const [skillOfferings, setSkillOfferings] = useState([]);s
+    const [skillOfferings, setSkillOfferings] = useState([]);
     const [selectedIds, setSelectedIds] = useState([]);
     const [showCheckboxes, setShowCheckboxes] = useState(false);
 
@@ -102,6 +105,17 @@ const Home = ({userId}) => {
 
     return (
         <>
+            <Grid2 container sx={{
+                backgroundImage: `url(${wiski_banner})`,
+                backgroundSize:400,
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                minWidth: 400,
+                minHeight: 400,
+
+            }}>
+                
+            </Grid2>
             <h2>Welcome back, {student.name}!</h2>
             {/*<h1>What service do you need?</h1>
 
