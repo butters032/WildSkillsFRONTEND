@@ -13,7 +13,7 @@ const Gig = ({userId}) => {
     const { title, description, skills = [], isActive, category, skillOfferingId } = location.state || {};
     console.log(location.state);
     const categoryId = category?.categoryId || null;
-    const resolvedCategoryName = category ? category.name : 'Unknown Category';
+    const [resolvedCategoryName, setCategoryName] = useState(category ? category.name : 'Unknown Category');
     const [editTitle, setEditTitle] = useState(title);
     const [editDescription, setEditDescription] = useState(description);
     const [editSkills, setEditSkills] = useState(skills);
@@ -21,23 +21,6 @@ const Gig = ({userId}) => {
     const [editIsActive, setEditIsActive] = useState(isActive); 
 
     const id = userId;
-    
-
-    /*useEffect(() => {
-        const fetchStudentName = async (id) => {
-            try {
-                const response = await axios.get(`http://localhost:8080/api/wildSkills/student/getUserStudentRecord?id=${id}`);
-                setStudentName(response.data.name);
-                console.log(userId)
-            } catch (error) {
-                console.error('Error fetching student name', error);
-            }
-        };
-
-        if (userId) {
-            fetchStudentName(userId);
-        }
-    }, []);*/
 
     const api = axios.create({
         baseURL: 'http://localhost:8080/api/wildSkills/student',
@@ -52,10 +35,8 @@ const Gig = ({userId}) => {
         const fetchStudent = async (id) => {
             try {
                 const response = await api.get(`/getUserStudentRecord?id=${id}`);
-                console.log(response.data);
                 const fetchedStudent = response.data;
                 setStudent(fetchedStudent);
-                console.log(student)
             } catch (error) {
                 console.error('Error fetching student data', error);
             }
@@ -80,6 +61,7 @@ const Gig = ({userId}) => {
         };
         fetchCategoryName();
     }, [categoryId, category]);
+    
 
     const handleChatClick = () => {
         navigate('/chat');
@@ -131,6 +113,9 @@ const Gig = ({userId}) => {
                             <Chat style={{ textAlign: 'left' }} />
                         </IconButton>
                         <br />
+                        <Typography variant="h6" color="textPrimary" style={{ display: 'flex', justifyContent: 'flex-start' }} gutterBottom> 
+                            {resolvedCategoryName}
+                        </Typography>
                         <Typography variant="body1" style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                             {editDescription}
                         </Typography>
