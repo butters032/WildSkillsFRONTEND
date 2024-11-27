@@ -70,8 +70,11 @@ const SkillOffering = () => {
             isActive: newIsActive,
             description: newDescription,
             skills: newSkills,
-            categoryId: newCategoryId 
+            category: {
+                categoryId: newCategoryId,
+            } 
         };
+        console.log('Skill Offering Data:',skillOfferingData);
 
         try {
             let response;
