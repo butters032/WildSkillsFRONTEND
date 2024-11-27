@@ -16,6 +16,7 @@ import Login from './Components/Login';
 import ReviewList from './Components/ReviewList';
 import UpdateReview from './Components/ReviewUpdate';
 import { Button } from '@mui/material';
+import TextField from '@mui/material/TextField';
 
 const App = () => {
     const [authenticated, setAuthenticated] = useState(false);
@@ -126,27 +127,32 @@ const App = () => {
     return (
         <>
             <Router>
-                <div style={{ textAlign: 'center', margin: '20px' }}>
-                    <div className="apptxt" style={{ borderBottom: "solid 2px", paddingBottom: 10, backgroundColor: "#800000" }}>
-                        <span style={{ alignSelf: 'start', display: 'flex'}}>
+                <div>
+                    <div className="apptxt" style={{ borderBottom: "solid 2px", paddingBottom: 20, backgroundColor: "#800000" }}>
+                        {/*<span style={{ marginLeft: 20, alignSelf: 'start', display: 'flex'}}>
                             <Link to="/" className="apptxt">WildSkills</Link>
-                        </span>
-                        <span style={{ alignSelf: 'end', display: 'flex' }}>
+                        </span>*/}
+                        {/*<span style={{ alignSelf: 'end', display: 'flex' }}>
                             <img src={UserIcon} alt="User Icon" style={{ width: '65px', height: '65px' }} />
-                        </span>
+                        </span>*/}
+                        <Link to="/" className="apptxt" style={{marginLeft: '15%', marginTop: 10}}>
+                            WildSkills
+                        </Link>
                     </div>
 
                     <div className="routetxt">
                         <nav>
                             {authenticated && (
                                 <>
+                                    <TextField id="outlined-basic" variant="outlined" size="small" style={{width: '400px', marginBottom: '10px', border: '1px solid white', borderRadius: '6px', backgroundColor: 'white'}} />
                                     <Link to="/categories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Categories</Link>
                                     <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Offerings</Link>
                                     <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Exchange</Link>
                                     {/*<Link to="/chat" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Chat</Link>*/}
                                     <Link to="/reviewList" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Reviews</Link>
                                     <Link to="/profile" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Profile</Link>
-                                    <Button onClick={()=>updateAuthentication(false)} style={{ color: 'white' }}>Logout</Button>
+                                    <Link to="/login" style={{ margin: '10px', textDecoration: 'none', color: 'white' }} onClick={()=>updateAuthentication(false)}>Logout</Link>
+                                    {/*<Button onClick={()=>updateAuthentication(false)} style={{ color: 'white' }}>Logout</Button>*/}
                                 </>
                             )}
                             
