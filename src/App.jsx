@@ -17,6 +17,9 @@ import ReviewList from './Components/ReviewList';
 import UpdateReview from './Components/ReviewUpdate';
 import { Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import wiski_logo from './assets/images/HomeAssets/wiski-logo.png';
+
+
 
 const App = () => {
     const [authenticated, setAuthenticated] = useState(false);
@@ -128,16 +131,18 @@ const App = () => {
         <>
             <Router>
                 <div>
-                    <div className="apptxt" style={{ borderBottom: "solid 2px", paddingBottom: 20, backgroundColor: "#800000" }}>
+                    <div className="apptxt" style={{ borderBottom: "solid 2px", paddingBottom: 20, backgroundColor: "#b03d3d" /*#800000 */}}>
                         {/*<span style={{ marginLeft: 20, alignSelf: 'start', display: 'flex'}}>
                             <Link to="/" className="apptxt">WildSkills</Link>
                         </span>*/}
                         {/*<span style={{ alignSelf: 'end', display: 'flex' }}>
                             <img src={UserIcon} alt="User Icon" style={{ width: '65px', height: '65px' }} />
                         </span>*/}
-                        <Link to="/" className="apptxt" style={{marginLeft: '15%', marginTop: 10}}>
-                            WildSkills
+                        <Link to="/" className="apptxt" style={{ marginLeft: '15%', marginTop: 10 }}>
+                            <img src={wiski_logo} alt="Wiski Logo" style={{ width: 'auto', height: '50px' }} />
                         </Link>
+
+                        
                     </div>
 
                     <div className="routetxt">
