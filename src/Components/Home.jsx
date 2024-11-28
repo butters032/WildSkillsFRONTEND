@@ -101,7 +101,7 @@ const Home = ({userId}) => {
         }
     }, [id]);
 
-    const handleClick = (studentId) => {
+    const handleNavigate = (studentId) => {
         navigate(`/skill-offerings/${studentId}`);
     };
 
@@ -194,6 +194,7 @@ const Home = ({userId}) => {
                     <Typography variant='h5'>
                         Popular Services Right Now
                     </Typography>
+                    {/*
                     <Grid container spacing={2}>
                         {students.map((student) => (
                             <Grid item size={4} key={student.studentId}>
@@ -210,11 +211,13 @@ const Home = ({userId}) => {
                             </Grid>
                         ))}
                     </Grid>
+                    */}
                     <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', marginTop: '20px' }}>
                             {skillOfferings.map((offering) => (
+                                
                                 <Card key={offering.skillOfferingId} style={{ width: '250px', margin: '10px' }}>
                                     <CardActionArea
-                                        onClick={() => !showCheckboxes && handleNavigate(offering)}
+                                        onClick={() => !showCheckboxes && handleNavigate(offering.skillOfferingId)}
                                         style={{ cursor: showCheckboxes ? 'default' : 'pointer' }}
                                     >
                                     <CardContent>
