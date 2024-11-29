@@ -7,7 +7,8 @@ import { Card, CardContent, CardActionArea, Typography, Grid2, Stack } from '@mu
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { blue } from '@mui/material/colors';
-import wiski_banner from '../assets/images/HomeAssets/wiski-banner.png';
+//import wiski_banner from '../assets/images/HomeAssets/wiski-banner.png';
+import wiski_banner from '../assets/images/HomeAssets/wiski-banner-full.png';
 
 
 
@@ -115,7 +116,7 @@ const Home = ({userId}) => {
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
-                    minHeight: '20vh',
+                    minHeight: '100vh',
                     minWidth: '100vw',
                     display: 'flex',
                     //justifyContent: 'center',
@@ -155,6 +156,23 @@ const Home = ({userId}) => {
                 >
                     What service do you need today?
                 </Typography>
+                <Typography
+                    variant="h2"
+                    component="div"
+                    sx={{
+                        stroke:10,
+                        fontWeight:'bold',
+                        position: 'absolute',
+                        color: '#ffc400',
+                        backgroundColor: 'rgba(0, 0, 0, 0)',
+                        padding: '120px 1020px',
+                        borderRadius: 2,
+                        textAlign: 'center',
+                        
+                    }}
+                >
+                    Welcome to Wild Skills
+                </Typography>
             </Grid2>
 
 
@@ -165,7 +183,7 @@ const Home = ({userId}) => {
             <Grid2
                 container
                 sx={{
-                    backgroundColor: 'white',
+                    backgroundColor: '#222222',
                     paddingLeft:20,
                     paddingRight:20
                 }}>
