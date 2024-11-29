@@ -71,3 +71,8 @@ button:focus-visible {
     width: 100px;
   }
 }
+
+label {
+  font-size: 16px;
+  font-weight: 500;
+}
