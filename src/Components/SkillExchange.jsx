@@ -67,7 +67,7 @@ export default function SkillExchange({userId}) {
         }
     };
 
-    const handleEditExchange = (id, status, title, scheduledStart, scheduledEnd) =>{
+    const handleExchange = (id, status, title, scheduledStart, scheduledEnd) =>{
         setId(id);
         setStatus(status);
         setTitle(title);
@@ -88,12 +88,12 @@ export default function SkillExchange({userId}) {
         });
     }
 
-    const newExchange = () =>{
-        api.post('/postSkillExchange', {
+    /*const newExchange = (userId) =>{
+        api.post(`/postSkillExchange/${creatorId}`, {
             status: 'Ongoing',
-            title,
-            scheduledStart,
-            scheduledEnd,
+            title: '',
+            scheduledStart: '',
+            scheduledEnd: '',
         })
         .then((exc) =>{
             console.log(exc.data);
@@ -105,7 +105,7 @@ export default function SkillExchange({userId}) {
         .catch((error) =>{
             console.log('Error creating Skill Exchange',error)
         })
-    }
+    }*/
 
     //skill exchange display/get
     useEffect(() =>{
@@ -139,7 +139,7 @@ export default function SkillExchange({userId}) {
                                     boxShadow: 6,
                                 }
                             }}
-                            onClick={() => { handleEditExchange(exc.skillExchangeID, exc.status, exc.title, exc.scheduledStart, exc.scheduledEnd) }}>
+                            onClick={() => { handleExchange(exc.skillExchangeID, exc.status, exc.title, exc.scheduledStart, exc.scheduledEnd) }}>
                             <Typography variant="h5">{exc.title}</Typography>
                             <Typography variant="body1" justifySelf={"left"}><strong>Status: </strong>{exc.status}</Typography>
                             {/*<Typography variant="body2" justifySelf={"left"}>Scheduled Start: {new Date(exc.scheduledStart).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}</Typography>
