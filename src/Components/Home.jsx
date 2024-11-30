@@ -372,7 +372,7 @@ const Home = ({userId}) => {
                                                     
                                                     minWidth: 200, 
                                                     justifyItems:'center', 
-                                                    backgroundColor:'#222222' }}>
+                                                    backgroundColor:'#333333' }}>
                                                     <CardContent>
                                                         <Typography variant="h6" sx={{
                                                             color: 'white',
