@@ -170,7 +170,7 @@ const App = () => {
                         <Route path="/skill-offerings" element={authenticated ? <SkillOffering userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/registration" element={<Registration userId={userId}/>} />
                         <Route path="/skill-exchange" element={authenticated ? <SkillExchange userId={userId}/> : <Navigate to="/login" />} />
-                        <Route path="/gig/:id" element={authenticated ? <Gig userId={userId}/> : <Navigate to="/login" />} />
+                        <Route path="/gig/:id" element={authenticated ? <Gig userId={userId} /> : <Navigate to="/login" />} />
                         <Route path="/chat" element={authenticated ? <Chat userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/reviews" element={authenticated ? <Review userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/reviewList" element={authenticated ? <ReviewList userId={userId}/> : <Navigate to="/login" />} />

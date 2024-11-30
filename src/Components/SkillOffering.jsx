@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const SkillOffering = () => {
+const SkillOffering = ({ userId }) => {
     const [skillOfferings, setSkillOfferings] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -18,6 +18,7 @@ const SkillOffering = () => {
     const [newSkills, setNewSkills] = useState('');
     const [editingSkillOfferingId, setEditingSkillOfferingId] = useState(null);
     const [newTitle, setNewTitle] = useState('');
+    const [student, setStudent] = useState({});
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,9 +26,40 @@ const SkillOffering = () => {
         fetchCategories();
     }, []);
 
+    const api = axios.create({
+        baseURL: 'http://localhost:8080/api/wildSkills/student',
+        timeout: 1000,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+    });
+
+    useEffect(() => {
+        const fetchStudent = async () => {
+            if (!userId) {
+                console.error('User ID is missing!');
+                return;
+            }
+            try {
+                const response = await api.get(`/getUserStudentRecord?id=${userId}`);
+                const fetchedStudent = response.data;
+                setStudent(fetchedStudent);
+            } catch (error) {
+                console.error('Error fetching student data:', error);
+            }
+        };
+
+        fetchStudent();
+    }, [userId]);
+
+    console.log(student.studentId);
+
     const fetchSkillOfferings = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/wildSkills/skilloffering/getAllSkillOfferingRecord');
+            const response = await axios.get(
+                'http://localhost:8080/api/wildSkills/skilloffering/getAllSkillOfferingRecord'
+            );
             setSkillOfferings(response.data);
             setLoading(false);
         } catch (error) {
@@ -37,13 +69,14 @@ const SkillOffering = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/wildSkills/category/getAllCategory');
+            const response = await axios.get(
+                'http://localhost:8080/api/wildSkills/category/getAllCategory'
+            );
             setCategories(response.data);
         } catch (error) {
             console.error('Error fetching categories:', error);
         }
     };
-
     const handleNavigate = (offering) => {
         const category = categories.find(cat => cat.categoryId === offering.categoryId);
         console.log('Final State:', { ...offering, category }); 
@@ -72,7 +105,8 @@ const SkillOffering = () => {
             skills: newSkills,
             category: {
                 categoryId: newCategoryId,
-            } 
+            },
+            studentID:student.id,
         };
         console.log('Skill Offering Data:',skillOfferingData);
 
@@ -222,16 +256,6 @@ const SkillOffering = () => {
                             onChange={(e) => setNewSkills(e.target.value)}
                         />
                     </FormControl>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={newIsActive}
-                                onChange={(e) => setNewIsActive(e.target.checked)}
-                                color="primary"
-                            />
-                        }
-                        label={newIsActive ? "Online" : "Offline"}
-                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseDialog} color="secondary">Cancel</Button>
