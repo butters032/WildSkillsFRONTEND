@@ -1,6 +1,6 @@
 import { Card, CardContent, Grid2, Stack, Typography, Button, TextField } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState,Box } from "react";
 import { useLocation } from 'react-router-dom';
 
 import Radio from '@mui/material/Radio';
@@ -14,6 +14,9 @@ import user_password from '../assets/images/LoginRegistrationAssets/user_passwor
 import user_email from '../assets/images/LoginRegistrationAssets/user_email.png';
 import user_calendar from '../assets/images/LoginRegistrationAssets/user_calendar.png';
 import user_gender from '../assets/images/LoginRegistrationAssets/user_gender.png';
+
+
+import wiski_banner from '../assets/images/HomeAssets/wiski-banner-full.png';
 
 
 const parseDate = (dateString) => {
@@ -110,143 +113,236 @@ export default function Profile({userId}) {
     };
 
 return (
-    <Card sx={{minWidth:500, minHeight:500}}>
-        {!isEditing && (
-            <CardContent>
-                <Stack spacing={3}>
-                    <div className="container">
-                        <div className="header">
-                            <Typography variant="h5">Profile Page</Typography>
-                            <div className="underline"></div>
+    <Grid2
+        container
+        sx={{
+            position: 'relative',
+            backgroundImage: `url(${wiski_banner})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            minHeight: '78vh',
+            minWidth: '100vw',
+            display: 'flex',
+        }}
+    >
+        <Card sx={{
+                    maxWidth: 400,
+                    minWidth: '28vw',
+                    margin: "auto",
+                    mt: 8,
+                    p: 3,
+                    boxShadow: 3,
+                    borderRadius: 3,
+                    backgroundColor: '#ffe6d1'
+                }}>
+            {!isEditing && (
+                <CardContent>
+                    
+                    <Stack spacing={4}>
+                        <div className="container">
+                            <div className="header">
+                            <Typography variant="h4" gutterBottom 
+                                sx={{
+                                    fontFamily: 'Proxima Nova Bold',
+                                }}>
+                                    Profile Page
+                                </Typography>
+                                <div className="underline"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="inputs">
-                        <div className="input">
-                            <img src={user_icon} alt="User Icon" />
-                            <Typography>{student.name}</Typography>
+                        <div className="inputs">
+                            <div className="input">
+                                <img src={user_icon} alt="User Icon" />
+                                <Typography
+                                    sx={{
+                                        //fontWeight: 'bold',
+                                        color: 'black',
+                                        textAlign: 'left',
+                                        fontFamily: 'Proxima Nova',
+                                        //textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                        fontSize: 17,
+                                        lineHeight: 1
+                                    }}>
+                                        {student.name}
+                                </Typography>
+                                
+                            </div>
+                            
                         </div>
-                    </div>
-                    <div className="inputs">
-                        <div className="input">
-                            <img src={user_calendar} alt="Calendar Icon" />
-                            <Typography variant="body2" sx={{ paddingRight: 1 }}>Date of Birth</Typography>
-                            <DatePicker
-                                name="birthdate"
-                                onChange={date => handleChange({ target: { name: 'birthdate', value: date } })}
-                                value={student.birthdate || new Date()}
-                                maxDate={new Date()}
-                                disableCalendar={true}
-                                disabled
-                            />
+                        
+                        <div className="inputs">
+                            <div className="input">
+                                <img src={user_calendar} alt="Calendar Icon" />
+                                <DatePicker
+                                    name="birthdate"
+                                    onChange={date => handleChange({ target: { name: 'birthdate', value: date } })}
+                                    value={student.birthdate || new Date()}
+                                    maxDate={new Date()}
+                                    disableCalendar={true}
+                                    disabled
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div className="inputs">
-                        <div className="input">
-                            <img src={user_gender} alt="Gender" />
-                            <Typography variant="body2">Gender</Typography>
-                            <Typography>: {student.gender}</Typography>
+                        <div className="inputs">
+                            <div className="input">
+                                <img src={user_gender} alt="Gender" />
+                                <Typography
+                                    sx={{
+                                        //fontWeight: 'bold',
+                                        color: 'black',
+                                        textAlign: 'left',
+                                        fontFamily: 'Proxima Nova',
+                                        //textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                        fontSize: 17,
+                                        lineHeight: 1
+                                    }}>
+                                        {student.gender}
+                                </Typography>
+                            </div>
                         </div>
-                    </div>
-                    <div className="inputs">
-                        <div className="input">
-                            <img src={user_email} alt="Email Icon" />
-                            <Typography>{student.email}</Typography>
+                        <div className="inputs">
+                            <div className="input">
+                                <img src={user_email} alt="Email Icon" />
+                                <Typography
+                                    sx={{
+                                        //fontWeight: 'bold',
+                                        color: 'black',
+                                        textAlign: 'left',
+                                        fontFamily: 'Proxima Nova',
+                                        //textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                        fontSize: 17,
+                                        lineHeight: 1
+                                    }}>
+                                        {student.email}
+                                </Typography>
+                            </div>
                         </div>
-                    </div>
-                    <div className="inputs">
-                        <div className="input">
-                            <img src={user_password} alt="Password Icon" />
-                            <Typography>{student.password}</Typography>
+                        <div className="inputs">
+                            <div className="input">
+                                <img src={user_password} alt="Password Icon" />
+                                <Typography
+                                    sx={{
+                                        //fontWeight: 'bold',
+                                        color: 'black',
+                                        textAlign: 'left',
+                                        fontFamily: 'Proxima Nova',
+                                        //textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                        fontSize: 17,
+                                        lineHeight: 1
+                                    }}>
+                                        {'********'}
+                                </Typography>
+                            </div>
                         </div>
-                    </div>
-                    <Grid2 container justifyContent="flex-end" sx={{justifyContent:"center", columnGap:20}}>
-                        <Button variant="contained" color="error" onClick={handleDeleteClick}>Delete Account</Button>
-                        <Button variant="contained" onClick={handleEditClick}>Edit Details</Button>
-                    </Grid2>
-                </Stack>
-            </CardContent>
-        )}     
-        {isEditing && (
-            <CardContent>
-                <Stack spacing={3}>
-                    <div className="container">
-                        <div className="header">
-                            <Typography variant="h5">Edit Profile</Typography>
-                            <div className="underline"></div>
+                        <Grid2 container justifyContent="flex-end" sx={{justifyContent:"center", columnGap:20}}>
+                            <Button variant="contained" color="error" onClick={handleDeleteClick}>Delete Account</Button>
+                            <Button variant="contained" onClick={handleEditClick}>Edit Details</Button>
+                        </Grid2>
+                    </Stack>
+                </CardContent>
+            )}     
+            {isEditing && (
+                <CardContent>
+                    <Stack spacing={4}>
+                        <div className="container">
+                            <div className="header">
+                            <Typography variant="h4" gutterBottom 
+                                sx={{
+                                    fontFamily: 'Proxima Nova Bold',
+                                }}>
+                                    Login
+                                </Typography>
+                                <div className="underline"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="inputs">
-                        <div className="input">
-                            <img src={user_icon} alt="User Icon" />
-                            <input value={student.name || ''} type="text" placeholder="Name" label="Name"
-                                name="name"onChange={handleChange} />
-                        </div>
-                    </div>
-
-                    <div className="inputs">
-                        <div className="input">
-                            <img src={user_calendar} alt="Calendar Icon" />
-                            <Typography variant="body2" sx={{ paddingRight: 1 }}>Date of Birth</Typography>
-                            <DatePicker
-                                name="birthdate"
-                                onChange={date => handleChange({ target: { name: 'birthdate', value: date } })}
-                                value={student.birthdate || new Date()}
-                                maxDate={new Date()}
-                                disableCalendar={true}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="inputs">
-                        <div className="input">
-                            <img src={user_gender} alt="Gender" />
-                            <Typography variant="body2">Gender :</Typography>
-                            <RadioGroup
-                                row
-                                name="gender"
-                                value={student.gender || ''}
-                                onChange={handleChange}
-                            >
-                                <FormControlLabel value="female" control={<Radio />} label="Female" />
-                                <FormControlLabel value="male" control={<Radio />} label="Male" />
-                                <FormControlLabel value="other" control={<Radio />} label="Other" />
-                            </RadioGroup>
-                        </div>
-                    </div>
-
-                    <div className="inputs">
-                        <div className="input">
-                            <img src={user_email} alt="Email Icon" />
-                            {/* Ill beautify this thing later with this for now kani sa
+                        <div className="inputs">
+                            <div className="input">
+                                <img src={user_icon} alt="User Icon" />
                                 <TextField
-                                label="Email"
-                                name="email"
-                                type="email"
-                                value={student.email || ''}
-                                onChange={handleChange}
+                                    label="Name"
+                                    name="Name"
+                                    type="text"
+                                    value={student.name || ''}
+                                    onChange={handleChange}
 
-                            />
-                            */}
-                            <input value={student.email || ''} type="email" placeholder="Email" label="Email"
-                                name="email" onChange={handleChange} />
+                                />
+                                {/*<input value={student.name || ''} type="text" placeholder="Name" label="Name"
+                                    name="name"onChange={handleChange} /> */}
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="inputs">
-                        <div className="input">
-                            <img src={user_password} alt="Password Icon" />
-                            <input value={student.password || ''} type="text" placeholder="Password" label="Password"
-                                name="password"onChange={handleChange} />
+                        <div className="inputs">
+                            <div className="input">
+                                <img src={user_calendar} alt="Calendar Icon" />
+                                <Typography variant="body2" sx={{ paddingRight: 1 }}>Date of Birth</Typography>
+                                <DatePicker
+                                    name="birthdate"
+                                    onChange={date => handleChange({ target: { name: 'birthdate', value: date } })}
+                                    value={student.birthdate || new Date()}
+                                    maxDate={new Date()}
+                                    disableCalendar={true}
+                                />
+                            </div>
                         </div>
-                    </div>
 
-                    <Grid2 container justifyContent="flex-end">
-                        <Button variant="contained" onClick={handleSaveClick}>Save Details</Button>
-                    </Grid2>
-                </Stack>
-            </CardContent>
-        )}
-    </Card>
+                        <div className="inputs">
+                            <div className="input">
+                                <img src={user_gender} alt="Gender" />
+                                <Typography variant="body2">Gender :</Typography>
+                                <RadioGroup
+                                    row
+                                    name="gender"
+                                    value={student.gender || ''}
+                                    onChange={handleChange}
+                                >
+                                    <FormControlLabel value="female" control={<Radio />} label="Female" />
+                                    <FormControlLabel value="male" control={<Radio />} label="Male" />
+                                    <FormControlLabel value="other" control={<Radio />} label="Other" />
+                                </RadioGroup>
+                            </div>
+                        </div>
+
+                        <div className="inputs">
+                            <div className="input">
+                                <img src={user_email} alt="Email Icon" />
+                                {/* Ill beautify this thing later with this for now kani sa*/}
+                                    <TextField
+                                    label="Email"
+                                    name="email"
+                                    type="email"
+                                    value={student.email || ''}
+                                    onChange={handleChange}
+
+                                    />
+                                
+                                {/* <input value={student.email || ''} type="email" placeholder="Email" label="Email" name="email" onChange={handleChange} />*/}
+                            </div>
+                        </div>
+
+                        <div className="inputs">
+                            <div className="input">
+                                <img src={user_password} alt="Password Icon" />
+                                <TextField
+                                    label="Password"
+                                    name="password"
+                                    type="password"
+                                    value={student.password || ''}
+                                    onChange={handleChange}
+
+                                    />
+                                {/*<input value={student.password || ''} type="text" placeholder="Password" label="Password" name="password"onChange={handleChange} /> */}
+                            </div>
+                        </div>
+
+                        <Grid2 container justifyContent="flex-end">
+                            <Button variant="contained" onClick={handleSaveClick}>Save Details</Button>
+                        </Grid2>
+                    </Stack>
+                </CardContent>
+            )}
+        </Card>
+    </Grid2>
     );
 }

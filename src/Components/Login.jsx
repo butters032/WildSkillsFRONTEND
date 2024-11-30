@@ -2,7 +2,11 @@ import React, { useRef } from "react";
 import { Card, CardContent, Typography, TextField, Button, Box, Grid, Grid2 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import '../LoginRegister.css'
+import '../LoginRegister.css';
+import wiski_banner from '../assets/images/HomeAssets/wiski-banner-full.png';
+
+//for the font
+import '../Home.css';
 
 export default function Login({ setUserId, setAuthId }) {
     const emailRef = useRef();
@@ -63,73 +67,91 @@ export default function Login({ setUserId, setAuthId }) {
     };
 
     return (
-        <Card
-            sx={{
-                maxWidth: 400,
-                margin: "auto",
-                mt: 8,
-                p: 3,
-                boxShadow: 3,
-                borderRadius: 3,
-            }}
-        >
-            <CardContent>
-                <Box textAlign="center" mb={3}>
-                    <Typography variant="h4" gutterBottom>
-                        Login
-                    </Typography>
-                    <Box
+        <Grid2
+        sx={{
+            minWidth:'100vw',
+            minHeight:'75vh',
+            paddingTop:0.1,
+            alignItems:'center',
+            backgroundColor: 'white',
+            backgroundImage: `url(${wiski_banner})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center'
+
+        }}>
+                
+            <Card
+                sx={{
+                    maxWidth: 400,
+                    margin: "auto",
+                    mt: 8,
+                    p: 3,
+                    boxShadow: 3,
+                    borderRadius: 3,
+                    backgroundColor: '#ffe6d1'
+                }}
+            >
+                <CardContent>
+                    <Box textAlign="center" mb={3}>
+                        <Typography variant="h4" gutterBottom 
                         sx={{
-                            width: 50,
-                            height: 4,
-                            backgroundColor: "#ffc400",
-                            margin: "0 auto",
-                        }}
-                    />
-                </Box>
-                <Box mb={3}>
-                    <TextField
-                        fullWidth
-                        label="Email"
-                        type="email"
-                        inputRef={emailRef}
-                        variant="outlined"
-                        margin="normal"
-                    />
-                    <TextField
-                        fullWidth
-                        label="Password"
-                        type="password"
-                        inputRef={passwordRef}
-                        variant="outlined"
-                        margin="normal"
-                    />
-                </Box>
-                <Grid2 container spacing={2}>
-                    <Grid2 item xs={12}>
-                        <Button
+                            fontFamily: 'Proxima Nova Bold',
+                        }}>
+                            Login
+                        </Typography>
+                        <Box
+                            sx={{
+                                width: 50,
+                                height: 4,
+                                backgroundColor: "#ffc400",
+                                margin: "0 auto",
+                            }}
+                        />
+                    </Box>
+                    <Box mb={3}>
+                        <TextField
                             fullWidth
-                            variant="contained"
-                            color="primary"
-                            size="large"
-                            onClick={handleLogin}
-                        >
-                            Submit
-                        </Button>
-                    </Grid2>
-                    <Grid2 item xs={12}>
-                        <Button
-                            fullWidth
+                            label="Email"
+                            type="email"
+                            inputRef={emailRef}
                             variant="outlined"
-                            color="secondary"
-                            size="large"
-                            onClick={redirectToReg}
-                        >
-                            No Account Yet? Register Now
-                        </Button>
+                            margin="normal"
+                        />
+                        <TextField
+                            fullWidth
+                            label="Password"
+                            type="password"
+                            inputRef={passwordRef}
+                            variant="outlined"
+                            margin="normal"
+                        />
+                    </Box>
+                    <Grid2 container spacing={2}>
+                        <Grid2 item xs={12}>
+                            <Button
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                                onClick={handleLogin}
+                            >
+                                Submit
+                            </Button>
+                        </Grid2>
+                        <Grid2 item xs={12}>
+                            <Button
+                                fullWidth
+                                variant="outlined"
+                                color="secondary"
+                                size="large"
+                                onClick={redirectToReg}
+                            >
+                                No Account Yet? Register Now
+                            </Button>
+                        </Grid2>
                     </Grid2>
-                </Grid2>
-            </CardContent>
-        </Card>
+                </CardContent>
+            </Card>
+        </Grid2>
     );
 }
