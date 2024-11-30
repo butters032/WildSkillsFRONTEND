@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Typography, Chip, IconButton, TextField, Button, Switch, FormControlLabel } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Chat from '@mui/icons-material/Chat';
 import Edit from '@mui/icons-material/Edit';
 import Save from '@mui/icons-material/Save';
 import axios from 'axios';
@@ -11,7 +10,6 @@ const Gig = ({userId}) => {
     const navigate = useNavigate();
     const [student, setStudent] = useState({});;
     const { title, description, skills = [], isActive, category, skillOfferingId } = location.state || {};
-    console.log(location.state);
     const categoryId = category?.categoryId || null;
     const [resolvedCategoryName, setCategoryName] = useState(category ? category.name : 'Unknown Category');
     const [editTitle, setEditTitle] = useState(title);
@@ -19,8 +17,7 @@ const Gig = ({userId}) => {
     const [editSkills, setEditSkills] = useState(skills);
     const [isEditing, setIsEditing] = useState(false);
     const [editIsActive, setEditIsActive] = useState(isActive); 
-
-    const id = userId;
+    const [authId, setAuthId] = useState();
 
     const api = axios.create({
         baseURL: 'http://localhost:8080/api/wildSkills/student',
@@ -30,23 +27,30 @@ const Gig = ({userId}) => {
             'Accept': 'application/json'
         }
     });
+
     useEffect(() => {
-        
-        const fetchStudent = async (id) => {
+        console.log('Student data:', student);  // Log entire student object to see its structure
+    }, [student]);
+    
+    useEffect(() => {
+        const fetchStudent = async () => {
+            if (!userId) {
+                console.error('User ID is missing!');
+                return;
+            }
             try {
-                const response = await api.get(`/getUserStudentRecord?id=${id}`);
+                const response = await api.get(`/getUserStudentRecord?id=${userId}`);
                 const fetchedStudent = response.data;
                 setStudent(fetchedStudent);
             } catch (error) {
-                console.error('Error fetching student data', error);
+                console.error('Error fetching student data:', error);
             }
         };
+    
+        fetchStudent();
+    }, [userId]);    
 
-        if (id) {
-            fetchStudent(id);
-        }
-    }, [id]);
-    console.log(student.name)
+
 
     useEffect(() => {
         const fetchCategoryName = async () => {
@@ -61,11 +65,6 @@ const Gig = ({userId}) => {
         };
         fetchCategoryName();
     }, [categoryId, category]);
-    
-
-    const handleChatClick = () => {
-        navigate('/chat');
-    };
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -102,16 +101,14 @@ const Gig = ({userId}) => {
                         <Typography variant="h6" color="textPrimary" style={{ display: 'flex', justifyContent: 'flex-start' }} gutterBottom>
                             {student.name}
                         </Typography>
+                        {student.authKey && student.authKey.authStatus === true ? (
                         <Typography variant="body2" color="textSecondary" style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
-                            <Chip label={editIsActive ? "Online" : "Offline"} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
+                            {/* <Chip label={editIsActive ? "Online" : "Offline"} style={{ verticalAlign: 'middle', marginRight: '5px' }} /> */}
+                            Online
                         </Typography>
-                        <IconButton
-                            color="primary"
-                            style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-start', color: 'gray' }}
-                            onClick={handleChatClick}
-                        >
-                            <Chat style={{ textAlign: 'left' }} />
-                        </IconButton>
+                        ) : (
+                        <Typography>Offline</Typography>
+                        )}
                         <br />
                         <Typography variant="h6" color="textPrimary" style={{ display: 'flex', justifyContent: 'flex-start' }} gutterBottom> 
                             {resolvedCategoryName}
@@ -151,11 +148,6 @@ const Gig = ({userId}) => {
                             onChange={(e) => setEditSkills(e.target.value)}
                             fullWidth
                             margin="normal"
-                        />
-                        <FormControlLabel
-                            control={<Switch checked={editIsActive} onChange={(e) => setEditIsActive(e.target.checked)} />}
-                            label={editIsActive ? "Online" : "Offline"}
-                            style={{ marginTop: '10px' }}
                         />
                         <Button
                             variant="contained"
