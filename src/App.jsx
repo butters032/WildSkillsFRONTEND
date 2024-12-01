@@ -149,7 +149,7 @@ const App = () => {
                         <nav>
                             {authenticated && (
                                 <>
-                                    <TextField id="outlined-basic" variant="outlined" size="small" style={{width: '400px', marginBottom: '10px', border: '1px solid white', borderRadius: '6px', backgroundColor: 'white'}} />
+                                    <TextField id="outlined-basic" variant="outlined" size="small" placeholder='What service are you looking for today?' style={{width: '400px', marginBottom: '10px', border: '1px solid white', borderRadius: '6px', backgroundColor: 'white'}} />
                                     <Link to="/categories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Categories</Link>
                                     <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Offerings</Link>
                                     <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Exchange</Link>
