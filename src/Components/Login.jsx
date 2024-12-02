@@ -70,13 +70,14 @@ export default function Login({ setUserId, setAuthId }) {
         <Grid2
         sx={{
             minWidth:'100vw',
-            minHeight:'75vh',
+            minHeight:'67vh',
             paddingTop:0.1,
             alignItems:'center',
             backgroundColor: 'white',
             backgroundImage: `url(${wiski_banner})`,
             backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center'
+            backgroundPosition: 'center',
+            backgroundSize: '100%'
 
         }}>
                 
@@ -88,7 +89,8 @@ export default function Login({ setUserId, setAuthId }) {
                     p: 3,
                     boxShadow: 3,
                     borderRadius: 3,
-                    backgroundColor: '#ffe6d1'
+                    backgroundColor: '#ffe6d1',
+                    background
                 }}
             >
                 <CardContent>
