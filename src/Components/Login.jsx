@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
-import { Card, CardContent, Typography, TextField, Button, Box, Grid, Grid2 } from "@mui/material";
+import { Card, CardContent, Typography, TextField, Button, Box, Grid, Grid2, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import '../LoginRegister.css';
 import wiski_banner from '../assets/images/HomeAssets/wiski-banner-full.png';
+import wiski_cat from '../assets/images/HomeAssets/wiski-cat.png';
 
 //for the font
 import '../Home.css';
@@ -68,92 +69,176 @@ export default function Login({ setUserId, setAuthId }) {
 
     return (
         <Grid2
+        container
         sx={{
             minWidth:'100vw',
-            minHeight:'67vh',
+            minHeight:'100vh',
             paddingTop:0.1,
             alignItems:'center',
+            justifyContent:'center',
             backgroundColor: 'white',
             backgroundImage: `url(${wiski_banner})`,
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
-            backgroundSize: '100%'
+            backgroundSize: 'cover',
+            
+            
 
         }}>
-                
-            <Card
-                sx={{
-                    maxWidth: 400,
-                    margin: "auto",
-                    mt: 8,
-                    p: 3,
-                    boxShadow: 3,
-                    borderRadius: 3,
-                    backgroundColor: '#ffe6d1',
+            <Grid2
+            sx={{
+                //backgroundColor:"white",
+                maxWidth:1000,
+                maxHeight:600,
+                alignContent: "center",
+                justifyContent: 'center'
+            }}>
+                <Stack direction={"row"}>
                     
-                }}
-            >
-                <CardContent>
-                    <Box textAlign="center" mb={3}>
-                        <Typography variant="h4" gutterBottom 
-                        sx={{
-                            fontFamily: 'Proxima Nova Bold',
-                        }}>
-                            Login
-                        </Typography>
-                        <Box
+                <Grid2
+                sx={{
+                    minWidth:400,
+                    minHeight:400,
+                    color: 'Black',
+                    //backgroundColor: "gray",
+                    
+                    
+                }}>
+                    
+                    <Box
+                    sx={{
+                        minWidth:400,
+                        minHeight:455,
+                        color: 'Black',
+                        backgroundColor: "gray",
+                        position: "relative",
+                        opacity:'80%',
+                        //backgroundBlendMode: 'lighten',
+                        alignContent: "center",
+                        justifyContent: 'center',
+                        borderRadius: 2
+                        
+                    }}>
+                        <img 
+                        src={wiski_cat}
+                        style={{
+                            width:110,
+                            height:50,
+                        }}
+                        />
+                        <Typography
+                            sx={{ fontWeight: 'bold',
+                                color: 'white',
+                                textAlign: 'center',
+                                fontFamily: 'Etna',
+                                letterSpacing: 10,
+                                textTransform: 'uppercase',
+                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                fontSize:20,
+                                lineHeight: 1,
+                                opacity:'100%'
+                                
+                            }} 
+                        >Welcome To</Typography>
+                        <Typography
+                            sx={{ fontWeight: 'bold',
+                                color: 'white',
+                                textAlign: 'center',
+                                fontFamily: 'Etna',
+                                letterSpacing: 10,
+                                textTransform: 'uppercase',
+                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                fontSize:20,
+                                lineHeight: 1,
+                                opacity:'100%'
+                                
+                            }} 
+                        >Wildskills</Typography>
+                    </Box>
+                    
+                </Grid2>
+                <Grid2>
+                    
+                <Card
+                    sx={{
+                        maxWidth: 400,
+                        margin: "auto",
+                        //marginTop: 8,
+                        padding: 3,
+                        boxShadow: 3,
+                        borderRadius: 3,
+                        backgroundColor: '#ffe6d1',
+                        opacity: '90%'
+                        
+                        
+                    }}
+                >
+                    <CardContent>
+                        
+                        <Box textAlign="center" mb={3}>
+                            <Typography variant="h4" gutterBottom 
                             sx={{
-                                width: 50,
-                                height: 4,
-                                backgroundColor: "#ffc400",
-                                margin: "0 auto",
-                            }}
-                        />
-                    </Box>
-                    <Box mb={3}>
-                        <TextField
-                            fullWidth
-                            label="Email"
-                            type="email"
-                            inputRef={emailRef}
-                            variant="outlined"
-                            margin="normal"
-                        />
-                        <TextField
-                            fullWidth
-                            label="Password"
-                            type="password"
-                            inputRef={passwordRef}
-                            variant="outlined"
-                            margin="normal"
-                        />
-                    </Box>
-                    <Grid2 container spacing={2}>
-                        <Grid2 item xs={12}>
-                            <Button
+                                fontFamily: 'Proxima Nova Bold',
+                            }}>
+                                Login
+                            </Typography>
+                            <Box
+                                sx={{
+                                    width: 50,
+                                    height: 4,
+                                    backgroundColor: "#ffc400",
+                                    margin: "0 auto",
+                                    
+                                }}
+                            />
+                        </Box>
+                        <Box mb={3}>
+                            <TextField
                                 fullWidth
-                                variant="contained"
-                                color="primary"
-                                size="large"
-                                onClick={handleLogin}
-                            >
-                                Submit
-                            </Button>
-                        </Grid2>
-                        <Grid2 item xs={12}>
-                            <Button
-                                fullWidth
+                                label="Email"
+                                type="email"
+                                inputRef={emailRef}
                                 variant="outlined"
-                                color="secondary"
-                                size="large"
-                                onClick={redirectToReg}
-                            >
-                                No Account Yet? Register Now
-                            </Button>
+                                margin="normal"
+                            />
+                            <TextField
+                                fullWidth
+                                label="Password"
+                                type="password"
+                                inputRef={passwordRef}
+                                variant="outlined"
+                                margin="normal"
+                            />
+                        </Box>
+                        <Grid2 container spacing={2}>
+                            <Grid2 item xs={12}>
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    size="large"
+                                    onClick={handleLogin}
+                                >
+                                    Submit
+                                </Button>
+                            </Grid2>
+                            <Grid2 item xs={12}>
+                                <Button
+                                    fullWidth
+                                    variant="outlined"
+                                    color="secondary"
+                                    size="large"
+                                    onClick={redirectToReg}
+                                >
+                                    No Account Yet? Register Now
+                                </Button>
+                            </Grid2>
                         </Grid2>
-                    </Grid2>
-                </CardContent>
-            </Card>
+                    </CardContent>
+                </Card>
+                </Grid2>
+                </Stack>
+            </Grid2>
         </Grid2>
     );
 }

@@ -16,11 +16,6 @@ import wiski_card_small from '../assets/images/HomeAssets/wiski-small-card.png';
 //for the font
 import '../Home.css';
 
-
-
-
-
-
 const Home = ({userId}) => {
     const [students, setStudents] = useState([]);
     const [search, setSearch] = useState('');
