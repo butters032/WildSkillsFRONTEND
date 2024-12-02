@@ -17,11 +17,7 @@ import wiski_card_small from '../assets/images/HomeAssets/wiski-small-card.png';
 import '../Home.css';
 
 
-
-
-
-
-const Home = ({userId}) => {
+const BrowseCategory = ({userId}) => {
     const [students, setStudents] = useState([]);
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
@@ -126,197 +122,8 @@ const Home = ({userId}) => {
             <Grid2
                 container
                 sx={{
-                    position: 'relative',
-                    backgroundImage: `url(${wiski_banner})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    minHeight: '78vh',
-                    minWidth: '100vw',
-                    display: 'flex',
-                }}
-            >
-                <Stack direction={'column'}>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            //padding: '170px 80px',
-                            paddingTop:'170px',
-                            paddingLeft:'80px',
-                            paddingBottom:'-5px',
-                            gap: 2, 
-                            position: 'relative',
-                        }}
-                    >
-                        <Avatar
-                            alt="profile-pic"
-                            variant="circle"
-                            src={wiski_banner}
-                            sx={{
-                                width: '18vh',
-                                height: '8vw',
-                            }}
-                        />
-
-                        <Box
-                        >
-                            <Typography
-                                //variant="h1"
-                                component="div"
-                                sx={{
-                                    fontWeight: 'bold',
-                                    color: '#ffde59',
-                                    textAlign: 'left',
-                                    fontFamily: 'Proxima Nova Bold',
-                                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                    fontSize: 80,
-                                    lineHeight: 1
-                                }}
-                            >
-                                Hello
-                            </Typography>
-
-                            <Typography
-                                //variant="h2"
-                                component="div"
-                                sx={{
-                                    fontWeight: 'bold',
-                                    color: 'white',
-                                    textAlign: 'left',
-                                    fontFamily: 'Proxima Nova Bold',
-                                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                    fontSize: 50,
-                                    lineHeight: 1
-                                }}
-                            >
-                                {student.name}!
-                            </Typography>
-                            
-                        </Box>
-                    </Box>
-                    
-                    <Box
-                        sx={{
-                            paddingLeft: 10,
-                            maxWidth:600,
-                            justifyContent:'center'
-                        }}
-                    >
-                        <Typography
-                        sx={{
-                            fontWeight: 'bold',
-                            color: 'white',
-                            textAlign: 'center',
-                            fontFamily: 'Proxima Nova',
-                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                            fontSize: 30,
-                            paddingTop:'30px',
-                            paddingBottom:'20px',
-                            paddingLeft: '50px',
-                            lineHeight: 1
-                        }}>
-                            Explore New Categories
-                        </Typography>
-                        <Grid container spacing={2} sx={{ justifyContent: 'center', paddingLeft: '50px' }}>
-                            {randomCategories.map((category) => ( <Grid item xs={2} sm={2} md={2} key={category.categoryId}> 
-                                <Card style={{ border: '1px solid black', borderRadius: '10px', minWidth: 250 , backgroundImage: `url(${wiski_card_small})`}}> 
-                                    <CardContent> 
-                                        <Typography variant="h6" sx={{ textAlign: 'center', }} > 
-                                            {category.name} 
-                                        </Typography> 
-                                    </CardContent> 
-                                </Card> 
-                            </Grid> ))} 
-                        </Grid>
-                    </Box>
-                </Stack>
-                
-                <Box sx={{ 
-                    display: 'flex',
-                    flexGrow: 1,
-                    justifyContent: 'flex-end',
-                    paddingRight: '120px',
-                    
-
-                    }}> 
-                    <Box sx={{ 
-                        display: 'flex', 
-                        flexDirection: 'column', 
-                        alignItems: 'center',
-                        paddingTop: '250px'
-                        
-                        }} >
-                    
-                        <img 
-                        src={wiski_cat}
-                        style={{
-                            alignItems:'center',
-                            width:240,
-                            height:120,
-                        }}
-                        />
-                        <Typography 
-                            variant="h1" 
-                            component="div" 
-                            sx={{ fontWeight: 'bold',
-                                color: 'white',
-                                textAlign: 'center',
-                                fontFamily: 'Etna',
-                                letterSpacing: 10,
-                                textTransform: 'uppercase',
-                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                lineHeight: 0.5
-                                
-                            }} 
-                            > Welcome to 
-                        </Typography> 
-                        <Typography 
-                            variant="h1" 
-                            component="div" 
-                            sx={{ fontWeight: 'bold',
-                                color: 'white',
-                                textAlign: 'center',
-                                fontFamily: 'Etna',
-                                letterSpacing: 10,
-                                textTransform: 'uppercase',
-                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                lineHeight: 1.3
-                            }} 
-                            > Wildskills
-                        </Typography>
-                        <Typography 
-                            
-                            component="div" 
-                            sx={{ fontWeight: 'bold',
-                                color: '#f6bb21',
-                                textAlign: 'center',
-                                fontFamily: 'Etna',
-                                letterSpacing: 10,
-                                //textTransform: 'uppercase',
-                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                lineHeight: 2,
-                                fontSize:20
-                            }} 
-                            > A skill exchange site
-                        </Typography> 
-                    </Box>
-
-                </Box>
-                
-                                
-            </Grid2>
-
-
-
-            {/*<h1>What service do you need?</h1>
-
-            <TextField id="outlined-basic" variant="outlined" size="small" style={{width: '500px', marginBottom: '10px'}} />
-            <Divider style={{marginBottom: '50px', backgroundColor: 'black'}}/>*/}
-            <Grid2
-                container
-                sx={{
                     backgroundColor: '#222222',
-                    paddingTop:20,
+                    //paddingTop:20,
                     paddingLeft:10,
                     minWidth:'100vw'
                 }}>
@@ -469,4 +276,4 @@ const Home = ({userId}) => {
     );
 };
 
-export default Home;
+export default BrowseCategory;

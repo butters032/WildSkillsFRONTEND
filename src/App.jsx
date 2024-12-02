@@ -15,6 +15,7 @@ import Profile from './Components/Profile';
 import Login from './Components/Login';
 import ReviewList from './Components/ReviewList';
 import UpdateReview from './Components/ReviewUpdate';
+import BrowseCategory from './Components/BrowseCategory';
 import { Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import wiski_logo from './assets/images/HomeAssets/wiski-logo.png';
@@ -151,6 +152,7 @@ const App = () => {
                                 <>
                                     <TextField id="outlined-basic" variant="outlined" size="small" placeholder='What service are you looking for today?' style={{width: '400px', marginBottom: '10px', border: '1px solid white', borderRadius: '6px', backgroundColor: 'white'}} />
                                     <Link to="/categories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Categories</Link>
+                                    <Link to="/browsecategories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Browse Categories</Link>
                                     <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Offerings</Link>
                                     <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Exchange</Link>
                                     {/*<Link to="/chat" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Chat</Link>*/}
@@ -167,6 +169,7 @@ const App = () => {
                     <Routes>
                         <Route path="/" element={authenticated ? <Home userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/categories" element={authenticated ? <Category userId={userId}/> : <Navigate to="/login" />} />
+                        <Route path="/browsecategories" element={authenticated ? <BrowseCategory userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/skill-offerings" element={authenticated ? <SkillOffering userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/registration" element={<Registration userId={userId}/>} />
                         <Route path="/skill-exchange" element={authenticated ? <SkillExchange userId={userId}/> : <Navigate to="/login" />} />
