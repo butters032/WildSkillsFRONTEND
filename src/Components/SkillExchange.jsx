@@ -1,4 +1,4 @@
-import { Button, Grid2, Stack, Typography } from "@mui/material";
+import { Button, Grid2, Stack, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, FormControl, TextField, Select, MenuItem, InputLabel } from "@mui/material";
 import { useState, useEffect } from "react";
 import { Edit, Delete, Reviews, Save } from '@mui/icons-material'
 import axios from 'axios'
@@ -13,8 +13,10 @@ export default function SkillExchange({userId}) {
     const [scheduledStart, setScheduledStart] = useState('');
     const [scheduledEnd, setScheduledEnd] = useState('');
 
-    const [isEditing, setIsEditing] = useState(false)
+    const [isSelected, setIsSelected] = useState(false)
     const [currentExchange, setCurrentExchange] = useState(null)
+    const [openDelete, setOpenDelete] = useState(false)
+    const [openEdit, setOpenEdit] = useState(false)
 
     const navigate = useNavigate();
 
@@ -31,6 +33,14 @@ export default function SkillExchange({userId}) {
         api.delete(`/deleteSkillExchange/${id}`)
         .then(() =>{
             exchangeReload();
+            setId('');
+            setStatus('');
+            setTitle('');
+            setScheduledStart('');
+            setScheduledEnd('');
+            setIsSelected(false);
+            setCurrentExchange(null);
+            setOpenDelete(false);
         })
         .catch((error) =>{
             console.log('Error deleting Skill Exchange',error)
@@ -51,21 +61,22 @@ export default function SkillExchange({userId}) {
             setTitle('');
             setScheduledStart('');
             setScheduledEnd('');
-            setIsEditing(false);
-            setCurrentExchange(null)
+            setIsSelected(false);
+            setCurrentExchange(null);
+            setOpenEdit(false);
         })
         .catch((error) =>{
             console.log('Error editing Skill Exchange',error);
         })
     }
 
-    const edit = () => { 
+    /*const edit = () => { 
         if (!isEditing){
             setIsEditing(true); 
         } else {
             setIsEditing(false);
         }
-    };
+    };*/
 
     const handleExchange = (id, status, title, scheduledStart, scheduledEnd) =>{
         setId(id);
@@ -74,6 +85,7 @@ export default function SkillExchange({userId}) {
         setScheduledStart(scheduledStart);
         setScheduledEnd(scheduledEnd);
         setCurrentExchange({ id, status, title, scheduledStart, scheduledEnd });
+        setIsSelected(true);
         console.log(isEditing)
     }
 
@@ -118,8 +130,8 @@ export default function SkillExchange({userId}) {
 
     return (
         <>
-            <Grid2 container spacing={2} direction="row" marginTop={2} marginLeft={5} marginRight={5}>
-                <Grid2 item xs={3} sx={{ boxShadow: 3, minHeight: "100%", minWidth: 400, borderRadius: 3, backgroundColor: "#f5f5f5", overflowY: "auto", overflowX: "hidden" }}>
+            <Grid2 container spacing={2} direction="row" sx={{marginTop: 1.5, marginLeft: 2, marginRight: 2, width: '99%', minWidth: 'max-content'}}>
+                <Grid2 item xs={12} sm={4} md={3} lg={3} xl={3} sx={{ boxShadow: 3, minHeight: "100%", minWidth: 400, borderRadius: 3, backgroundColor: "#f5f5f5", overflowY: "auto", overflowX: "hidden" }}>
                     <Typography variant="h5" sx={{ justifySelf: "left", paddingLeft: 2 }}>Active Exchange</Typography>
                     {exchange.map((exc, index) => (
                         <Grid2 key={index}
@@ -141,18 +153,18 @@ export default function SkillExchange({userId}) {
                             }}
                             onClick={() => { handleExchange(exc.skillExchangeID, exc.status, exc.title, exc.scheduledStart, exc.scheduledEnd) }}>
                             <Typography variant="h5">{exc.title}</Typography>
-                            <Typography variant="body1" justifySelf={"left"}><strong>Status: </strong>{exc.status}</Typography>
+                            <Typography variant="body1" justifySelf={"left"}>{/*<strong>Status: </strong>*/}{exc.status}</Typography>
                             {/*<Typography variant="body2" justifySelf={"left"}>Scheduled Start: {new Date(exc.scheduledStart).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}</Typography>
                             <Typography variant="body2" justifySelf={"left"}>Scheduled End: {new Date(exc.scheduledEnd).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}</Typography>*/}
                         </Grid2>
                     ))}
                 </Grid2>
 
-                <Grid2 item xs={6}>
+                <Grid2 xs={12} sm={8} md={6} lg={6} xl={6}>
                     <Chat />
                 </Grid2>
 
-                <Grid2 item xs={3} sx={{ boxShadow: 3, minHeight: 700, minWidth: 400, borderRadius: 3, backgroundColor: "#f5f5f5", padding: 2 }}>
+                <Grid2 item xs={12} sm={4} md={3} lg={3} xl={3} sx={{ boxShadow: 3, minHeight: 700, minWidth: 400, borderRadius: 3, backgroundColor: "#f5f5f5", padding: 2 }}>
                     <Stack direction="column" spacing={2}>
                         <Stack direction="column">
                             <Typography variant="h5" sx={{ alignSelf: "center", fontWeight: 'bold'}}>
@@ -169,47 +181,84 @@ export default function SkillExchange({userId}) {
                             </Typography>
                         </Stack>
 
-                        <Stack direction="column" spacing={0}>
-                            <Button
-                                variant="text"
-                                onClick={edit}
-                                startIcon={<Edit/>}
-                                sx={{ maxWidth: 200, minWidth: 200, alignSelf: 'center', fontWeight: 'bold', color: "#b03d3d", borderColor: "#b03d3d", justifyContent: 'flex-start'}}>
-                                Edit
-                            </Button>
-                            <Button
-                                variant="text"
-                                onClick={() => { deleteExchange(excidRef.current.value) }}
-                                startIcon={<Delete/>}
-                                sx={{ maxWidth: 200, minWidth: 200, alignSelf: 'center', fontWeight: 'bold', color: "#b03d3d", borderColor: "#b03d3d", justifyContent: 'flex-start'}}>
-                                Delete
-                            </Button>
-                            <Button
-                                variant="text"
-                                onClick={() => { handleReviewClick() }}
-                                startIcon={<Reviews/>}
-                                sx={{ maxWidth: 200, minWidth: 200, alignSelf: 'center', fontWeight: 'bold', color: "#b03d3d", borderColor: "#b03d3d", justifyContent: 'flex-start'}}>
-                                Review
-                            </Button>
-                        </Stack>
-                        {isEditing && ( 
-                                <Stack alignItems={"center"}> 
-                                    <label htmlFor="estatus" style={{ marginTop: '16px' }}>Update Status:</label> 
-                                    <select id="estatus" value={status} defaultValue="Ongoing" onChange={(e) => setStatus(e.target.value)} style={{ padding: '8px', borderRadius: '4px', marginBottom: '12px', fontSize: '14px', minWidth: 220 }}> 
-                                        <option value="Ongoing">Ongoing</option> 
-                                        <option value="Cancelled">Cancelled</option> 
-                                        <option value="Completed">Completed</option> 
-                                    </select> 
-                                    
-                                    <label>Update Schedule Start:</label> 
-                                    <input type="datetime-local" value={scheduledStart} onChange={(e) => setScheduledStart(e.target.value)} placeholder="Schedule Start" style={{ padding: '8px', borderRadius: '4px', marginBottom: '12px', fontSize: '14px' }} /> 
-                                    
-                                    <label>Update Schedule End:</label> 
-                                    <input type="datetime-local" value={scheduledEnd} onChange={(e) => setScheduledEnd(e.target.value)} placeholder="Schedule End" style={{ padding: '8px', borderRadius: '4px', marginBottom: '12px', fontSize: '14px' }} /> 
-                                    
-                                    <Button variant="outlined" onClick={editExchange} startIcon={<Save/>} sx={{ maxWidth: 200, minWidth: 200, alignSelf: 'center', fontWeight: 'bold', color: "#b03d3d", borderColor: "#b03d3d", marginTop: 2 }} > Submit </Button> 
-                                </Stack> 
-                            )}
+                        {isSelected && (
+                            <Stack direction="column" spacing={0}>
+                                <Button
+                                    variant="text"
+                                    onClick={() => setOpenEdit(true)}
+                                    startIcon={<Edit/>}
+                                    sx={{ maxWidth: 200, minWidth: 200, alignSelf: 'center', fontWeight: 'bold', color: "#b03d3d", borderColor: "#b03d3d", justifyContent: 'flex-start'}}>
+                                    Edit
+                                </Button>
+                                <Dialog open={openEdit} onClose={() => setOpenEdit(false)}>
+                                    <DialogTitle>Edit Exchange</DialogTitle>
+                                    <DialogContent>
+                                        <Stack alignItems={"center"}> 
+                                            <FormControl fullWidth margin="normal">
+                                                <InputLabel id="estatus-label">Update Status</InputLabel>
+                                                <Select
+                                                    labelId="estatus-label"
+                                                    id="estatus"
+                                                    value={status}
+                                                    onChange={(e) => setStatus(e.target.value)}
+                                                    label="Update Status"
+                                                    sx={{marginBottom: 2}}
+                                                    >
+                                                    <MenuItem value="Ongoing">Ongoing</MenuItem>
+                                                    <MenuItem value="Cancelled">Cancelled</MenuItem>
+                                                    <MenuItem value="Completed">Completed</MenuItem>
+                                                </Select>
+                                                <TextField
+                                                    id="scheduledStart"
+                                                    label="Update Schedule Start"
+                                                    type="datetime-local"
+                                                    value={scheduledStart}
+                                                    onChange={(e) => setScheduledStart(e.target.value)}
+                                                    sx={{marginBottom: 2}}
+                                                />
+                                                <TextField
+                                                    id="scheduledEnd"
+                                                    label="Update Schedule End"
+                                                    type="datetime-local"
+                                                    value={scheduledEnd}
+                                                    onChange={(e) => setScheduledEnd(e.target.value)}
+                                                />
+                                            </FormControl>
+                                        </Stack>
+                                    </DialogContent> 
+                                    <DialogActions>
+                                        <Button onClick={() => setOpenEdit(false)}>Cancel</Button>
+                                        <Button onClick={() => {editExchange()}}>Edit</Button>
+                                    </DialogActions>
+                                </Dialog>
+
+                                <Button
+                                    variant="text"
+                                    onClick={() => setOpenDelete(true)}
+                                    startIcon={<Delete/>}
+                                    sx={{ maxWidth: 200, minWidth: 200, alignSelf: 'center', fontWeight: 'bold', color: "#b03d3d", borderColor: "#b03d3d", justifyContent: 'flex-start'}}>
+                                    Delete
+                                </Button>
+                                <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
+                                    <DialogTitle>Delete the Exchange?</DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText>Are you sure you want to delete the exchange?</DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => setOpenDelete(false)}>Cancel</Button>
+                                        <Button onClick={() => { deleteExchange(id) }} autoFocus>Delete</Button>
+                                    </DialogActions>
+                                </Dialog>
+
+                                <Button
+                                    variant="text"
+                                    onClick={() => { handleReviewClick() }}
+                                    startIcon={<Reviews/>}
+                                    sx={{ maxWidth: 200, minWidth: 200, alignSelf: 'center', fontWeight: 'bold', color: "#b03d3d", borderColor: "#b03d3d", justifyContent: 'flex-start'}}>
+                                    Review
+                                </Button>
+                            </Stack>
+                        )}
                     </Stack>
                 </Grid2>
             </Grid2>
