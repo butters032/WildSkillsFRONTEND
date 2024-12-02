@@ -90,7 +90,7 @@ export default function Login({ setUserId, setAuthId }) {
                     boxShadow: 3,
                     borderRadius: 3,
                     backgroundColor: '#ffe6d1',
-                    background
+                    
                 }}
             >
                 <CardContent>

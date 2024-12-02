@@ -393,7 +393,7 @@ const Home = ({userId}) => {
                                 paddingTop:'30px',
                                 paddingBottom:'20px',
                                 paddingLeft: '50px',
-                                lineHeight: 1
+                                lineHeight: 1,
                             }}>
                                 Popular Services Right Now
                         </Typography>
