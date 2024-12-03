@@ -147,7 +147,7 @@ export default function SkillExchange({userId}) {
 
                     {exchange.map((exc, index) => (
                         <Grid2 key={index}
-                            sx={{ boxShadow: 4,
+                            sx={{ //boxShadow: 4,
                                 minHeight: 70,
                                 margin: "auto",
                                 marginTop: 0,
