@@ -25,6 +25,7 @@ import { Buffer } from 'buffer';
 import process from 'process';
 import SearchIcon from '@mui/icons-material/Search'; // Import the Search Icon
 import {  InputAdornment } from '@mui/material/';
+import Dashboard from './Components/AdminDashboard';
 
 window.global = window;
 window.Buffer = Buffer;
@@ -162,7 +163,16 @@ const App = () => {
                                     <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Exchange</Link>
                                     <Link to="/reviewList" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Reviews</Link>
                                     <Link to="/profile" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Profile</Link>
+
                                     <Link to="/login" style={{ margin: '10px', textDecoration: 'none', color: 'white' }} onClick={() => updateAuthentication(false)}>Logout</Link>
+
+                                    {/*<Link to="/login" style={{ margin: '10px', textDecoration: 'none', color: 'white' }} onClick={()=>updateAuthentication(false)}>Logout</Link>*/}
+
+
+                                    <Link to="/adminDashboard" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Admin</Link>
+
+                                    {/*<Button onClick={()=>updateAuthentication(false)} style={{ color: 'white' }}>Logout</Button>*/}
+
                                 </>
                             )}
                         </nav>
@@ -183,7 +193,14 @@ const App = () => {
                         <Route path="/reviewList" element={authenticated ? <ReviewList userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/update-review/:id" element={authenticated ? <UpdateReview userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/profile" element={authenticated ? <Profile userId={userId}/> : <Navigate to="/login" />} />
+
                         <Route path="/login" element={authenticated ? <Navigate to="/" /> : <Login setUserId={setUserId} setAuthId={setAuthId}/>} />
+
+                        <Route path="/login" element={authenticated ?  <Navigate to="/" /> :<Login setUserId={setUserId} setAuthId={setAuthId}/>} />
+
+
+                        <Route path="/adminDashboard" element={authenticated ? <Dashboard userId={userId}/> : <Navigate to="/login" />} />      
+
                     </Routes>
                 </div>
             </Router>
