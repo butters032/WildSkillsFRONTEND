@@ -16,6 +16,8 @@ import wiski_card_small from '../assets/images/HomeAssets/wiski-small-card.png';
 //for the font
 import '../Home.css';
 
+
+
 const Home = ({userId}) => {
     const [students, setStudents] = useState([]);
     const [search, setSearch] = useState('');
@@ -23,7 +25,8 @@ const Home = ({userId}) => {
 
     const [student, setStudent] = useState({});
     const location = useLocation();
-    const id = userId; 
+    const id = userId;
+    const [profilePic,setProfilePic]= useState('');
 
     //---------------------------
 
@@ -99,6 +102,7 @@ const Home = ({userId}) => {
                 const fetchedStudent = response.data;
                 fetchedStudent.birthdate = parseDate(fetchedStudent.birthdate);
                 setStudent(fetchedStudent);
+                setProfilePic("data:image/png;base64,"+fetchedStudent.avatar);
             } catch (error) {
                 console.error('Error fetching student data', error);
             }
@@ -124,7 +128,7 @@ const Home = ({userId}) => {
 
     return (
         <>
-            <Grid
+            <Grid2
                 container
                 sx={{
                     position: 'relative',
@@ -132,8 +136,10 @@ const Home = ({userId}) => {
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
-                    minHeight: '78vh',
-                    minWidth: '100vw',
+                    //minHeight: '78vh',
+                    //minWidth: '100vw',
+                    minHeight: '100vh',
+                    minWidth: '99vw',
                     display: 'flex',
                 }}
             >
@@ -141,17 +147,18 @@ const Home = ({userId}) => {
                     <Box
                         sx={{
                             display: 'flex',
-                            paddingTop: '170px',
-                            paddingLeft: '80px',
-                            paddingBottom: '-5px',
-                            gap: 2,
+                            //padding: '170px 80px',
+                            paddingTop:'170px',
+                            paddingLeft:'80px',
+                            paddingBottom:'-5px',
+                            gap: 2, 
                             position: 'relative',
                         }}
                     >
                         <Avatar
                             alt="profile-pic"
                             variant="circle"
-                            src={wiski_banner}
+                            src={profilePic}
                             sx={{
                                 width: '18vh',
                                 height: '8vw',
@@ -296,7 +303,7 @@ const Home = ({userId}) => {
                         </Typography>
                     </Box>
                 </Box>
-            </Grid>
+            </Grid2>
     
             <Grid
                 container
