@@ -32,6 +32,7 @@ const App = () => {
     const [userId, setUserId] = useState(() => localStorage.getItem('userId') || 'blank');
     
     const [authId, setAuthId] = useState(() => localStorage.getItem('authId') || 'blank');
+    const [authDetails, setAuthDetails] = useState({});
 
     /*
     const [sessionEnd, setSessionEnd] = useState(() => {
@@ -41,6 +42,15 @@ const App = () => {
     */
 
     const defaultVal = 'blank';
+
+    const apiAuth = axios.create({
+        baseURL: 'http://localhost:8080/api/wildSkills/authentication',
+        timeout: 1000,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    });
 
     useEffect(() => {
         localStorage.setItem('authId', authId);
@@ -54,26 +64,44 @@ const App = () => {
     }, [authId,userId]);
     //authId,userId
 
-    const updateAuthentication = (choice) =>{
-        console.log('choice: ',choice);
-        if(choice==true){
-            setAuthenticated(true);
-            setTimeout(100);
-        }
-        else{
-            localStorage.removeItem('authId');
-        localStorage.removeItem('userId');
-        //localStorage.removeItem('sessionEnd');
-        
-        setAuthId(defaultVal);
-        setUserId(defaultVal);
-        //setSessionEnd(null);
-        setAuthenticated(false);
+    const updateAuthentication = (choice) => {
+        console.log('choice: ', choice);
     
-        console.log('Logout successfulz');
+        if (choice === true) {
+            setAuthenticated(true);
+            setTimeout(() => {}, 100); // You might need to use this setTimeout differently if you need some delay.
+        } else {
+            localStorage.removeItem('authId');
+            localStorage.removeItem('userId');
+            // localStorage.removeItem('sessionEnd');
+    
+            setAuthId(defaultVal);
+            setUserId(defaultVal);
+            // setSessionEnd(null);
+            setAuthenticated(false);
+    
+            setAuthDetails(prevState => {
+                const newAuthDetails = {
+                    ...prevState,
+                    authStatus: false
+                };
+    
+                console.log(newAuthDetails);
+                
+                // Make API call after updating authDetails
+                apiAuth.put(`/putAuthenticationDetails?authId=${authId}`, newAuthDetails)
+                    .then(response => {
+                        console.log('Logout successfulz');
+                    })
+                    .catch(error => {
+                        console.error('API call error: ', error);
+                    });
+    
+                return newAuthDetails;
+            });
         }
-
-    }
+    };
+    
 
     useEffect(() => {
         const checkAuth = async (authId) => {
@@ -83,6 +111,9 @@ const App = () => {
                     const currStatus = authResponse.data.authStatus;
                     const sessionEndTime = new Date(authResponse.data.sessionDurationEnd);
                     const currTime = new Date();
+                    const fetchedAuthData = authResponse.data;
+                    setAuthDetails(fetchedAuthData);
+                    console.log("this is the authdeets: "+authDetails.authId);
 
                     localStorage.setItem('sessionEnd', sessionEndTime.toISOString());
                     //setSessionEnd(sessionEndTime);
@@ -109,14 +140,7 @@ const App = () => {
         checkAuth(authId);
     }, [authId]);
 
-    const apiAuth = axios.create({
-        baseURL: 'http://localhost:8080/api/wildSkills/authentication',
-        timeout: 1000,
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-    });
+    
 
     /*
     const logoutHandle = async () => {
