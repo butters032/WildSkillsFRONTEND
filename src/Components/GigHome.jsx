@@ -3,14 +3,38 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Typography, Chip, Button, Avatar, Box, Paper, Divider } from '@mui/material';
 import { Person, CheckCircle, Cancel } from '@mui/icons-material';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
-const GigHome = () => {
+const GigHome = ({userId}) => {
     const { id } = useParams(); 
     const location = useLocation();
     const [gigData, setGigData] = useState(location.state || null); 
     const [studentName, setStudentName] = useState('');
     const [showFullDescription, setShowFullDescription] = useState(false);
+    const navigate = useNavigate();
+
+    const api = axios.create({
+        baseURL: `http://localhost:8080/api/wildSkills/skillExchange/student/${userId}`,
+        timeout: 1000,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    });
+
+    const postExchange = (offeringId) => {
+        api.post(`/postSkillExchange/${offeringId}`, {
+            status: 'Ongoing'
+        })
+        .then((response) =>{
+            console.log(response);
+            navigate('/skill-exchange');
+        })
+        .catch((error) =>{
+            console.log('Error creating Skill Exchange',error);
+        })
+    }
 
     useEffect(() => {
         const fetchGigData = async () => {
@@ -140,6 +164,7 @@ const GigHome = () => {
                                     background: 'linear-gradient(45deg, #cf2d2d 30%, #ff762e 90%)', 
                                 },
                             }}
+                            onClick={() => {postExchange(gigData.skillOfferingId)}}
                         >
                             Initialize Exchange
                         </Button>
