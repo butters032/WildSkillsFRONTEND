@@ -157,7 +157,7 @@ const App = () => {
                                         ),
                                     }}
                                 />
-                                    <Link to="/categories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Categories</Link>
+                                    {/*<Link to="/categories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Categories</Link>*/}
                                     <Link to="/browsecategories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Browse Categories</Link>
                                     <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Offerings</Link>
                                     <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Exchange</Link>
@@ -169,7 +169,13 @@ const App = () => {
                                     {/*<Link to="/login" style={{ margin: '10px', textDecoration: 'none', color: 'white' }} onClick={()=>updateAuthentication(false)}>Logout</Link>*/}
 
 
-                                    <Link to="/adminDashboard" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Admin</Link>
+                                   {/*<Link to="/adminDashboard" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Admin</Link>*/}
+
+                                    {userId === 1 && (
+                                        <Link to="/adminDashboard" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>
+                                            Admin
+                                        </Link>
+                                    )}
 
                                     {/*<Button onClick={()=>updateAuthentication(false)} style={{ color: 'white' }}>Logout</Button>*/}
 
@@ -180,7 +186,7 @@ const App = () => {
 
                     <Routes>
                         <Route path="/" element={authenticated ? <Home userId={userId}/> : <Navigate to="/login" />} />
-                        <Route path="/categories" element={authenticated ? <Category userId={userId}/> : <Navigate to="/login" />} />
+                        {/*<Route path="/categories" element={authenticated ? <Category userId={userId}/> : <Navigate to="/login" />} />*/}
                         <Route path="/browsecategories" element={authenticated ? <BrowseCategory userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/skill-offerings" element={authenticated ? <SkillOffering userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/registration" element={<Registration userId={userId}/>} />
@@ -198,8 +204,8 @@ const App = () => {
 
                         <Route path="/login" element={authenticated ?  <Navigate to="/" /> :<Login setUserId={setUserId} setAuthId={setAuthId}/>} />
 
-
-                        <Route path="/adminDashboard" element={authenticated ? <Dashboard userId={userId}/> : <Navigate to="/login" />} />      
+                        <Route path="/categories" element={authenticated && userId === 1 ? <Category userId={userId}/> : <Navigate to="/login" />} />
+                        <Route path="/adminDashboard" element={authenticated && userId === 1 ? (<Dashboard userId={userId} />) : (<Navigate to={authenticated ? "/" : "/login"} />)}/>   
 
                     </Routes>
                 </div>
