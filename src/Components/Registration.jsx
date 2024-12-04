@@ -120,11 +120,10 @@ export default function Registration({ setIsRegistering }) {
             email: emailRef.current.value,
             password: passwordRef.current.value,
             gender: gender,
-            avatar: avatarBase64, // Add Base64 encoded avatar
+            avatar: avatarBase64,
         };
     
         try {
-            // Send the data via API
             const req = await api.post('/postStudentRecord', studentData);
     
             alert("Registration Success");

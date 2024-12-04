@@ -34,10 +34,13 @@ const App = () => {
     const [authenticated, setAuthenticated] = useState(false);
     const [userId, setUserId] = useState(() => localStorage.getItem('userId') || 'blank');
     const [authId, setAuthId] = useState(() => localStorage.getItem('authId') || 'blank');
+    const [authDetails, setAuthDetails] = useState({});
     const [query, setQuery] = useState('');
     
 
     const defaultVal = 'blank';
+
+
 
     useEffect(() => {
         localStorage.setItem('authId', authId);
@@ -47,24 +50,26 @@ const App = () => {
         console.log('User Id: ', authId);
     }, [authId, userId]);
 
-    const updateAuthentication = (choice) => {
-        console.log('choice: ', choice);
-        if (choice === true) {
+    const updateAuthentication = (choice) =>{
+        console.log('choice: ',choice);
+        if(choice==true){
             setAuthenticated(true);
             setTimeout(100);
-        } else {
-            localStorage.removeItem('authId');
-            localStorage.removeItem('userId');
-            //localStorage.removeItem('sessionEnd');
-
-            setAuthId(defaultVal);
-            setUserId(defaultVal);
-            //setSessionEnd(null);
-            setAuthenticated(false);
-
-            console.log('Logout successful');
         }
-    };
+        else{
+            localStorage.removeItem('authId');
+        localStorage.removeItem('userId');
+        //localStorage.removeItem('sessionEnd');
+        
+        setAuthId(defaultVal);
+        setUserId(defaultVal);
+        //setSessionEnd(null);
+        setAuthenticated(false);
+    
+        console.log('Logout successfulz');
+        }
+
+    }
 
     useEffect(() => {
         const checkAuth = async (authId) => {
@@ -74,7 +79,6 @@ const App = () => {
                     const currStatus = authResponse.data.authStatus;
                     const sessionEndTime = new Date(authResponse.data.sessionDurationEnd);
                     const currTime = new Date();
-                    console.log(query)
 
                     localStorage.setItem('sessionEnd', sessionEndTime.toISOString());
                     //setSessionEnd(sessionEndTime);
@@ -106,6 +110,21 @@ const App = () => {
             'Accept': 'application/json'
         }
     });
+
+    /*
+    const logoutHandle = async () => {
+        localStorage.removeItem('authId');
+        localStorage.removeItem('userId');
+        //localStorage.removeItem('sessionEnd');
+        
+        setAuthId(defaultVal);
+        setUserId(defaultVal);
+        //setSessionEnd(null);
+        setAuthenticated(false);
+    
+        console.log('Logout successful');
+    };
+    */
 
     return (
         <>
