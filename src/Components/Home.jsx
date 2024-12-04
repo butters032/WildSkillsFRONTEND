@@ -23,8 +23,7 @@ const Home = ({userId}) => {
 
     const [student, setStudent] = useState({});
     const location = useLocation();
-    const id = userId;
-    const [profilePic,setProfilePic]= useState('');
+    const id = userId; 
 
     //---------------------------
 
@@ -100,7 +99,6 @@ const Home = ({userId}) => {
                 const fetchedStudent = response.data;
                 fetchedStudent.birthdate = parseDate(fetchedStudent.birthdate);
                 setStudent(fetchedStudent);
-                setProfilePic("data:image/png;base64,"+fetchedStudent.avatar);
             } catch (error) {
                 console.error('Error fetching student data', error);
             }
@@ -126,7 +124,7 @@ const Home = ({userId}) => {
 
     return (
         <>
-            <Grid2
+            <Grid
                 container
                 sx={{
                     position: 'relative',
@@ -134,10 +132,8 @@ const Home = ({userId}) => {
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
-                    //minHeight: '78vh',
-                    //minWidth: '100vw',
-                    minHeight: '100vh',
-                    minWidth: '99vw',
+                    minHeight: '78vh',
+                    minWidth: '100vw',
                     display: 'flex',
                 }}
             >
@@ -145,28 +141,25 @@ const Home = ({userId}) => {
                     <Box
                         sx={{
                             display: 'flex',
-                            //padding: '170px 80px',
-                            paddingTop:'170px',
-                            paddingLeft:'80px',
-                            paddingBottom:'-5px',
-                            gap: 2, 
+                            paddingTop: '170px',
+                            paddingLeft: '80px',
+                            paddingBottom: '-5px',
+                            gap: 2,
                             position: 'relative',
                         }}
                     >
                         <Avatar
                             alt="profile-pic"
                             variant="circle"
-                            src={profilePic}
+                            src={wiski_banner}
                             sx={{
                                 width: '18vh',
                                 height: '8vw',
                             }}
                         />
-
-                        <Box
-                        >
+    
+                        <Box>
                             <Typography
-                                //variant="h1"
                                 component="div"
                                 sx={{
                                     fontWeight: 'bold',
@@ -175,14 +168,13 @@ const Home = ({userId}) => {
                                     fontFamily: 'Proxima Nova Bold',
                                     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
                                     fontSize: 80,
-                                    lineHeight: 1
+                                    lineHeight: 1,
                                 }}
                             >
                                 Hello
                             </Typography>
-
+    
                             <Typography
-                                //variant="h2"
                                 component="div"
                                 sx={{
                                     fontWeight: 'bold',
@@ -191,286 +183,264 @@ const Home = ({userId}) => {
                                     fontFamily: 'Proxima Nova Bold',
                                     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
                                     fontSize: 50,
-                                    lineHeight: 1
+                                    lineHeight: 1,
                                 }}
                             >
                                 {student.name}!
                             </Typography>
-                            
                         </Box>
                     </Box>
-                    
+    
                     <Box
                         sx={{
                             paddingLeft: 10,
-                            maxWidth:600,
-                            justifyContent:'center'
+                            maxWidth: 600,
+                            justifyContent: 'center',
                         }}
                     >
                         <Typography
-                        sx={{
-                            fontWeight: 'bold',
-                            color: 'white',
-                            textAlign: 'center',
-                            fontFamily: 'Proxima Nova',
-                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                            fontSize: 30,
-                            paddingTop:'30px',
-                            paddingBottom:'20px',
-                            paddingLeft: '50px',
-                            lineHeight: 1
-                        }}>
+                            sx={{
+                                fontWeight: 'bold',
+                                color: 'white',
+                                textAlign: 'center',
+                                fontFamily: 'Proxima Nova',
+                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                fontSize: 30,
+                                paddingTop: '30px',
+                                paddingBottom: '20px',
+                                paddingLeft: '50px',
+                                lineHeight: 1,
+                            }}
+                        >
                             Explore New Categories
                         </Typography>
                         <Grid container spacing={2} sx={{ justifyContent: 'center', paddingLeft: '50px' }}>
-                            {randomCategories.map((category) => ( <Grid item xs={2} sm={2} md={2} key={category.categoryId}> 
-                                <Card style={{ border: '1px solid black', borderRadius: '10px', minWidth: 250 , backgroundImage: `url(${wiski_card_small})`}}> 
-                                    <CardContent> 
-                                        <Typography variant="h6" sx={{ textAlign: 'center', }} > 
-                                            {category.name} 
-                                        </Typography> 
-                                    </CardContent> 
-                                </Card> 
-                            </Grid> ))} 
+                            {randomCategories.map((category) => (
+                                <Grid item xs={2} sm={2} md={2} key={category.categoryId}>
+                                    <Card
+                                        style={{
+                                            border: '1px solid black',
+                                            borderRadius: '10px',
+                                            minWidth: 250,
+                                            backgroundImage: `url(${wiski_card_small})`,
+                                        }}
+                                    >
+                                        <CardContent>
+                                            <Typography variant="h6" sx={{ textAlign: 'center' }}>
+                                                {category.name}
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            ))}
                         </Grid>
                     </Box>
                 </Stack>
-                
-                <Box sx={{ 
-                    display: 'flex',
-                    flexGrow: 1,
-                    justifyContent: 'flex-end',
-                    paddingRight: '120px',
-                    
-
-                    }}> 
-                    <Box sx={{ 
-                        display: 'flex', 
-                        flexDirection: 'column', 
-                        alignItems: 'center',
-                        paddingTop: '250px'
-                        
-                        }} >
-                    
-                        <img 
-                        src={wiski_cat}
-                        style={{
-                            alignItems:'center',
-                            width:240,
-                            height:120,
-                        }}
+    
+                <Box sx={{ display: 'flex', flexGrow: 1, justifyContent: 'flex-end', paddingRight: '120px' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '250px' }}>
+                        <img
+                            src={wiski_cat}
+                            style={{
+                                alignItems: 'center',
+                                width: 240,
+                                height: 120,
+                            }}
                         />
-                        <Typography 
-                            variant="h1" 
-                            component="div" 
-                            sx={{ fontWeight: 'bold',
+                        <Typography
+                            variant="h1"
+                            component="div"
+                            sx={{
+                                fontWeight: 'bold',
                                 color: 'white',
                                 textAlign: 'center',
                                 fontFamily: 'Etna',
                                 letterSpacing: 10,
                                 textTransform: 'uppercase',
                                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                lineHeight: 0.5
-                                
-                            }} 
-                            > Welcome to 
-                        </Typography> 
-                        <Typography 
-                            variant="h1" 
-                            component="div" 
-                            sx={{ fontWeight: 'bold',
-                                color: 'white',
-                                textAlign: 'center',
-                                fontFamily: 'Etna',
-                                letterSpacing: 10,
-                                textTransform: 'uppercase',
-                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                lineHeight: 1.3
-                            }} 
-                            > Wildskills
+                                lineHeight: 0.5,
+                            }}
+                        >
+                            Welcome to
                         </Typography>
-                        <Typography 
-                            
-                            component="div" 
-                            sx={{ fontWeight: 'bold',
+                        <Typography
+                            variant="h1"
+                            component="div"
+                            sx={{
+                                fontWeight: 'bold',
+                                color: 'white',
+                                textAlign: 'center',
+                                fontFamily: 'Etna',
+                                letterSpacing: 10,
+                                textTransform: 'uppercase',
+                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                lineHeight: 1.3,
+                            }}
+                        >
+                            Wildskills
+                        </Typography>
+                        <Typography
+                            component="div"
+                            sx={{
+                                fontWeight: 'bold',
                                 color: '#f6bb21',
                                 textAlign: 'center',
                                 fontFamily: 'Etna',
                                 letterSpacing: 10,
-                                //textTransform: 'uppercase',
                                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
                                 lineHeight: 2,
-                                fontSize:20
-                            }} 
-                            > A skill exchange site
-                        </Typography> 
+                                fontSize: 20,
+                            }}
+                        >
+                            A skill exchange site
+                        </Typography>
                     </Box>
-
                 </Box>
-                
-                                
-            </Grid2>
-
-
-
-            {/*<h1>What service do you need?</h1>
-
-            <TextField id="outlined-basic" variant="outlined" size="small" style={{width: '500px', marginBottom: '10px'}} />
-            <Divider style={{marginBottom: '50px', backgroundColor: 'black'}}/>*/}
-            <Grid2
+            </Grid>
+    
+            <Grid
                 container
                 sx={{
                     backgroundColor: '#222222',
-                    paddingTop:20,
-                    paddingLeft:10,
-                    minWidth:'89vw'
-                }}>
-                    <Stack direction={'column'}>
-                        <Typography
-                            sx={{
-                                fontWeight: 'bold',
-                                color: 'white',
-                                textAlign: 'left',
-                                fontFamily: 'Proxima Nova',
-                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                fontSize: 30,
-                                paddingTop:'30px',
-                                paddingBottom:'20px',
-                                paddingLeft: '50px',
-                                lineHeight: 1
-                            }}>
-                                Browse Categories
-                        </Typography>
-                        <Box
-                            container
-                            sx={{
-                                //backgroundColor: 'white',
-                                paddingTop: '20px',
-                                paddingBottom: '20px',
-                                paddingLeft: '20px',
-                                overflowX: 'scroll',
-                                display: 'flex',
-                                height: "100%",
-                                '&::-webkit-scrollbar': {
-                                    width: '0.4em'
-                                },
-                                '&::-webkit-scrollbar-track': {
-                                    boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-                                    webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
-                                },
-                                '&::-webkit-scrollbar-thumb': {
-                                    backgroundColor: 'rgba(0,0,0,.1)',
-                                    outline: '1px solid slategrey'
-                                }
-
-                                
-                            }}
-                        >
-                            <Grid container spacing={27} sx={{flexWrap: 'nowrap', maxWidth:'90vw'}}>
-                                {categories.map((category) => (
-                                    <Grid item xs={12} sm={6} md={4} key={category.categoryId}>
-                                        <Card style={{ 
-                                            //border: '1px solid black', 
-                                            //borderRadius: '10px',
-                                            
-                                            minWidth: 200, 
-                                            justifyItems:'center', 
-                                            backgroundColor:'#333333' }}>
-                                            <CardContent>
-                                                <Typography variant="h6" sx={{
-                                                    color: 'white',
-                                                    textAlign: 'center'
-                                                }}>{category.name}</Typography>
-                                            </CardContent>
-                                        </Card>
-                                    </Grid>
-                                    ))}
-                                </Grid>
-                            </Box>
-                        <Typography
-                            sx={{
-                                fontWeight: 'bold',
-                                color: 'white',
-                                textAlign: 'left',
-                                fontFamily: 'Proxima Nova',
-                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                fontSize: 30,
-                                paddingTop:'30px',
-                                paddingBottom:'20px',
-                                paddingLeft: '50px',
-                                lineHeight: 1,
-                            }}>
-                                Popular Services Right Now
-                        </Typography>
-                        
-                    
-                    {/*
-                    <Grid container spacing={2}>
-                        {students.map((student) => (
-                            <Grid item size={4} key={student.studentId}>
-                                <CardActionArea style={{borderRadius: '10px'}} onClick={() => handleClick(student.studentId)}>
-                                    <Card style={{border: '1px solid black', borderRadius: '10px'}}>
-                                        <CardContent>
-                                            <Typography variant="h5">{student.name}</Typography>
-                                            <Divider style={{marginBottom: '15px', marginTop: '5px', backgroundColor: 'black'}}/>
-                                            <Typography variant="body2">Sample content for student</Typography>
-                                        </CardContent>
-                                    </Card>
-                                </CardActionArea>
-                                
-                            </Grid>
-                        ))}
-                    </Grid>
-                    */}
-                    
-                    <Grid2 
+                    paddingTop: 20,
+                    paddingLeft: 10,
+                    minWidth: '100vw',
+                }}
+            >
+                <Stack direction={'column'}>
+                    <Typography
+                        sx={{
+                            fontWeight: 'bold',
+                            color: 'white',
+                            textAlign: 'left',
+                            fontFamily: 'Proxima Nova',
+                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                            fontSize: 30,
+                            paddingTop: '30px',
+                            paddingBottom: '20px',
+                            paddingLeft: '50px',
+                            lineHeight: 1,
+                        }}
+                    >
+                        Browse Categories
+                    </Typography>
+                    <Box
                         container
                         sx={{
-                            //backgroundColor: 'white',
                             paddingTop: '20px',
                             paddingBottom: '20px',
                             paddingLeft: '20px',
-                            //overflowX: 'scroll',
+                            overflowX: 'scroll',
                             display: 'flex',
-                            height: "100%",
+                            height: '100%',
+                            '&::-webkit-scrollbar': {
+                                width: '0.4em',
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: 'rgba(0,0,0,.1)',
+                                outline: '1px solid slategrey',
+                            },
                         }}
-                        >
-                            {skillOfferings.map((offering) => (
-                            <Stack direction={'row'} key={offering.skillOfferingId}>
-                                <Card style={{ width: '250px', margin: '10px' }}>
-                                <CardActionArea
-                                            onClick={() => handleNavigateToGigHome(offering)}
-                                            style={{ cursor: 'pointer' }}
-                                        >
-
+                    >
+                        <Grid container spacing={27} sx={{ flexWrap: 'nowrap', maxWidth: '90vw' }}>
+                            {categories.map((category) => (
+                                <Grid item xs={12} sm={6} md={4} key={category.categoryId}>
+                                    <Card
+                                        style={{
+                                            minWidth: 200,
+                                            justifyItems: 'center',
+                                            backgroundColor: '#333333',
+                                        }}
+                                    >
                                         <CardContent>
-                                            {showCheckboxes && (
-                                                <Checkbox
-                                                    checked={selectedIds.includes(offering.skillOfferingId)}
-                                                    onChange={() => {
-                                                        setSelectedIds((prev) =>
-                                                            prev.includes(offering.skillOfferingId)
-                                                                ? prev.filter((id) => id !== offering.skillOfferingId)
-                                                                : [...prev, offering.skillOfferingId]
-                                                        );
-                                                    }}
-                                                />
-                                            )}
-                                            <Typography variant="h6">{offering.title}</Typography>
-                                            <Typography variant="body2" color="textSecondary">
-                                                {offering.description || "No description available"}
+                                            <Typography variant="h6" sx={{ color: 'white', textAlign: 'center' }}>
+                                                {category.name}
                                             </Typography>
                                         </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                            </Stack>
-                        ))}
-                    </Grid2>
-                    </Stack>
-                    
-            </Grid2>
+                                    </Card>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Box>
+    
+                    <Typography
+                        sx={{
+                            fontWeight: 'bold',
+                            color: 'white',
+                            textAlign: 'left',
+                            fontFamily: 'Proxima Nova',
+                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                            fontSize: 30,
+                            paddingTop: '30px',
+                            paddingBottom: '20px',
+                            paddingLeft: '50px',
+                            lineHeight: 1,
+                        }}
+                    >
+                        Popular Services Right Now
+                    </Typography>
+    
+                    <Grid
+                        container
+                        sx={{
+                            paddingTop: '20px',
+                            paddingBottom: '20px',
+                            paddingLeft: '20px',
+                            display: 'flex',
+                            height: '100%',
+                        }}
+                    >
+                        <Grid container spacing={0} justifyContent="center" style={{ overflowY: 'scroll', maxHeight: '60vh', padding: '20px' }}>
+                            {skillOfferings.map((offering) => (
+                                <Grid item key={offering.skillOfferingId} xs={12} sm={6} md={6} lg={4} style={{ display: 'flex', justifyContent: 'center', marginRight: '5px', marginLeft: '5px' }}>
+                                    <Card
+                                        style={{
+                                            boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+                                            transition: '0.3s',
+                                            width: '500px',
+                                            height: '350px',
+                                            margin: '20px',
+                                            borderRadius: '10px',
+                                        }}
+                                    >
+                            <CardActionArea
+                                onClick={() => !showCheckboxes && handleNavigateToGigHome(offering)}
+                                style={{ cursor: showCheckboxes ? 'default' : 'pointer' }}
+                            >
+                                <CardContent>
+                                    {showCheckboxes && (
+                                        <Checkbox
+                                            checked={selectedIds.includes(offering.skillOfferingId)}
+                                            onChange={() => {
+                                                setSelectedIds((prev) =>
+                                                    prev.includes(offering.skillOfferingId)
+                                                        ? prev.filter((id) => id !== offering.skillOfferingId)
+                                                        : [...prev, offering.skillOfferingId]
+                                                );
+                                            }}
+                                        />
+                                    )}
+                                    <Typography variant="h6" style={{ fontWeight: 'bold' }}>
+                                        {offering.title}
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        {offering.description || "No description available"}
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
+                                    </Card>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Grid>
+                </Stack>
+            </Grid>
         </>
     );
+    
 };
 
 export default Home;
