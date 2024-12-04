@@ -87,27 +87,26 @@ export default function Profile({userId}) {
             if (avatarFile.type === 'image/png') {
                 const reader = new FileReader();
                 const promise = new Promise((resolve, reject) => {
-                    reader.onload = () => resolve(reader.result.split(",")[1]); // Strip the `data:image/png;base64,` prefix
+                    reader.onload = () => resolve(reader.result.split(",")[1]);
                     reader.onerror = (err) => reject(err);
                 });
     
                 reader.readAsDataURL(avatarFile);
-                avatarBase64 = await promise;  // Get the base64 string
+                avatarBase64 = await promise;
     
                 console.log('Avatar in base64:', avatarBase64);
     
-                // Update state with the base64 value
+               
                 setStudent(prevState => ({
                     ...prevState,
                     avatar: avatarBase64
                 }));
             } else {
                 alert('Please upload a PNG image');
-                return; // Stop further processing if the file type is incorrect
+                return; 
             }
         }
     
-        // Update other fields
         if (name !== 'avatar') {
             setStudent(prevState => ({
                 ...prevState,
@@ -116,10 +115,10 @@ export default function Profile({userId}) {
         }
     };
     
-    // To check the updated state after it's been set, you can use useEffect:
+
     useEffect(() => {
         console.log('Updated student state:', student);
-    }, [student]);  // This will log the updated state whenever 'student' changes
+    }, [student]); 
     
     
     

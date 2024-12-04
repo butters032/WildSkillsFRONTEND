@@ -70,7 +70,7 @@ const App = () => {
     
         if (choice === true) {
             setAuthenticated(true);
-            setTimeout(() => {}, 100); // You might need to use this setTimeout differently if you need some delay.
+            setTimeout(() => {}, 100);
         } else {
             localStorage.removeItem('authId');
             localStorage.removeItem('userId');
@@ -89,7 +89,6 @@ const App = () => {
     
                 console.log(newAuthDetails);
                 
-                // Make API call after updating authDetails
                 apiAuth.put(`/putAuthenticationDetails?authId=${authId}`, newAuthDetails)
                     .then(response => {
                         console.log('Logout successfulz');
