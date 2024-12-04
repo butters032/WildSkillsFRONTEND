@@ -1,18 +1,20 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Card, CardContent, Typography, TextField, Button, Box, Grid, Grid2, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import '../LoginRegister.css';
 import wiski_banner from '../assets/images/HomeAssets/wiski-banner-full.png';
 import wiski_cat from '../assets/images/HomeAssets/wiski-cat.png';
+import Registration from './Registration';
 
 //for the font
 import '../Home.css';
 
-export default function Login({ setUserId, setAuthId }) {
+export default function Login({ setUserId, setAuthId}) {
     const emailRef = useRef();
     const passwordRef = useRef();
     const navigate = useNavigate();
+    const [isRegistering, setIsRegistering] = useState(false);
 
     const api = axios.create({
         baseURL: "http://localhost:8080/api/wildSkills/student",
@@ -71,16 +73,19 @@ export default function Login({ setUserId, setAuthId }) {
         <Grid2
         container
         sx={{
-            minWidth:'100vw',
-            minHeight:'100vh',
+            minHeight: '100vh',
+            minWidth: '99vw',
             paddingTop:0.1,
             alignItems:'center',
             justifyContent:'center',
-            backgroundColor: 'white',
             backgroundImage: `url(${wiski_banner})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
             backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            //minHeight: '78vh',
+            //minWidth: '100vw',
+            
+            display: 'flex',
             
             
 
@@ -88,10 +93,12 @@ export default function Login({ setUserId, setAuthId }) {
             <Grid2
             sx={{
                 //backgroundColor:"white",
-                maxWidth:1000,
+                maxWidth:1200,
                 maxHeight:600,
                 alignContent: "center",
-                justifyContent: 'center'
+                justifyContent: 'center',
+                //backgroundColor: 'gray',
+                
             }}>
                 <Stack direction={"row"}>
                     
@@ -110,63 +117,148 @@ export default function Login({ setUserId, setAuthId }) {
                         minWidth:400,
                         minHeight:455,
                         color: 'Black',
-                        backgroundColor: "gray",
+                        //backgroundColor: "gray",
+                        backgroundImage: `url(${wiski_cat})`,
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: '60%',
+                        backgroundPosition: 'top',
                         position: "relative",
                         opacity:'80%',
                         //backgroundBlendMode: 'lighten',
                         alignContent: "center",
                         justifyContent: 'center',
-                        borderRadius: 2
+                        borderTopLeftRadius:10,
+                        borderBottomLeftRadius:10,
+                        //paddingRight: 30,
+                        marginTop:9,
+                        marginRight:2
+
                         
                     }}>
+                        {/*
                         <img 
                         src={wiski_cat}
                         style={{
                             width:110,
                             height:50,
                         }}
-                        />
+                        />*/}
+                        <Stack direction={"row"}>
+                            
                         <Typography
                             sx={{ fontWeight: 'bold',
                                 color: 'white',
-                                textAlign: 'center',
+                                textAlign: 'left',
                                 fontFamily: 'Etna',
                                 letterSpacing: 10,
                                 textTransform: 'uppercase',
                                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                fontSize:20,
+                                fontSize:50,
                                 lineHeight: 1,
-                                opacity:'100%'
+                                opacity:'100%',
+                                
                                 
                             }} 
-                        >Welcome To</Typography>
+                        >Share</Typography>
                         <Typography
                             sx={{ fontWeight: 'bold',
                                 color: 'white',
-                                textAlign: 'center',
+                                textAlign: 'left',
                                 fontFamily: 'Etna',
                                 letterSpacing: 10,
                                 textTransform: 'uppercase',
                                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                fontSize:20,
+                                fontSize:50,
+                                lineHeight: 1,
+                                opacity:'100%',
+                                paddingLeft: 3
+                                
+                            }} 
+                        >your</Typography>
+                        <Typography
+                            sx={{ fontWeight: 'bold',
+                                color: '#ff5757',
+                                textAlign: 'left',
+                                fontFamily: 'Etna',
+                                letterSpacing: 10,
+                                textTransform: 'uppercase',
+                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                fontSize:50,
+                                lineHeight: 1,
+                                opacity:'100%',
+                                paddingLeft: 3
+                                
+                            }} 
+                        >talents</Typography>
+                        </Stack>
+                        <Grid2 container spacing={2}>
+                            <Stack direction={'row'}>
+                                
+                        <Typography
+                            sx={{ fontWeight: 'bold',
+                                color: 'white',
+                                textAlign: 'left',
+                                fontFamily: 'Etna',
+                                letterSpacing: 10,
+                                textTransform: 'uppercase',
+                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                fontSize:50,
                                 lineHeight: 1,
                                 opacity:'100%'
                                 
                             }} 
-                        >Wildskills</Typography>
+                        >with </Typography>
+                        
+                        <Typography
+                            sx={{ fontWeight: 'bold',
+                                color: 'white',
+                                textAlign: 'left',
+                                fontFamily: 'Etna',
+                                letterSpacing: 10,
+                                textTransform: 'uppercase',
+                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                fontSize:50,
+                                lineHeight: 1,
+                                opacity:'100%',
+                                paddingLeft:3
+                                
+                            }} 
+                        >Wild</Typography>
+                        <Typography
+                        sx={{ fontWeight: 'bold',
+                                color: '#ffde59',
+                                textAlign: 'left',
+                                    fontFamily: 'Etna',
+                                    letterSpacing: 10,
+                                    textTransform: 'uppercase',
+                                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                    fontSize:50,
+                                    lineHeight: 1,
+                                    opacity:'100%',
+                                    //paddingLeft:2
+                                
+                            }} 
+                        >skills</Typography>
+                            
+                        
+                            </Stack>
+                        </Grid2>
                     </Box>
+                    
                     
                 </Grid2>
                 <Grid2>
+                {!isRegistering && (
                     
-                <Card
+                    <Card
                     sx={{
                         maxWidth: 400,
                         margin: "auto",
                         //marginTop: 8,
                         padding: 3,
                         boxShadow: 3,
-                        borderRadius: 3,
+                        borderTopRightRadius:10,
+                        borderBottomRightRadius:10,
                         backgroundColor: '#ffe6d1',
                         opacity: '90%'
                         
@@ -228,7 +320,7 @@ export default function Login({ setUserId, setAuthId }) {
                                     variant="outlined"
                                     color="secondary"
                                     size="large"
-                                    onClick={redirectToReg}
+                                    onClick={()=>setIsRegistering(true)}
                                 >
                                     No Account Yet? Register Now
                                 </Button>
@@ -236,6 +328,30 @@ export default function Login({ setUserId, setAuthId }) {
                         </Grid2>
                     </CardContent>
                 </Card>
+                )}
+                {isRegistering && (
+                    <>
+                    <Grid2
+                    sx={{
+                        backgroundColor:'#ffe6d1'
+
+                    }}>
+                        <Registration />
+                        <Button
+                            fullWidth
+                            variant="outlined"
+                            color="secondary"
+                            size="large"
+                            onClick={()=>setIsRegistering(false)}
+                        >
+                            Already have an account?
+                        </Button>
+                    </Grid2>
+                    
+                    </>
+                    
+                     
+                )}
                 </Grid2>
                 </Stack>
             </Grid2>

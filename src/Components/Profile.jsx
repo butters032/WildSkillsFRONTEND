@@ -76,13 +76,61 @@ export default function Profile({userId}) {
         }
     };
 
+    const handleChange = async (e) => {
+        const { name, value, files } = e.target;
+        let updatedValue = value;
+    
+        let avatarBase64 = null;
+        if (name === 'avatar' && files && files[0]) {
+            const avatarFile = files[0];
+    
+            if (avatarFile.type === 'image/png') {
+                const reader = new FileReader();
+                const promise = new Promise((resolve, reject) => {
+                    reader.onload = () => resolve(reader.result.split(",")[1]); // Strip the `data:image/png;base64,` prefix
+                    reader.onerror = (err) => reject(err);
+                });
+    
+                reader.readAsDataURL(avatarFile);
+                avatarBase64 = await promise;  // Get the base64 string
+    
+                console.log('Avatar in base64:', avatarBase64);
+    
+                // Update state with the base64 value
+                setStudent(prevState => ({
+                    ...prevState,
+                    avatar: avatarBase64
+                }));
+            } else {
+                alert('Please upload a PNG image');
+                return; // Stop further processing if the file type is incorrect
+            }
+        }
+    
+        // Update other fields
+        if (name !== 'avatar') {
+            setStudent(prevState => ({
+                ...prevState,
+                [name]: updatedValue
+            }));
+        }
+    };
+    
+    // To check the updated state after it's been set, you can use useEffect:
+    useEffect(() => {
+        console.log('Updated student state:', student);
+    }, [student]);  // This will log the updated state whenever 'student' changes
+    
+    
+    
+    /*
     const handleChange = (e) => {
         const { name, value } = e.target;
         setStudent(prevState => ({
             ...prevState,
             [name]: value
         }));
-    };
+    };*/
 
     const handleDeleteClick = async () => {
         /*
@@ -262,7 +310,7 @@ return (
                                 <img src={user_icon} alt="User Icon" />
                                 <TextField
                                     label="Name"
-                                    name="Name"
+                                    name="name"
                                     type="text"
                                     value={student.name || ''}
                                     onChange={handleChange}
@@ -320,6 +368,17 @@ return (
                                 {/* <input value={student.email || ''} type="email" placeholder="Email" label="Email" name="email" onChange={handleChange} />*/}
                             </div>
                         </div>
+                        <div className="inputs">
+                            <div className="input">
+                                <input 
+                                    type="file" 
+                                    accept="image/*" 
+                                    name="avatar" 
+                                    onChange={handleChange} 
+                                />
+                            </div>
+                        </div>
+
 
                         <div className="inputs">
                             <div className="input">

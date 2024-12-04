@@ -23,14 +23,13 @@ import { useNavigate } from "react-router-dom";
 
 import RegistrationSuccess from "./RegistrationSuccess.jsx";
 
-export default function Registration() {
+
+export default function Registration({ setIsRegistering }) {
     const nameRef = useRef();
-    //const ageRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
     const confirmpasswordRef = useRef();
-    const [isSuccessful, setIsSuccessful] = useState(false);
-
+    const avatarRef = useRef();
     const [birthdate, setBirthdate] = useState(new Date());
     const [gender, setGender] = useState('');
     const navigate = useNavigate();
@@ -44,9 +43,8 @@ export default function Registration() {
         }
     });
 
-    const handleGenderInputChange = (e) => { 
+    const handleGenderInputChange = (e) => {
         setGender(e.target.value);
-        console.log(gender);
     };
 
     const checkEmailExists = async (email) => {
@@ -58,53 +56,106 @@ export default function Registration() {
             return false;
         }
     };
-
+ /*
+        const emailExists = await checkEmailExists(emailRef.current.value);
+        if (emailExists) {
+            alert("Email has already been used");
+            return;
+        }
+            */
     const newStudent = async () => {
         if (confirmpasswordRef.current.value !== passwordRef.current.value) {
             alert("Passwords Don't Match");
             return;
         }
-
-        const emailExists = await checkEmailExists(emailRef.current.value);
-
-        if (emailExists) {
-            alert("Email has already been used");
-            return;
-        }
-
-        try {
-            const req = await api.post('/postStudentRecord', {
-                name: nameRef.current.value,
-                birthdate: birthdate.toISOString().split('T')[0],
-                email: emailRef.current.value,
-                password: passwordRef.current.value,
-                gender: gender,
+    
+        // Validate email (optional logic)
+        // const emailExists = await checkEmailExists(emailRef.current.value);
+        // if (emailExists) {
+        //     alert("Email has already been used");
+        //     return;
+        // }
+    
+        // Encode avatar as Base64
+        const avatarFile = avatarRef.current.files[0];
+        let avatarBase64 = null;
+        
+        if (avatarFile) {
+            const reader = new FileReader();
+            const promise = new Promise((resolve, reject) => {
+                reader.onload = () => resolve(reader.result.split(",")[1]); // Strip the `data:image/*;base64,` prefix
+                reader.onerror = (err) => reject(err);
             });
+            reader.readAsDataURL(avatarFile);
+            avatarBase64 = await promise;
+            console.log(avatarBase64)
+        }
+        /*
+        let avatarBase64 = null;
+        if (avatarFile) {
+            // Assume avatarBase64 is your base64-encoded string with the data URL prefix
+            //let avatarBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
 
-            setTimeout(() => {
-                navigate('/login');
-            }, 100);
+            // Strip the data URL prefix
+            const reader = new FileReader(); 
+            reader.readAsDataURL(avatarFile); 
+            reader.onloadend = () => {avatarBase64 = (reader.result.split(',')[1]); // This will give you the base64 string without the prefix 
+            console.log(avatarBase64);
+            };
 
-            console.log(req.data);
+
+
+        }
+        if (avatarBase64.startsWith("data:image/")) {
+                avatarBase64 = avatarBase64.split(",")[1];
+            }
+            console.log(avatarBase64);
+        */
+            
+    
+        // Create the request payload
+        const studentData = {
+            name: nameRef.current.value,
+            birthdate: birthdate.toISOString().split('T')[0],
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+            gender: gender,
+            avatar: avatarBase64, // Add Base64 encoded avatar
+        };
+    
+        try {
+            // Send the data via API
+            const req = await api.post('/postStudentRecord', studentData);
+    
             alert("Registration Success");
-            nameRef.current.value = null;
-            birthdate.value = null;
-            emailRef.current.value = null;
-            passwordRef.current.value = null;
-            confirmpasswordRef.current.value = null;
-            setGender(null);
-            setBirthdate(null);
+            console.log(req.data);
+            navigate('/login');
         } catch (error) {
-            console.log('ENK ENK', error);
+            console.error('Error during registration:', error);
+            alert("Error during registration. Please try again.");
         }
     };
+        
+        
+        
 
-    const redirectToReg = async () => {
-        navigate('/login');
-    }
+    const redirectToReg = () => {
+        setIsRegistering(false);
+    };
 
     return (
-        <Card sx={{minWidth:500, minHeight:500}}>
+        <Card
+            sx={{
+                maxWidth: 400,
+                margin: "auto",
+                padding: 3,
+                boxShadow: 3,
+                borderTopRightRadius: 10,
+                borderBottomRightRadius: 10,
+                backgroundColor: '#ffe6d1',
+                opacity: '90%'
+            }}
+        >
             <>
                 <div className="container">
                     <div className="header">
@@ -114,71 +165,68 @@ export default function Registration() {
                 </div>
                 <div className="inputs">
                     <div className="input">
-                        <img src={user_icon} alt="User Icon" />
                         <input ref={nameRef} type="text" placeholder="Name" />
                     </div>
                 </div>
                 <div className="inputs">
                     <div className="input">
-                        <img src={user_calendar} alt="Calendar Icon" />
-                        <Typography variant="body2" sx={{paddingRight:1}}>Date of Birth</Typography>
-                        <DatePicker 
-                            placeholder="Birth Date"
-                            onChange={setBirthdate} 
-                            value={birthdate} 
+                        <Typography variant="body2" sx={{ paddingRight: 1 }}>Date of Birth</Typography>
+                        <DatePicker
+                            onChange={setBirthdate}
+                            value={birthdate}
                             maxDate={new Date()}
                             disableCalendar={true}
-                            
                         />
                     </div>
                 </div>
                 <div className="inputs">
                     <div className="input">
-                        <img src={user_gender} alt= "Gender" />
                         <Typography variant="body2">Gender</Typography>
-                        <Grid2 size={{ xs: 12, md: 6 }}>
-                        <RadioGroup sx={{marginLeft:'2rem'}}
-                                    row
-                                    value={gender}
-                                    onChange={handleGenderInputChange}
-                                    aria-labelledby="demo-row-radio-buttons-group-label"
-                                    name="gender"
-                                >
-                                    <FormControlLabel value="female" control={<Radio />} label="Female" />
-                                    <FormControlLabel value="male" control={<Radio />} label="Male" />
-                                    <FormControlLabel value="other" control={<Radio />} label="Other" />
-                        </RadioGroup>
+                        <Grid2
+                        sx={{
+                            paddingLeft:2
+                        }}>
+                            <RadioGroup
+                                row
+                                value={gender}
+                                onChange={handleGenderInputChange}
+                                aria-labelledby="gender-radio-group-label"
+                                name="gender"
+                            >
+                                <FormControlLabel value="female" control={<Radio />} label="Female" />
+                                <FormControlLabel value="male" control={<Radio />} label="Male" />
+                                <FormControlLabel value="other" control={<Radio />} label="Other" />
+                            </RadioGroup>
                         </Grid2>
                     </div>
                 </div>
                 <div className="inputs">
                     <div className="input">
-                        <img src={user_email} alt="Email Icon" />
                         <input ref={emailRef} type="email" placeholder="Email" />
                     </div>
                 </div>
                 <div className="inputs">
                     <div className="input">
-                        <img src={user_password} alt="Password Icon" />
                         <input ref={passwordRef} type="password" placeholder="Password" />
                     </div>
                 </div>
                 <div className="inputs">
                     <div className="input">
-                        <img src={user_password} alt="Password Icon" />
                         <input ref={confirmpasswordRef} type="password" placeholder="Confirm Password" />
                     </div>
                 </div>
-                <Grid2 sx={{paddingTop:1}}>
+                <div className="inputs">
+                    <div className="input">
+                        <input ref={avatarRef} type="file" accept="image/*" /> {/* File input for avatar */}
+                    </div>
+                </div>
+                <Grid2 sx={{ paddingTop: 1 }}>
                     <button onClick={newStudent}>Submit</button>
                 </Grid2>
-                <Grid2 sx={{paddingTop:1}}>
-                    <button onClick={redirectToReg} >Already Have An Account? Login now</button>
+                <Grid2 sx={{ paddingTop: 1 }}>
+                    <button onClick={redirectToReg}>Already Have An Account? Login now</button>
                 </Grid2>
-                         
             </>
         </Card>
-        
-
     );
 }
