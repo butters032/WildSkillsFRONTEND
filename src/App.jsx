@@ -19,8 +19,13 @@ import BrowseCategory from './Components/BrowseCategory';
 import { Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import wiski_logo from './assets/images/HomeAssets/wiski-logo.png';
+import { Buffer } from 'buffer';
+import process from 'process';
 
 
+window.global = window;
+window.Buffer = Buffer;
+window.process = process;
 
 const App = () => {
     const [authenticated, setAuthenticated] = useState(false);
