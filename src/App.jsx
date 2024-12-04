@@ -158,6 +158,11 @@ const App = () => {
                                     }}
                                 />
                                     {/*<Link to="/categories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Categories</Link>*/}
+                                    {userId === 1 && (
+                                        <Link to="/adminDashboard" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>
+                                            Admin Dashboard
+                                        </Link>
+                                    )}
                                     <Link to="/browsecategories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Browse Categories</Link>
                                     <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Offerings</Link>
                                     <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Exchange</Link>
@@ -171,11 +176,7 @@ const App = () => {
 
                                    {/*<Link to="/adminDashboard" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Admin</Link>*/}
 
-                                    {userId === 1 && (
-                                        <Link to="/adminDashboard" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>
-                                            Admin
-                                        </Link>
-                                    )}
+                                    
 
                                     {/*<Button onClick={()=>updateAuthentication(false)} style={{ color: 'white' }}>Logout</Button>*/}
 
