@@ -126,8 +126,10 @@ const Home = ({userId}) => {
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
-                    minHeight: '78vh',
-                    minWidth: '100vw',
+                    //minHeight: '78vh',
+                    //minWidth: '100vw',
+                    minHeight: '100vh',
+                    minWidth: '99vw',
                     display: 'flex',
                 }}
             >
@@ -313,7 +315,7 @@ const Home = ({userId}) => {
                     backgroundColor: '#222222',
                     paddingTop:20,
                     paddingLeft:10,
-                    minWidth:'100vw'
+                    minWidth:'89vw'
                 }}>
                     <Stack direction={'column'}>
                         <Typography

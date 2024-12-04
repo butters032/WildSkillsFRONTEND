@@ -23,14 +23,13 @@ import { useNavigate } from "react-router-dom";
 
 import RegistrationSuccess from "./RegistrationSuccess.jsx";
 
-export default function Registration() {
+
+export default function Registration({ setIsRegistering }) {
     const nameRef = useRef();
-    //const ageRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
     const confirmpasswordRef = useRef();
-    const [isSuccessful, setIsSuccessful] = useState(false);
-
+    const avatarRef = useRef(); // New ref for avatar upload
     const [birthdate, setBirthdate] = useState(new Date());
     const [gender, setGender] = useState('');
     const navigate = useNavigate();
@@ -44,9 +43,8 @@ export default function Registration() {
         }
     });
 
-    const handleGenderInputChange = (e) => { 
+    const handleGenderInputChange = (e) => {
         setGender(e.target.value);
-        console.log(gender);
     };
 
     const checkEmailExists = async (email) => {
@@ -72,39 +70,50 @@ export default function Registration() {
             return;
         }
 
+        const formData = new FormData();
+        formData.append('name', nameRef.current.value);
+        formData.append('birthdate', birthdate.toISOString().split('T')[0]);
+        formData.append('email', emailRef.current.value);
+        formData.append('password', passwordRef.current.value);
+        formData.append('gender', gender);
+
+        if (avatarRef.current.files[0]) {
+            formData.append('avatar', avatarRef.current.files[0]); // Append avatar file
+        }
+
         try {
-            const req = await api.post('/postStudentRecord', {
-                name: nameRef.current.value,
-                birthdate: birthdate.toISOString().split('T')[0],
-                email: emailRef.current.value,
-                password: passwordRef.current.value,
-                gender: gender,
+            const response = await api.post('/postStudentRecord', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
 
-            setTimeout(() => {
-                navigate('/login');
-            }, 100);
-
-            console.log(req.data);
+            console.log(response.data);
             alert("Registration Success");
-            nameRef.current.value = null;
-            birthdate.value = null;
-            emailRef.current.value = null;
-            passwordRef.current.value = null;
-            confirmpasswordRef.current.value = null;
-            setGender(null);
-            setBirthdate(null);
+            setTimeout(() => navigate('/login'), 100);
         } catch (error) {
-            console.log('ENK ENK', error);
+            console.error('Error during registration:', error);
+            alert("Registration Failed");
         }
     };
 
-    const redirectToReg = async () => {
-        navigate('/login');
-    }
+    const redirectToReg = () => {
+        setIsRegistering(false);
+    };
 
     return (
-        <Card sx={{minWidth:500, minHeight:500}}>
+        <Card
+            sx={{
+                maxWidth: 400,
+                margin: "auto",
+                padding: 3,
+                boxShadow: 3,
+                borderTopRightRadius: 10,
+                borderBottomRightRadius: 10,
+                backgroundColor: '#ffe6d1',
+                opacity: '90%'
+            }}
+        >
             <>
                 <div className="container">
                     <div className="header">
@@ -114,71 +123,65 @@ export default function Registration() {
                 </div>
                 <div className="inputs">
                     <div className="input">
-                        <img src={user_icon} alt="User Icon" />
                         <input ref={nameRef} type="text" placeholder="Name" />
                     </div>
                 </div>
                 <div className="inputs">
                     <div className="input">
-                        <img src={user_calendar} alt="Calendar Icon" />
-                        <Typography variant="body2" sx={{paddingRight:1}}>Date of Birth</Typography>
-                        <DatePicker 
-                            placeholder="Birth Date"
-                            onChange={setBirthdate} 
-                            value={birthdate} 
+                        <Typography variant="body2" sx={{ paddingRight: 1 }}>Date of Birth</Typography>
+                        <DatePicker
+                            onChange={setBirthdate}
+                            value={birthdate}
                             maxDate={new Date()}
                             disableCalendar={true}
-                            
                         />
                     </div>
                 </div>
                 <div className="inputs">
                     <div className="input">
-                        <img src={user_gender} alt= "Gender" />
                         <Typography variant="body2">Gender</Typography>
-                        <Grid2 size={{ xs: 12, md: 6 }}>
-                        <RadioGroup sx={{marginLeft:'2rem'}}
-                                    row
-                                    value={gender}
-                                    onChange={handleGenderInputChange}
-                                    aria-labelledby="demo-row-radio-buttons-group-label"
-                                    name="gender"
-                                >
-                                    <FormControlLabel value="female" control={<Radio />} label="Female" />
-                                    <FormControlLabel value="male" control={<Radio />} label="Male" />
-                                    <FormControlLabel value="other" control={<Radio />} label="Other" />
-                        </RadioGroup>
+                        <Grid2>
+                            <RadioGroup
+                                row
+                                value={gender}
+                                onChange={handleGenderInputChange}
+                                aria-labelledby="gender-radio-group-label"
+                                name="gender"
+                            >
+                                <FormControlLabel value="female" control={<Radio />} label="Female" />
+                                <FormControlLabel value="male" control={<Radio />} label="Male" />
+                                <FormControlLabel value="other" control={<Radio />} label="Other" />
+                            </RadioGroup>
                         </Grid2>
                     </div>
                 </div>
                 <div className="inputs">
                     <div className="input">
-                        <img src={user_email} alt="Email Icon" />
                         <input ref={emailRef} type="email" placeholder="Email" />
                     </div>
                 </div>
                 <div className="inputs">
                     <div className="input">
-                        <img src={user_password} alt="Password Icon" />
                         <input ref={passwordRef} type="password" placeholder="Password" />
                     </div>
                 </div>
                 <div className="inputs">
                     <div className="input">
-                        <img src={user_password} alt="Password Icon" />
                         <input ref={confirmpasswordRef} type="password" placeholder="Confirm Password" />
                     </div>
                 </div>
-                <Grid2 sx={{paddingTop:1}}>
+                <div className="inputs">
+                    <div className="input">
+                        <input ref={avatarRef} type="file" accept="image/*" /> {/* File input for avatar */}
+                    </div>
+                </div>
+                <Grid2 sx={{ paddingTop: 1 }}>
                     <button onClick={newStudent}>Submit</button>
                 </Grid2>
-                <Grid2 sx={{paddingTop:1}}>
-                    <button onClick={redirectToReg} >Already Have An Account? Login now</button>
+                <Grid2 sx={{ paddingTop: 1 }}>
+                    <button onClick={redirectToReg}>Already Have An Account? Login now</button>
                 </Grid2>
-                         
             </>
         </Card>
-        
-
     );
 }
