@@ -1,4 +1,4 @@
-import { Card, CardContent, Grid2, Stack, Typography } from "@mui/material";
+import { Card, CardContent, Grid2, Stack, Typography, Box,TextField,Button } from "@mui/material";
 import axios from "axios";
 import { useRef, useState } from "react";
 
@@ -144,88 +144,154 @@ export default function Registration({ setIsRegistering }) {
 
     return (
         <Card
-            sx={{
-                maxWidth: 400,
-                margin: "auto",
-                padding: 3,
-                boxShadow: 3,
-                borderTopRightRadius: 10,
-                borderBottomRightRadius: 10,
-                backgroundColor: '#ffe6d1',
-                opacity: '90%'
-            }}
+          sx={{
+            minWidth: 400,
+            margin: "auto",
+            //marginTop: 8,
+            padding: 3,
+            boxShadow: 3,
+            borderTopRightRadius:10,
+            borderBottomRightRadius:10,
+            backgroundColor: '#ffe6d1',
+            opacity: '90%'
+          }}
         >
-            <>
-                <div className="container">
-                    <div className="header">
-                        <Typography variant="h5">Sign Up</Typography>
-                        <div className="underline"></div>
-                    </div>
-                </div>
-                <div className="inputs">
-                    <div className="input">
-                        <input ref={nameRef} type="text" placeholder="Name" />
-                    </div>
-                </div>
-                <div className="inputs">
-                    <div className="input">
-                        <Typography variant="body2" sx={{ paddingRight: 1 }}>Date of Birth</Typography>
-                        <DatePicker
-                            onChange={setBirthdate}
-                            value={birthdate}
-                            maxDate={new Date()}
-                            disableCalendar={true}
-                        />
-                    </div>
-                </div>
-                <div className="inputs">
-                    <div className="input">
-                        <Typography variant="body2">Gender</Typography>
-                        <Grid2
-                        sx={{
-                            paddingLeft:2
-                        }}>
-                            <RadioGroup
-                                row
-                                value={gender}
-                                onChange={handleGenderInputChange}
-                                aria-labelledby="gender-radio-group-label"
-                                name="gender"
-                            >
-                                <FormControlLabel value="female" control={<Radio />} label="Female" />
-                                <FormControlLabel value="male" control={<Radio />} label="Male" />
-                                <FormControlLabel value="other" control={<Radio />} label="Other" />
-                            </RadioGroup>
-                        </Grid2>
-                    </div>
-                </div>
-                <div className="inputs">
-                    <div className="input">
-                        <input ref={emailRef} type="email" placeholder="Email" />
-                    </div>
-                </div>
-                <div className="inputs">
-                    <div className="input">
-                        <input ref={passwordRef} type="password" placeholder="Password" />
-                    </div>
-                </div>
-                <div className="inputs">
-                    <div className="input">
-                        <input ref={confirmpasswordRef} type="password" placeholder="Confirm Password" />
-                    </div>
-                </div>
-                <div className="inputs">
-                    <div className="input">
-                        <input ref={avatarRef} type="file" accept="image/*" /> {/* File input for avatar */}
-                    </div>
-                </div>
-                <Grid2 sx={{ paddingTop: 1 }}>
-                    <button onClick={newStudent}>Submit</button>
-                </Grid2>
-                <Grid2 sx={{ paddingTop: 1 }}>
-                    <button onClick={redirectToReg}>Already Have An Account? Login now</button>
-                </Grid2>
-            </>
+          <Box textAlign="center" mb={3}>
+            <Typography variant="h5" fontWeight="bold">
+              Create Your Account
+            </Typography>
+            
+            <Typography variant="subtitle1" color="textSecondary">
+              Let's get started with your details
+            </Typography>
+            <Box
+            sx={{
+                width: 50,
+                height: 4,
+                backgroundColor: "#ffc400",
+                margin: "0 auto",
+                
+            }}
+        />  
+          </Box>
+
+    
+          <Stack spacing={3}>
+            {/* Name Input */}
+            <TextField
+              inputRef={nameRef}
+              label="Full Name"
+              variant="outlined"
+              fullWidth
+              placeholder="Enter your full name"
+            />
+    
+            {/* Date of Birth */}
+            <Box>
+              <Typography variant="body1" fontWeight="medium" mb={1}>
+                Date of Birth
+              </Typography>
+              <DatePicker
+                onChange={setBirthdate}
+                value={birthdate}
+                maxDate={new Date()}
+                className="react-date-picker"
+              />
+            </Box>
+    
+            {/* Gender */}
+            <Box>
+              <Typography variant="body1" fontWeight="medium" mb={1}>
+                Gender
+              </Typography>
+              <RadioGroup
+                row
+                value={gender}
+                onChange={handleGenderInputChange}
+                aria-labelledby="gender-radio-group-label"
+              >
+                <FormControlLabel value="female" control={<Radio />} label="Female" />
+                <FormControlLabel value="male" control={<Radio />} label="Male" />
+                <FormControlLabel value="other" control={<Radio />} label="Other" />
+              </RadioGroup>
+            </Box>
+    
+            {/* Email Input */}
+            <TextField
+              inputRef={emailRef}
+              label="Email"
+              variant="outlined"
+              fullWidth
+              placeholder="Enter your email address"
+              type="email"
+            />
+    
+            {/* Password Input */}
+            <TextField
+              inputRef={passwordRef}
+              label="Password"
+              variant="outlined"
+              fullWidth
+              placeholder="Enter your password"
+              type="password"
+            />
+    
+            {/* Confirm Password */}
+            <TextField
+              inputRef={confirmpasswordRef}
+              label="Confirm Password"
+              variant="outlined"
+              fullWidth
+              placeholder="Re-enter your password"
+              type="password"
+            />
+    
+            {/* Avatar Upload */}
+            <Box>
+              <Typography variant="body1" fontWeight="medium" mb={1}>
+                Profile Picture
+              </Typography>
+              
+              <Button
+                variant="outlined"
+                component="label"
+                sx={{ width: "100%" }}
+              >
+                Upload Avatar
+                <input ref={avatarRef} hidden accept="image/*" type="file" />
+              </Button>
+            </Box>
+    
+            {/* Submit and Redirect Buttons */}
+            <Grid2 container spacing={2}
+            sx={{
+                justifyContent: "center"
+            }}>
+              <Grid2 xs={12} sm={6}>
+                <Button
+                  onClick={newStudent}
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  sx={{ py: 1.5 }}
+                >
+                  Sign Up
+                </Button>
+              </Grid2>
+              <Grid2 xs={12} sm={6}>
+                <Button
+                  onClick={redirectToReg}
+                  variant="text"
+                  color="secondary"
+                  fullWidth
+                  sx={{ py: 1.5 }}
+                >
+                  Already Have An Account?
+                </Button>
+              </Grid2>
+            </Grid2>
+          </Stack>
         </Card>
-    );
-}
+      );
+    }
+

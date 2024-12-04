@@ -75,7 +75,7 @@ export default function Login({ setUserId, setAuthId}) {
         sx={{
             minHeight: '100vh',
             minWidth: '99vw',
-            paddingTop:0.1,
+            //paddingTop:0.1,
             alignItems:'center',
             justifyContent:'center',
             backgroundImage: `url(${wiski_banner})`,
@@ -94,7 +94,7 @@ export default function Login({ setUserId, setAuthId}) {
             sx={{
                 //backgroundColor:"white",
                 maxWidth:1200,
-                maxHeight:600,
+                maxHeight:800,
                 alignContent: "center",
                 justifyContent: 'center',
                 //backgroundColor: 'gray',
@@ -107,6 +107,8 @@ export default function Login({ setUserId, setAuthId}) {
                     minWidth:400,
                     minHeight:400,
                     color: 'Black',
+                    
+                    
                     //backgroundColor: "gray",
                     
                     
@@ -132,6 +134,7 @@ export default function Login({ setUserId, setAuthId}) {
                         //paddingRight: 30,
                         marginTop:9,
                         marginRight:2
+                        
 
                         
                     }}>
@@ -302,7 +305,10 @@ export default function Login({ setUserId, setAuthId}) {
                                 margin="normal"
                             />
                         </Box>
-                        <Grid2 container spacing={2}>
+                        <Grid2 container spacing={2}
+                        sx={{
+                            justifyContent:"center"
+                        }}>
                             <Grid2 item xs={12}>
                                 <Button
                                     fullWidth
@@ -316,10 +322,10 @@ export default function Login({ setUserId, setAuthId}) {
                             </Grid2>
                             <Grid2 item xs={12}>
                                 <Button
-                                    fullWidth
-                                    variant="outlined"
+                                    variant="text"
                                     color="secondary"
-                                    size="large"
+                                    fullWidth
+                                    sx={{ py: 1.5 }}
                                     onClick={()=>setIsRegistering(true)}
                                 >
                                     No Account Yet? Register Now
@@ -333,19 +339,10 @@ export default function Login({ setUserId, setAuthId}) {
                     <>
                     <Grid2
                     sx={{
-                        backgroundColor:'#ffe6d1'
+                        //backgroundColor:'#ffe6d1'
 
                     }}>
-                        <Registration />
-                        <Button
-                            fullWidth
-                            variant="outlined"
-                            color="secondary"
-                            size="large"
-                            onClick={()=>setIsRegistering(false)}
-                        >
-                            Already have an account?
-                        </Button>
+                        <Registration setIsRegistering={setIsRegistering}/>
                     </Grid2>
                     
                     </>
