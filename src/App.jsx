@@ -9,6 +9,7 @@ import './App.css';
 import Registration from './Components/Registration';
 import UserIcon from './assets/images/UserIcon.png';
 import Gig from './Components/Gig';
+import GigHome from './Components/GigHome';
 import Review from './Components/Review';
 import Home from './Components/Home';
 import Profile from './Components/Profile';
@@ -203,6 +204,7 @@ const App = () => {
                         <Route path="/registration" element={<Registration userId={userId}/>} />
                         <Route path="/skill-exchange" element={authenticated ? <SkillExchange userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/gig/:id" element={authenticated ? <Gig userId={userId} /> : <Navigate to="/login" />} />
+                        <Route path="/gig-home/:id" element={authenticated ? <GigHome userId={userId} /> : <Navigate to="/login" />} />
                         <Route path="/chat" element={authenticated ? <Chat userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/reviews" element={authenticated ? <Review userId={userId}/> : <Navigate to="/login" />} />
                         <Route path="/reviewList" element={authenticated ? <ReviewList userId={userId}/> : <Navigate to="/login" />} />

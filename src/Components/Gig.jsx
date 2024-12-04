@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, Typography, Chip, IconButton, TextField, Button, Switch, FormControlLabel } from '@mui/material';
+import { Card, CardContent,Box, Typography, Avatar,Chip,Paper, IconButton, TextField,Divider, Button, Switch, FormControlLabel } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Edit from '@mui/icons-material/Edit';
 import Save from '@mui/icons-material/Save';
+import Person from '@mui/icons-material/Person';
 import axios from 'axios';
 
 const Gig = ({userId}) => {
@@ -78,7 +79,7 @@ const Gig = ({userId}) => {
             isActive: editIsActive,
         };
         try {
-            await axios.put(`http://localhost:8080/api/wildSkills/skilloffering/putSkillOfferingDetails?id=${skillOfferingId}`, skillOfferingData);
+            await axios.put(`http://localhost:8080/api/wildSkills/skilloffering/student/${userId}/putSkillOfferingDetails/client/${skillOfferingId}`, skillOfferingData);
             setIsEditing(false);
         } catch (error) {
             console.error('Error saving skill offering details', error);
@@ -88,41 +89,69 @@ const Gig = ({userId}) => {
     const skillArray = editSkills ? editSkills.split(',') : [];
 
     return (
-        <Card style={{ height: 'auto', width: '900px', margin: '20px', padding: '10px', borderRadius: '8px' }}>
-            <CardContent>
-                {!isEditing ? (
-                    <>
-                        <Typography variant="h5" style={{ fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', fontSize: '25px' }}>
+        <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="83vh"
+            minWidth="99vw"
+            sx={{
+                background: 'linear-gradient(120deg, #000000, #434343)', 
+                padding: 2, 
+                margin: '0 auto',
+            }}
+        >
+            <Paper
+                elevation={4}
+                sx={{
+                    padding: 3,
+                    borderRadius: 3,
+                    maxWidth: '700px',
+                    width: '100%',
+                }}
+            >
+                <Box display="flex" alignItems="center" mb={3}>
+                    <Box>
+                        <Typography variant="h5" fontWeight="bold">
                             {editTitle}
-                            <IconButton color="primary" onClick={handleEditClick}>
-                                <Edit />
-                            </IconButton>
                         </Typography>
-                        <Typography variant="h6" color="textPrimary" style={{ display: 'flex', justifyContent: 'flex-start' }} gutterBottom>
+                        <Typography variant="subtitle1" color="textSecondary">
                             {student.name}
                         </Typography>
+                    </Box>
+                    <IconButton color="primary" onClick={handleEditClick} sx={{ marginLeft: 'auto' }}>
+                        <Edit />
+                    </IconButton>
+                </Box>
+                <Divider sx={{ marginBottom: 2 }} />
+                {!isEditing ? (
+                    <>
+                        {/* 
                         {student.authKey && student.authKey.authStatus === true ? (
-                        <Typography variant="body2" color="textSecondary" style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
-                            {/* <Chip label={editIsActive ? "Online" : "Offline"} style={{ verticalAlign: 'middle', marginRight: '5px' }} /> */}
+                            <Typography variant="body2" color="textSecondary" gutterBottom>
                             Online
-                        </Typography>
+                            </Typography>
                         ) : (
-                        <Typography>Offline</Typography>
+                            <Typography variant="body2" color="textSecondary" gutterBottom>
+                            Offline
+                            </Typography>
                         )}
-                        <br />
-                        <Typography variant="h6" color="textPrimary" style={{ display: 'flex', justifyContent: 'flex-start' }} gutterBottom> 
+                        */}
+                        <Typography variant="body2" color="textSecondary" gutterBottom>
                             {resolvedCategoryName}
                         </Typography>
-                        <Typography variant="body1" style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
+                        <Typography variant="body1" color="textSecondary" sx={{ marginTop: 2, lineHeight: 1.8 }}>
                             {editDescription}
                         </Typography>
-                        <br />
-                        <Typography variant="body2" color="textSecondary" style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>Skills</Typography>
-                        <Typography variant="body2" color="textSecondary" style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
+                        <Box display="flex" flexWrap="wrap" gap={1} mt={3}>
                             {skillArray.slice(0, 10).map((skill, index) => (
-                                <Chip key={index} label={skill.trim()} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
+                                <Chip 
+                                    key={index} 
+                                    label={skill.trim()} 
+                                    sx={{ bgcolor: '#e0f7fa', color: '#006064', fontWeight: 'bold' }} 
+                                />
                             ))}
-                        </Typography>
+                        </Box>
                     </>
                 ) : (
                     <>
@@ -132,6 +161,7 @@ const Gig = ({userId}) => {
                             onChange={(e) => setEditTitle(e.target.value)}
                             fullWidth
                             margin="normal"
+                            sx={{ bgcolor: 'background.paper', borderRadius: 1 }}
                         />
                         <TextField
                             label="Description"
@@ -141,6 +171,7 @@ const Gig = ({userId}) => {
                             margin="normal"
                             multiline
                             rows={4}
+                            sx={{ bgcolor: 'background.paper', borderRadius: 1 }}
                         />
                         <TextField
                             label="Skills"
@@ -148,21 +179,37 @@ const Gig = ({userId}) => {
                             onChange={(e) => setEditSkills(e.target.value)}
                             fullWidth
                             margin="normal"
+                            sx={{ bgcolor: 'background.paper', borderRadius: 1 }}
                         />
                         <Button
                             variant="contained"
-                            color="secondary"
+                            color="primary"
                             onClick={handleSaveClick}
-                            style={{ marginTop: '10px', marginLeft: '10px' }}
+                            sx={{
+                                marginTop: 2,
+                                background: 'linear-gradient(45deg, #cf2d2d 30%, #ff762e 90%)', 
+                                border: 0,
+                                borderRadius: 3,
+                                height:'40px',
+                                maxWidth:'100px',
+                                boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)', 
+                                color: 'white',
+                                padding: '0 30px',
+                                '&:hover': {
+                                    background: 'linear-gradient(45deg, #cf2d2d 30%, #ff762e 90%)',
+                                },
+                            }}
                         >
-                            <Save />
+                            <Save style={{ marginRight: '8px' }} />
                             Save
                         </Button>
                     </>
                 )}
-            </CardContent>
-        </Card>
+            </Paper>
+        </Box>
     );
-};
+    
+}
+    
 
 export default Gig;

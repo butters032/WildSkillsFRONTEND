@@ -38,6 +38,11 @@ const Home = ({userId}) => {
         fetchSkillOfferings();
         fetchCategories();
     }, []);
+    useEffect(() => {
+        if (skillOfferings.length > 0) {
+            console.log('All Gigs:', skillOfferings);
+        }
+    }, [skillOfferings]);
 
     const fetchSkillOfferings = async () => {
         try {
@@ -105,9 +110,10 @@ const Home = ({userId}) => {
         }
     }, [id]);
 
-    const handleNavigate = (studentId) => {
-        navigate(`/skill-offerings/${studentId}`);
+    const handleNavigateToGigHome = (offering) => {
+        navigate(`/gig-home/${offering.skillOfferingId}`, { state: offering });
     };
+    
 
     const shuffleArray = (array) => { 
         for (let i = array.length - 1; i > 0; i--) {
@@ -396,6 +402,7 @@ const Home = ({userId}) => {
                             }}>
                                 Popular Services Right Now
                         </Typography>
+                        
                     
                     {/*
                     <Grid container spacing={2}>
@@ -415,6 +422,7 @@ const Home = ({userId}) => {
                         ))}
                     </Grid>
                     */}
+                    
                     <Grid2 
                         container
                         sx={{
@@ -426,39 +434,36 @@ const Home = ({userId}) => {
                             display: 'flex',
                             height: "100%",
                         }}
-                    >
+                        >
                             {skillOfferings.map((offering) => (
-                                <Stack direction={'row'}>
-                                        
-                                <Card key={offering.skillOfferingId} style={{ width: '250px', margin: '10px' }}>
-                                    <CardActionArea
-                                        onClick={() => !showCheckboxes && handleNavigate(offering.skillOfferingId)}
-                                        style={{ cursor: showCheckboxes ? 'default' : 'pointer' }}
-                                    >
-                                    <CardContent>
-                                        {showCheckboxes && (
-                                            <Checkbox
-                                                checked={selectedIds.includes(offering.skillOfferingId)}
-                                                onChange={() => {
-                                                    setSelectedIds((prev) =>
-                                                        prev.includes(offering.skillOfferingId)
-                                                            ? prev.filter((id) => id !== offering.skillOfferingId)
-                                                            : [...prev, offering.skillOfferingId]
-                                                    );
-                                                }}
-                                            />
-                                        )}
-                                        <Typography variant="h6">
-                                            {offering.title}
-                                        </Typography>
-                                        <Typography variant="body2" color="textSecondary">
-                                            {offering.description || "No description available"}
-                                        </Typography>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                                </Stack>
-                                
+                            <Stack direction={'row'} key={offering.skillOfferingId}>
+                                <Card style={{ width: '250px', margin: '10px' }}>
+                                <CardActionArea
+                                            onClick={() => handleNavigateToGigHome(offering)}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+
+                                        <CardContent>
+                                            {showCheckboxes && (
+                                                <Checkbox
+                                                    checked={selectedIds.includes(offering.skillOfferingId)}
+                                                    onChange={() => {
+                                                        setSelectedIds((prev) =>
+                                                            prev.includes(offering.skillOfferingId)
+                                                                ? prev.filter((id) => id !== offering.skillOfferingId)
+                                                                : [...prev, offering.skillOfferingId]
+                                                        );
+                                                    }}
+                                                />
+                                            )}
+                                            <Typography variant="h6">{offering.title}</Typography>
+                                            <Typography variant="body2" color="textSecondary">
+                                                {offering.description || "No description available"}
+                                            </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            </Stack>
                         ))}
                     </Grid2>
                     </Stack>

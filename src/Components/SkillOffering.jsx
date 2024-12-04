@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Button, IconButton, Checkbox, Card, CardActionArea, CardContent, Typography, Dialog, DialogTitle, DialogContent, DialogActions, FormControl, TextField, Select, MenuItem, FormControlLabel, Switch, InputLabel } from '@mui/material';
+import { Button, Grid, IconButton, Checkbox, Card,CardMedia, CardActionArea, CardContent, Typography, Dialog, DialogTitle, DialogContent, DialogActions, FormControl, TextField, Select, MenuItem, FormControlLabel, Switch, InputLabel } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { ArrowBack } from '@mui/icons-material';
+
 
 const SkillOffering = ({ userId }) => {
     const [skillOfferings, setSkillOfferings] = useState([]);
@@ -58,7 +62,7 @@ const SkillOffering = ({ userId }) => {
     const fetchSkillOfferings = async () => {
         try {
             const response = await axios.get(
-                'http://localhost:8080/api/wildSkills/skilloffering/getAllSkillOfferingRecord'
+                `http://localhost:8080/api/wildSkills/skilloffering/student/${userId}/getAllSkillOfferingRecord/client`
             );
             setSkillOfferings(response.data);
             setLoading(false);
@@ -87,7 +91,7 @@ const SkillOffering = ({ userId }) => {
 
     const handleDeleteSelected = async () => {
         try {
-            await Promise.all(selectedIds.map(id => axios.delete(`http://localhost:8080/api/wildSkills/skilloffering/deleteSkillOfferingDetails/${id}`)));
+            await Promise.all(selectedIds.map(id => axios.delete(`http://localhost:8080/api/wildSkills/skilloffering/student/{studentId}/deleteSkillOfferingDetails/client/${id}`)));
             fetchSkillOfferings();
             setSelectedIds([]);
             setShowCheckboxes(false);
@@ -96,6 +100,7 @@ const SkillOffering = ({ userId }) => {
             console.error('Error deleting selected skill offerings:', error);
         }
     };
+    
 
     const handleSave = async () => {
         const skillOfferingData = {
@@ -106,17 +111,15 @@ const SkillOffering = ({ userId }) => {
             category: {
                 categoryId: newCategoryId,
             },
-            studentID:student.id,
+            //studentID:userId,
         };
         console.log('Skill Offering Data:',skillOfferingData);
 
+        
         try {
             let response;
-            if (editingSkillOfferingId) {
-                response = await axios.put(`http://localhost:8080/api/wildSkills/skilloffering/putSkillOfferingDetails?id=${editingSkillOfferingId}`, skillOfferingData);
-            } else {
-                response = await axios.post('http://localhost:8080/api/wildSkills/skilloffering/postSkillOfferingRecord', skillOfferingData);
-            }
+            response = await axios.post(`http://localhost:8080/api/wildSkills/skilloffering/student/${userId}/postSkillOfferingRecord`, skillOfferingData);
+            
 
             const savedOffering = response.data;
             setSkillOfferings(prevOfferings => 
@@ -147,10 +150,46 @@ const SkillOffering = ({ userId }) => {
         }
     };
 
+    const scrollContainer = React.useRef(null);
+
+    const scrollLeft = () => {
+        scrollContainer.current.scrollBy({ left: -250, behavior: 'smooth' });
+    };
+
+    const scrollRight = () => {
+        scrollContainer.current.scrollBy({ left: 250, behavior: 'smooth' });
+    };
+
     return (
-        <div style={{ textAlign: 'center', color: 'black' }}>
-            <h1>My Gigs</h1>
-            <Button variant="contained" color="primary" onClick={() => setOpenDialog(true)}>Add Gig</Button>
+         <div style={{ textAlign: 'center', 
+         color: 'black', 
+         background: 'linear-gradient(120deg, #000000, #434343)', 
+         minHeight: '85vh', 
+         padding: '20px',
+         minWidth:'97.8vw'
+         }}>
+            <div style={{color:'white',fontSize:'50px'}}
+            >Gigs</div>
+            <Button 
+                variant="contained" 
+                onClick={() => setOpenDialog(true)}
+                style={{
+                    background: 'linear-gradient(45deg, #cf2d2d 30%, #ff762e 90%)',
+                    color: 'white',
+                    margin: '20px',
+                    borderRadius: '15px',
+                   // boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+                    padding: '10px 20px',
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    textTransform: 'none',
+                    '&:hover': {
+                        background: 'linear-gradient(45deg, #FF8E53 30%, #FE6B8B 90%)',
+                    }
+                }}
+            >
+                ADD GIG
+            </Button>
             <IconButton
                 color="secondary"
                 onClick={() => {
@@ -165,47 +204,87 @@ const SkillOffering = ({ userId }) => {
             {loading ? (
                 <p>Loading...</p>
             ) : (
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', marginTop: '20px' }}>
-                    {skillOfferings.map((offering) => (
-                        <Card key={offering.skillOfferingId} style={{ width: '250px', margin: '10px' }}>
-                            <CardActionArea
-                                onClick={() => !showCheckboxes && handleNavigate(offering)}
-                                style={{ cursor: showCheckboxes ? 'default' : 'pointer' }}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 20px' }}>
+                    <IconButton 
+                        onClick={scrollRight} 
+                        style={{ color: 'white' }}
+                    >
+                        <ArrowBackIosIcon />
+                    </IconButton>
+                    <div 
+                        ref={scrollContainer} 
+                        style={{ display: 'flex', overflowX: 'auto', padding: '20px', width: '80%', margin: '0 10px' }}
+                    >
+                        {skillOfferings.map((offering) => (
+                            <Card
+                                key={offering.skillOfferingId}
+                                style={{
+                                    boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+                                    transition: '0.3s',
+                                    width: '250px',
+                                    margin: '0 10px',
+                                    flexShrink: 0, // Prevent shrinking
+                                }}
                             >
-                                <CardContent>
-                                    {showCheckboxes && (
-                                        <Checkbox
-                                            checked={selectedIds.includes(offering.skillOfferingId)}
-                                            onChange={() => {
-                                                setSelectedIds((prev) =>
-                                                    prev.includes(offering.skillOfferingId)
-                                                        ? prev.filter((id) => id !== offering.skillOfferingId)
-                                                        : [...prev, offering.skillOfferingId]
-                                                );
-                                            }}
-                                        />
-                                    )}
-                                    <Typography variant="h6">
-                                        {offering.title}
-                                    </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        {offering.description || "No description available"}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
-                    ))}
+                                <CardActionArea
+                                    onClick={() => !showCheckboxes && handleNavigate(offering)}
+                                    style={{ cursor: showCheckboxes ? 'default' : 'pointer' }}
+                                >
+                                    <CardContent>
+                                        {showCheckboxes && (
+                                            <Checkbox
+                                                checked={selectedIds.includes(offering.skillOfferingId)}
+                                                onChange={() => {
+                                                    setSelectedIds((prev) =>
+                                                        prev.includes(offering.skillOfferingId)
+                                                            ? prev.filter((id) => id !== offering.skillOfferingId)
+                                                            : [...prev, offering.skillOfferingId]
+                                                    );
+                                                }}
+                                            />
+                                        )}
+                                        <Typography variant="h6" style={{ fontWeight: 'bold' }}>
+                                            {offering.title}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary">
+                                            {offering.description || "No description available"}
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+                        ))}
+                    </div>
+                    <IconButton 
+                        onClick={scrollRight} 
+                        style={{ color: 'white' }}
+                    >
+                        <ArrowForwardIosIcon />
+                    </IconButton>
+
                 </div>
             )}
             {showCheckboxes && selectedIds.length > 0 && (
                 <Button
-                    variant="text"
-                    color="secondary"
-                    onClick={() => setOpenConfirmDialog(true)}
-                    style={{ marginTop: '20px', color: 'red' }}
-                >
-                    Delete
-                </Button>
+                variant="text"
+                onClick={() => setOpenConfirmDialog(true)}
+                style={{
+                    marginTop: '20px',
+                    color: 'red',
+                    borderRadius: '15px',
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    textTransform: 'none',
+                    padding: '10px 20px',
+                    border: '2px solid red',
+                    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+                    '&:hover': {
+                        background: 'rgba(255, 0, 0, 0.1)',
+                    }
+                }}
+            >
+                Delete
+            </Button>
+            
             )}
             <Dialog open={openConfirmDialog} onClose={() => setOpenConfirmDialog(false)}>
                 <DialogTitle>Confirm Deletion</DialogTitle>
@@ -264,6 +343,7 @@ const SkillOffering = ({ userId }) => {
             </Dialog>
         </div>
     );
+
 };
 
 export default SkillOffering;
