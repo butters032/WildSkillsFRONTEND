@@ -79,6 +79,7 @@ export default function Registration({ setIsRegistering }) {
         // Encode avatar as Base64
         const avatarFile = avatarRef.current.files[0];
         let avatarBase64 = null;
+        
         if (avatarFile) {
             const reader = new FileReader();
             const promise = new Promise((resolve, reject) => {
@@ -87,8 +88,30 @@ export default function Registration({ setIsRegistering }) {
             });
             reader.readAsDataURL(avatarFile);
             avatarBase64 = await promise;
-            console.log(avatarBase64);
+            console.log(avatarBase64)
         }
+        /*
+        let avatarBase64 = null;
+        if (avatarFile) {
+            // Assume avatarBase64 is your base64-encoded string with the data URL prefix
+            //let avatarBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+
+            // Strip the data URL prefix
+            const reader = new FileReader(); 
+            reader.readAsDataURL(avatarFile); 
+            reader.onloadend = () => {avatarBase64 = (reader.result.split(',')[1]); // This will give you the base64 string without the prefix 
+            console.log(avatarBase64);
+            };
+
+
+
+        }
+        if (avatarBase64.startsWith("data:image/")) {
+                avatarBase64 = avatarBase64.split(",")[1];
+            }
+            console.log(avatarBase64);
+        */
+            
     
         // Create the request payload
         const studentData = {

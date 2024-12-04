@@ -23,7 +23,8 @@ const Home = ({userId}) => {
 
     const [student, setStudent] = useState({});
     const location = useLocation();
-    const id = userId; 
+    const id = userId;
+    const [profilePic,setProfilePic]= useState('');
 
     //---------------------------
 
@@ -94,6 +95,7 @@ const Home = ({userId}) => {
                 const fetchedStudent = response.data;
                 fetchedStudent.birthdate = parseDate(fetchedStudent.birthdate);
                 setStudent(fetchedStudent);
+                setProfilePic("data:image/png;base64,"+fetchedStudent.avatar);
             } catch (error) {
                 console.error('Error fetching student data', error);
             }
@@ -148,7 +150,7 @@ const Home = ({userId}) => {
                         <Avatar
                             alt="profile-pic"
                             variant="circle"
-                            src={wiski_banner}
+                            src={profilePic}
                             sx={{
                                 width: '18vh',
                                 height: '8vw',
