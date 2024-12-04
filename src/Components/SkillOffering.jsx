@@ -91,7 +91,7 @@ const SkillOffering = ({ userId }) => {
 
     const handleDeleteSelected = async () => {
         try {
-            await Promise.all(selectedIds.map(id => axios.delete(`http://localhost:8080/api/wildSkills/skilloffering/student/{studentId}/deleteSkillOfferingDetails/client/${id}`)));
+            await Promise.all(selectedIds.map(id => axios.delete(`http://localhost:8080/api/wildSkills/skilloffering/student/${userId}/deleteSkillOfferingDetails/client/${id}`)));
             fetchSkillOfferings();
             setSelectedIds([]);
             setShowCheckboxes(false);
@@ -160,111 +160,88 @@ const SkillOffering = ({ userId }) => {
         scrollContainer.current.scrollBy({ left: 250, behavior: 'smooth' });
     };
 
-    return (
-         <div style={{ textAlign: 'center', 
-         color: 'black', 
-         background: 'linear-gradient(120deg, #000000, #434343)', 
-         minHeight: '85vh', 
-         padding: '20px',
-         minWidth:'97.8vw'
-         }}>
-            <div style={{color:'white',fontSize:'50px'}}
-            >Gigs</div>
-            <Button 
-                variant="contained" 
-                onClick={() => setOpenDialog(true)}
-                style={{
-                    background: 'linear-gradient(45deg, #cf2d2d 30%, #ff762e 90%)',
-                    color: 'white',
-                    margin: '20px',
-                    borderRadius: '15px',
-                   // boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-                    padding: '10px 20px',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    textTransform: 'none',
-                    '&:hover': {
-                        background: 'linear-gradient(45deg, #FF8E53 30%, #FE6B8B 90%)',
-                    }
-                }}
-            >
-                ADD GIG
-            </Button>
-            <IconButton
-                color="secondary"
-                onClick={() => {
-                    setShowCheckboxes(prev => !prev);
-                    setSelectedIds([]);
-                }}
-                onDoubleClick={toggleDeleteConfirmation}
-                style={{ color: 'red' }}
-            >
-                <DeleteIcon />
-            </IconButton>
-            {loading ? (
-                <p>Loading...</p>
-            ) : (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 20px' }}>
-                    <IconButton 
-                        onClick={scrollRight} 
-                        style={{ color: 'white' }}
-                    >
-                        <ArrowBackIosIcon />
-                    </IconButton>
-                    <div 
-                        ref={scrollContainer} 
-                        style={{ display: 'flex', overflowX: 'auto', padding: '20px', width: '80%', margin: '0 10px' }}
-                    >
-                        {skillOfferings.map((offering) => (
-                            <Card
-                                key={offering.skillOfferingId}
-                                style={{
-                                    boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
-                                    transition: '0.3s',
-                                    width: '250px',
-                                    margin: '0 10px',
-                                    flexShrink: 0, // Prevent shrinking
-                                }}
-                            >
-                                <CardActionArea
-                                    onClick={() => !showCheckboxes && handleNavigate(offering)}
-                                    style={{ cursor: showCheckboxes ? 'default' : 'pointer' }}
-                                >
-                                    <CardContent>
-                                        {showCheckboxes && (
-                                            <Checkbox
-                                                checked={selectedIds.includes(offering.skillOfferingId)}
-                                                onChange={() => {
-                                                    setSelectedIds((prev) =>
-                                                        prev.includes(offering.skillOfferingId)
-                                                            ? prev.filter((id) => id !== offering.skillOfferingId)
-                                                            : [...prev, offering.skillOfferingId]
-                                                    );
-                                                }}
-                                            />
-                                        )}
-                                        <Typography variant="h6" style={{ fontWeight: 'bold' }}>
-                                            {offering.title}
-                                        </Typography>
-                                        <Typography variant="body2" color="textSecondary">
-                                            {offering.description || "No description available"}
-                                        </Typography>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                        ))}
-                    </div>
-                    <IconButton 
-                        onClick={scrollRight} 
-                        style={{ color: 'white' }}
-                    >
-                        <ArrowForwardIosIcon />
-                    </IconButton>
 
-                </div>
-            )}
-            {showCheckboxes && selectedIds.length > 0 && (
-                <Button
+return (
+    <div style={{ textAlign: 'center', color: 'black', background: 'linear-gradient(120deg, #000000, #434343)', minHeight: '85vh', padding: '20px', minWidth: '97.8vw' }}>
+        <div style={{ color: 'white', fontSize: '50px' }}>Skill Offerings</div>
+        <Button 
+            variant="contained" 
+            onClick={() => setOpenDialog(true)}
+            style={{
+                background: 'linear-gradient(45deg, #cf2d2d 30%, #ff762e 90%)',
+                color: 'white',
+                margin: '20px',
+                borderRadius: '15px',
+                padding: '10px 20px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                textTransform: 'none',
+                '&:hover': {
+                    background: 'linear-gradient(45deg, #FF8E53 30%, #FE6B8B 90%)',
+                }
+            }}
+        >
+            ADD GIG
+        </Button>
+        <IconButton
+            color="secondary"
+            onClick={() => {
+                setShowCheckboxes(prev => !prev);
+                setSelectedIds([]);
+            }}
+            onDoubleClick={toggleDeleteConfirmation}
+            style={{ color: 'red' }}
+        >
+            <DeleteIcon />
+        </IconButton>
+        {loading ? (
+            <p style={{ color: 'white' }}>Loading...</p>
+        ) : (
+            <Grid container spacing={0} justifyContent="center" style={{ overflowY: 'scroll', maxHeight: '60vh', padding: '20px' }}>
+                {skillOfferings.map((offering, index) => (
+                    <Grid item key={offering.skillOfferingId} xs={12} sm={6} md={6} lg={4} style={{ display: 'flex', justifyContent: 'center',marginRight: '5px',marginLeft: '5px', }}>
+                        <Card
+                            style={{
+                                boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+                                transition: '0.3s',
+                                width: '500px',
+                                height: '350px',
+                                margin:'20px',
+                                borderRadius: '10px',
+                            }}
+                        >
+                            <CardActionArea
+                                onClick={() => !showCheckboxes && handleNavigate(offering)}
+                                style={{ cursor: showCheckboxes ? 'default' : 'pointer' }}
+                            >
+                                <CardContent>
+                                    {showCheckboxes && (
+                                        <Checkbox
+                                            checked={selectedIds.includes(offering.skillOfferingId)}
+                                            onChange={() => {
+                                                setSelectedIds((prev) =>
+                                                    prev.includes(offering.skillOfferingId)
+                                                        ? prev.filter((id) => id !== offering.skillOfferingId)
+                                                        : [...prev, offering.skillOfferingId]
+                                                );
+                                            }}
+                                        />
+                                    )}
+                                    <Typography variant="h6" style={{ fontWeight: 'bold' }}>
+                                        {offering.title}
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        {offering.description || "No description available"}
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
+        )}
+        {showCheckboxes && selectedIds.length > 0 && (
+            <Button
                 variant="text"
                 onClick={() => setOpenConfirmDialog(true)}
                 style={{
@@ -276,7 +253,6 @@ const SkillOffering = ({ userId }) => {
                     textTransform: 'none',
                     padding: '10px 20px',
                     border: '2px solid red',
-                    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
                     '&:hover': {
                         background: 'rgba(255, 0, 0, 0.1)',
                     }
@@ -284,66 +260,64 @@ const SkillOffering = ({ userId }) => {
             >
                 Delete
             </Button>
-            
-            )}
-            <Dialog open={openConfirmDialog} onClose={() => setOpenConfirmDialog(false)}>
-                <DialogTitle>Confirm Deletion</DialogTitle>
-                <DialogContent>
-                    <Typography>Are you sure you want to delete the selected gig?</Typography>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpenConfirmDialog(false)} color="secondary">Cancel</Button>
-                    <Button onClick={handleDeleteSelected} color="primary">Delete</Button>
-                </DialogActions>
-            </Dialog>
-            <Dialog open={openDialog} onClose={handleCloseDialog} fullWidth maxWidth="sm">
-                <DialogTitle>{editingSkillOfferingId ? "Edit Gig" : "Add Gig"}</DialogTitle>
-                <DialogContent>
-                    <FormControl fullWidth margin="normal">
-                        <TextField
-                            label="Title"
-                            value={newTitle}
-                            onChange={(e) => setNewTitle(e.target.value)}
-                            required
-                        />
-                    </FormControl>
-                    <FormControl fullWidth margin="normal">
-                        <TextField
-                            label="Description"
-                            value={newDescription}
-                            onChange={(e) => setNewDescription(e.target.value)}
-                            required
-                        />
-                    </FormControl>
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel>Category</InputLabel>
-                        <Select
-                            value={newCategoryId}
-                            onChange={(e) => setNewCategoryId(e.target.value)}
-                        >
-                            {categories.map((category) => (
-                                <MenuItem key={category.categoryId} value={category.categoryId}>
-                                    {category.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <FormControl fullWidth margin="normal">
-                        <TextField
-                            label="Skills (comma-separated)"
-                            value={newSkills}
-                            onChange={(e) => setNewSkills(e.target.value)}
-                        />
-                    </FormControl>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog} color="secondary">Cancel</Button>
-                    <Button onClick={handleSave} color="primary">Save</Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    );
-
-};
+        )}
+        <Dialog open={openConfirmDialog} onClose={() => setOpenConfirmDialog(false)}>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogContent>
+                <Typography>Are you sure you want to delete the selected gig?</Typography>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => setOpenConfirmDialog(false)} color="secondary">Cancel</Button>
+                <Button onClick={handleDeleteSelected} color="primary">Delete</Button>
+            </DialogActions>
+        </Dialog>
+        <Dialog open={openDialog} onClose={handleCloseDialog} fullWidth maxWidth="sm">
+            <DialogTitle>{editingSkillOfferingId ? "Edit Gig" : "Add Gig"}</DialogTitle>
+            <DialogContent>
+                <FormControl fullWidth margin="normal">
+                    <TextField
+                        label="Title"
+                        value={newTitle}
+                        onChange={(e) => setNewTitle(e.target.value)}
+                        required
+                    />
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                    <TextField
+                        label="Description"
+                        value={newDescription}
+                        onChange={(e) => setNewDescription(e.target.value)}
+                        required
+                    />
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                    <InputLabel>Category</InputLabel>
+                    <Select
+                        value={newCategoryId}
+                        onChange={(e) => setNewCategoryId(e.target.value)}
+                    >
+                        {categories.map((category) => (
+                            <MenuItem key={category.categoryId} value={category.categoryId}>
+                                {category.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                    <TextField
+                        label="Skills (comma-separated)"
+                        value={newSkills}
+                        onChange={(e) => setNewSkills(e.target.value)}
+                    />
+                </FormControl>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleCloseDialog} color="secondary">Cancel</Button>
+                <Button onClick={handleSave} color="primary">Save</Button>
+            </DialogActions>
+        </Dialog>
+    </div>
+);
+}
 
 export default SkillOffering;
