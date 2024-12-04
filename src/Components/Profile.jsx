@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Card,
-  CardContent,
-  Grid,
-  Stack,
-  Typography,
-  Button,
-  TextField,
-  Box,
-  Avatar,
-  Grid2,
-} from "@mui/material";
+import {Card,CardContent,Stack,Typography,Button,TextField,Box,Avatar,Grid2,} from "@mui/material";
 import axios from "axios";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -166,10 +155,10 @@ export default function Profile({userId}) {
         });
     };
 
-  return (
-    <Grid2
-      container
-      sx={{
+return (
+        <Grid2
+        container
+        sx={{
         backgroundImage: `url(${wiskiBanner})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -178,48 +167,48 @@ export default function Profile({userId}) {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-      }}
-    >
-      <Card
-        sx={{
-          maxWidth: 500,
-          padding: 4,
-          boxShadow: 6,
-          borderRadius: 4,
-          background: "linear-gradient(135deg, #ffe6d1, #ffc0cb)",
-          alignItems:"center"
         }}
-      >
-        <CardContent>
-          <Stack spacing={3}>
-            <Typography variant="h4" align="center" fontWeight="bold" gutterBottom>
-              {isEditing ? "Edit Profile" : "Profile"}
-            </Typography>
-            <Box
-                sx={{
+        >
+        <Card
+        sx={{
+        maxWidth: 500,
+        padding: 4,
+        boxShadow: 6,
+        borderRadius: 4,
+        background: "linear-gradient(135deg, #ffe6d1, #ffc0cb)",
+        alignItems:"center"
+        }}
+        >
+            <CardContent>
+                <Stack spacing={3}>
+                    <Typography variant="h4" align="center" fontWeight="bold" gutterBottom>
+                        {isEditing ? "Edit Profile" : "Profile"}
+                    </Typography>
+                <Box
+                    sx={{
                     width: 50,
                     height: 4,
                     backgroundColor: "#ffc400",
                     margin: "0 auto",
                     alignSelf:"center"
-                    
-                }}
-            />
-            <Box textAlign="center">
-              <Avatar
-                alt="profile-pic"
-                variant="circle"
-                src={profilePic || userIcon}
-                //src={student.avatar}
-                //alt="User Avatar"
-                sx={{ width: 100, height: 100, margin: "0 auto", mb: 2 }}
-              />
-              {isEditing && (
+
+                    }}
+                />
+                <Box textAlign="center">
+                <Avatar
+                    alt="profile-pic"
+                    variant="circle"
+                    src={profilePic || userIcon}
+                    //src={student.avatar}
+                    //alt="User Avatar"
+                    sx={{ width: 100, height: 100, margin: "0 auto", mb: 2 }}
+                    />
+                    {isEditing && (
                 <Button
                     variant="outlined"
                     component="label"
                     sx={{ width: "100%" }}
-                >
+                    >
                     Upload Avatar
                     <input
                         type="file"
@@ -228,118 +217,112 @@ export default function Profile({userId}) {
                         hidden
                         onChange={handleChange}
                     />
-            </Button>
-            
-                
-                
-                
-                
-                
-              )}
-            </Box>
-            <TextField
-              label="Name"
-              name="name"
-              value={student.name || ""}
-              onChange={handleChange}
-              fullWidth
-              disabled={!isEditing}
-              variant="outlined"
-            />
-            <Box>
-              <Typography>Date of Birth</Typography>
-              <DatePicker
-                name="birthdate"
-                onChange={(date) =>
-                  handleChange({ target: { name: "birthdate", value: date } })
-                }
-                value={student.birthdate || new Date()}
-                disabled={!isEditing}
-              />
-            </Box>
-            <Box>
-                <Typography>Gender</Typography>
-                <RadioGroup
-                    row
-                    name="gender"
-                    value={student.gender || ""}
+                </Button>
+                )}
+                </Box>
+                <TextField
+                    label="Name"
+                    name="name"
+                    value={student.name || ""}
                     onChange={handleChange}
-                >
+                    fullWidth
+                    disabled={!isEditing}
+                    variant="outlined"
+                />
+                <Box>
+                <Typography>Date of Birth</Typography>
+                <DatePicker
+                    name="birthdate"
+                    onChange={(date) =>
+                    handleChange({ target: { name: "birthdate", value: date } })
+                    }
+                    value={student.birthdate || new Date()}
+                    disabled={!isEditing}
+                    />
+                </Box>
+                <Box>
+                    <Typography>Gender</Typography>
+                    <RadioGroup
+                        row
+                        name="gender"
+                        value={student.gender || ""}
+                        onChange={handleChange}
+                    >
                     <FormControlLabel 
                         value="male" 
                         control={<Radio />} 
                         label="Male" 
-                        disabled={!isEditing} // Disable when isEditing is true
+                        disabled={!isEditing}
                     />
                     <FormControlLabel 
                         value="female" 
                         control={<Radio />} 
                         label="Female" 
-                        disabled={!isEditing} // Disable when isEditing is true
+                        disabled={!isEditing}
                     />
                     <FormControlLabel 
                         value="other" 
                         control={<Radio />} 
                         label="Other" 
-                        disabled={!isEditing} // Disable when isEditing is true
+                        disabled={!isEditing}
                     />
-                </RadioGroup>
-            </Box>
+                    </RadioGroup>
+                </Box>
 
-            <TextField
-              label="Email"
-              name="email"
-              value={student.email || ""}
-              onChange={handleChange}
-              fullWidth
-              disabled={!isEditing}
-              variant="outlined"
-            />
-            {isEditing && (
-              <TextField
-                label="Password"
-                name="password"
-                type="password"
-                value={student.password || ""}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            )}
-            <Stack direction="row" justifyContent="space-between">
-              {isEditing ? (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSaveClick}
-                  
-                >
-                  Save
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={handleDeleteClick}
-                  
-                >
-                  Delete Account
-                </Button>
-              )}
-              {!isEditing && (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => setIsEditing(true)}
-                  
-                >
-                  Edit Profile
-                </Button>
-              )}
-            </Stack>
-          </Stack>
-        </CardContent>
-      </Card>
+                    <TextField
+                    label="Email"
+                    name="email"
+                    value={student.email || ""}
+                    onChange={handleChange}
+                    fullWidth
+                    disabled={!isEditing}
+                    variant="outlined"
+                />
+                {isEditing && (
+                    <TextField
+                        label="Password"
+                        name="password"
+                        type="password"
+                        value={student.password || ""}
+                        onChange={handleChange}
+                        fullWidth
+                        variant="outlined"
+                    />
+                )}
+                <Stack direction="row" justifyContent="space-between">
+                    {isEditing ? (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleSaveClick}
+
+                        >
+                        Save
+                        </Button>
+                        ) : (
+                        <Button
+                            variant="contained"
+                            color="error"
+                            onClick={handleDeleteClick}
+
+                        >
+                    Delete Account
+                    </Button>
+                    )}
+                    {!isEditing && (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => setIsEditing(true)}
+
+                        >
+                    Edit Profile
+                    </Button>
+                    )}
+                    </Stack>
+                </Stack>
+            </CardContent>
+        </Card>
     </Grid2>
-  );
+);
 }
