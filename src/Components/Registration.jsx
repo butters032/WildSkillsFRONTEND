@@ -29,7 +29,7 @@ export default function Registration({ setIsRegistering }) {
     const emailRef = useRef();
     const passwordRef = useRef();
     const confirmpasswordRef = useRef();
-    const avatarRef = useRef(); // New ref for avatar upload
+    const avatarRef = useRef();
     const [birthdate, setBirthdate] = useState(new Date());
     const [gender, setGender] = useState('');
     const navigate = useNavigate();
@@ -182,7 +182,10 @@ export default function Registration({ setIsRegistering }) {
                 <div className="inputs">
                     <div className="input">
                         <Typography variant="body2">Gender</Typography>
-                        <Grid2>
+                        <Grid2
+                        sx={{
+                            paddingLeft:2
+                        }}>
                             <RadioGroup
                                 row
                                 value={gender}
