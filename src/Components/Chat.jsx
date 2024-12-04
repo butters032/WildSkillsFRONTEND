@@ -4,15 +4,31 @@ import axios from 'axios';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 
+const Message = ({ msg, studentId, handleEdit, handleDelete, handleClick, isClicked }) => {
+  const isOwnMessage = msg.senderId === studentId; // Check if the sender is the current student
 
-const Message = ({ msg, handleEdit, handleDelete, handleClick, isClicked }) => {
   return (
-    <Grid sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', border: '1px solid', borderRadius: 3, padding: '10px', 
-        margin: '5px 0', 
-        backgroundColor: '#333', 
-        color: 'white', }}
-        onClick={() => handleClick(msg.messageId)}>
-      <Typography variant="body1">{msg.message}</Typography>
+    <Grid 
+      sx={{
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: isOwnMessage ? 'flex-end' : 'flex-start',  
+        textAlign: isOwnMessage ? 'right' : 'left', 
+        border: '1px solid', 
+        borderRadius: 3, 
+        padding: '10px', 
+        margin: '5px', 
+        maxWidth:'50%', 
+        wordBreak: 'break-word', 
+        backgroundColor: isOwnMessage ? '#1976d2' : '#333', 
+        color: isOwnMessage ? 'white' : 'lightgray', 
+        alignSelf: isOwnMessage ? 'flex-end' : 'flex-start',
+      }}
+      onClick={() => handleClick(msg.messageId)}
+    >
+      <Typography variant="body1"> 
+        {msg.message}
+      </Typography>
       {isClicked && (
         <>
           <Typography variant="caption" color="lightgray" sx={{ marginTop: '5px' }}>
@@ -43,6 +59,8 @@ const Chat = () => {
   const [currentMessageId, setCurrentMessageId] = useState(null);
   const [clickedMessages, setClickedMessages] = useState({});
   const [stompClient, setStompClient] = useState(null);
+  const [studentId, setStudentId] = useState(null);
+  const [chatId, setChatId] = useState(null);  // Store chat ID for fetching messages
 
   const api = axios.create({
     baseURL: 'http://localhost:8080/api/wildSkills/message/',
@@ -54,6 +72,27 @@ const Chat = () => {
   });
 
   useEffect(() => {
+    const fetchStudentId = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/wildSkills/studentId'); 
+        setStudentId(response.data.studentId);
+      } catch (error) {
+        console.error('Error fetching studentId:', error);
+      }
+    };
+
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/wildSkills/message/getMessages/${chatId}`);
+        setMessages(response.data); 
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+      }
+    };
+
+    fetchStudentId();
+    if (chatId) fetchMessages();
+
     const socket = new SockJS('http://localhost:8080/ws');
     const client = new Client({
       webSocketFactory: () => socket,
@@ -62,6 +101,9 @@ const Chat = () => {
         client.subscribe('/topic/public', (messageOutput) => {
           const newMessage = JSON.parse(messageOutput.body);
           setMessages((prevMessages) => [...prevMessages, newMessage]);
+          api.post('/saveMessage', newMessage)
+            .then(() => console.log('Message saved to backend'))
+            .catch((error) => console.error('Error saving message:', error));
         });
       },
       onWebSocketError: (error) => {
@@ -77,12 +119,20 @@ const Chat = () => {
         stompClient.deactivate();
       }
     };
-  }, []);
+  }, [chatId]);  // Re-run when chatId is updated
 
   const handleSend = () => {
     if (input.trim() === '') return;
 
+    const newMessage = {
+      message: input,
+      timeStamp: new Date(),
+      senderId: studentId,
+      messageId: Date.now(), 
+    };
+
     if (isEditing) {
+      // Editing an existing message
       api.put(`/putMessageDetails?id=${currentMessageId}`, { message: input })
         .then(() => {
           setMessages((prev) =>
@@ -99,10 +149,20 @@ const Chat = () => {
         .catch((error) => console.error('Error editing message:', error));
     } else {
       if (stompClient) {
+        const newMessage = { message: input, timeStamp: new Date(), messageId: Date.now() }; 
+        setMessages((prev) => [...prev, newMessage]); 
+
         stompClient.publish({
           destination: '/app/chat.sendMessage',
           body: JSON.stringify({ message: input }),
         });
+
+        api.post('/saveMessage', newMessage)
+          .then(() => {
+            setMessages((prev) => [...prev, newMessage]); 
+          })
+          .catch((error) => console.error('Error saving message:', error));
+
         setInput('');
       }
     }
@@ -137,22 +197,35 @@ const Chat = () => {
   };
 
   return (
-    <Grid container spacing={2} direction="column" sx={{ minWidth:'1080px', marginLeft: 2, marginRight: 100,maxWidth:'2000px', margin: 'auto', padding: 2, backgroundColor: '#f5f5f5', borderRadius: 5,}}>
-      <Grid item sx={{ minHeight: '80vh', maxWidth: '1000px', overflowY: 'auto', padding: 2, backgroundColor: '#fff', borderRadius: 3, }}>
-        {messages.map((msg) => ( 
+    <Grid container spacing={2} direction="column" sx={{ minWidth:'1050px', marginLeft: 2, marginRight: 100, maxWidth:'1000px', margin: 'auto', padding: 2, backgroundColor: '#f5f5f5', borderRadius: 5 }}>
+      <Grid item sx={{ minHeight: '76vh', maxWidth: '1000px', overflowY: 'auto', padding: 2, backgroundColor: '#fff', borderRadius: 3 }}>
+        {messages.map((msg) => (
           <Message 
             key={msg.messageId} 
             msg={msg} 
+            studentId={studentId}
             handleEdit={handleEditMessage} 
             handleDelete={handleDeleteMessage} 
             handleClick={handleClickMessage} 
-            isClicked={clickedMessages[msg.messageId]}/>
+            isClicked={clickedMessages[msg.messageId]}
+          />
         ))}
       </Grid>
       <Grid item>
         <Stack direction="row" spacing={2}>
-          <TextField fullWidth value={input} onChange={(e) => setInput(e.target.value)} placeholder="Write a message" onKeyDown={handleKeyDown}/>
-          <Button variant="contained" color="primary" onClick={handleSend} sx={{ borderRadius: '20px' }} >
+          <TextField 
+            fullWidth 
+            value={input} 
+            onChange={(e) => setInput(e.target.value)} 
+            placeholder="Write a message" 
+            onKeyDown={handleKeyDown} 
+          />
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={handleSend} 
+            sx={{ borderRadius: '20px' }}
+          >
             {isEditing ? 'Update' : 'Send'}
           </Button>
         </Stack>
