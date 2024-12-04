@@ -24,7 +24,7 @@ const Review = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/api/wildSkills/review/postReviewRecord', {
+            const response = await axios.post('http://localhost:8080/api/wildSkills/review/reviewStudent/1/2', {
                 rating: rating,
                 comment: comment
             });

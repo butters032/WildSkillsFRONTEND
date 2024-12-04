@@ -56,14 +56,16 @@ const ReviewList = () => {
         <>
             <h1>Reviews</h1>
             <Divider style={{ marginBottom: '50px', backgroundColor: 'black' }} />
+            
 
             <Grid container spacing={2}>
                 {reviews.map((review) => (
                     <Grid item size={4} key={review.reviewId}>
                         <Card style={{ border: '1px solid black', borderRadius: '10px' }}>
                             <CardContent>
-                                <Typography variant="h5">{review.title || 'Review Title'}</Typography>
+                                <Typography variant="h5">{review.revieweeName || 'Review Title'}</Typography>
                                 <Divider style={{ marginBottom: '15px', marginTop: '5px', backgroundColor: 'black' }} />
+                                <Typography>Review Made by: {review.reviewerName}</Typography>
                                 <Rating precision={0.5} value={review.rating} readOnly />
                                 <Typography variant="body2">{review.comment || 'Sample review content'}</Typography>
                                 <Button 

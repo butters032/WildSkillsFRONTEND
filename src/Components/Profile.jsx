@@ -43,6 +43,8 @@ export default function Profile({userId}) {
         }
     });
 
+    const[averageRating, setAverageRating] = useState(0);
+
     useEffect(() => {
         
         const fetchStudent = async (id) => {
@@ -55,6 +57,16 @@ export default function Profile({userId}) {
             } catch (error) {
                 console.error('Error fetching student data', error);
             }
+
+            const averageRating = async ({userId}) => {
+                try {
+                    const ave = await axios.get(`http://localhost:8080/api/wildSkills/review/getAve/${userId}`);
+                    console.log(ave);
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error');
+                }
+            };
         };
 
         if (id) {
@@ -158,6 +170,9 @@ export default function Profile({userId}) {
             alert("Error deleting student record: " + error.message);
         });
     };
+
+
+    
 
 return (
     <Grid2
