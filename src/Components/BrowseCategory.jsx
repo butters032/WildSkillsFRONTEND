@@ -123,9 +123,9 @@ const BrowseCategory = ({userId}) => {
                 container
                 sx={{
                     backgroundColor: '#222222',
-                    //paddingTop:20,
-                    paddingLeft:10,
-                    minWidth:'100vw'
+                    paddingLeft:15,
+                    minWidth:'100vw',
+                    minHeight:'90vh'
                 }}>
                     <Stack direction={'column'}>
                         <Typography
