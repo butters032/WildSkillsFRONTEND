@@ -260,19 +260,6 @@ export default function SkillExchange({userId}) {
                                             <DialogContent>
                                                 <Stack alignItems={"center"}> 
                                                     <FormControl fullWidth margin="normal">
-                                                        {/*<InputLabel id="estatus-label">Update Status</InputLabel>
-                                                        <Select
-                                                            labelId="estatus-label"
-                                                            id="estatus"
-                                                            value={status}
-                                                            onChange={(e) => setStatus(e.target.value)}
-                                                            label="Update Status"
-                                                            sx={{marginBottom: 2}}
-                                                            >
-                                                            <MenuItem value="Ongoing">Ongoing</MenuItem>
-                                                            <MenuItem value="Cancelled">Cancelled</MenuItem>
-                                                            <MenuItem value="Completed">Completed</MenuItem>
-                                                        </Select>*/}
                                                         <TextField
                                                             id="scheduledStart"
                                                             label="Update Schedule Start"
