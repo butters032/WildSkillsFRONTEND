@@ -56,46 +56,65 @@ export default function Registration({ setIsRegistering }) {
             return false;
         }
     };
-
+ /*
+        const emailExists = await checkEmailExists(emailRef.current.value);
+        if (emailExists) {
+            alert("Email has already been used");
+            return;
+        }
+            */
     const newStudent = async () => {
         if (confirmpasswordRef.current.value !== passwordRef.current.value) {
             alert("Passwords Don't Match");
             return;
         }
-
-        const emailExists = await checkEmailExists(emailRef.current.value);
-
-        if (emailExists) {
-            alert("Email has already been used");
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('name', nameRef.current.value);
-        formData.append('birthdate', birthdate.toISOString().split('T')[0]);
-        formData.append('email', emailRef.current.value);
-        formData.append('password', passwordRef.current.value);
-        formData.append('gender', gender);
-
-        if (avatarRef.current.files[0]) {
-            formData.append('avatar', avatarRef.current.files[0]); // Append avatar file
-        }
-
-        try {
-            const response = await api.post('/postStudentRecord', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+    
+        // Validate email (optional logic)
+        // const emailExists = await checkEmailExists(emailRef.current.value);
+        // if (emailExists) {
+        //     alert("Email has already been used");
+        //     return;
+        // }
+    
+        // Encode avatar as Base64
+        const avatarFile = avatarRef.current.files[0];
+        let avatarBase64 = null;
+        if (avatarFile) {
+            const reader = new FileReader();
+            const promise = new Promise((resolve, reject) => {
+                reader.onload = () => resolve(reader.result.split(",")[1]); // Strip the `data:image/*;base64,` prefix
+                reader.onerror = (err) => reject(err);
             });
-
-            console.log(response.data);
+            reader.readAsDataURL(avatarFile);
+            avatarBase64 = await promise;
+            console.log(avatarBase64);
+        }
+    
+        // Create the request payload
+        const studentData = {
+            name: nameRef.current.value,
+            birthdate: birthdate.toISOString().split('T')[0],
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+            gender: gender,
+            avatar: avatarBase64, // Add Base64 encoded avatar
+        };
+    
+        try {
+            // Send the data via API
+            const req = await api.post('/postStudentRecord', studentData);
+    
             alert("Registration Success");
-            setTimeout(() => navigate('/login'), 100);
+            console.log(req.data);
+            navigate('/login');
         } catch (error) {
             console.error('Error during registration:', error);
-            alert("Registration Failed");
+            alert("Error during registration. Please try again.");
         }
     };
+        
+        
+        
 
     const redirectToReg = () => {
         setIsRegistering(false);
