@@ -8,6 +8,7 @@ import Grid from '@mui/material/Grid2';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
+import { useLocation } from 'react-router-dom';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -17,33 +18,23 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-const Review = ({ userId, exchangeId }) => {
+const Review = () => {
+    const location = useLocation();
+    const { userId, exchangeId } = location.state || {};
+
     const [rating, setRating] = useState(2.5);
     const [comment, setComment] = useState('');
-    const [studentId, setStudentId] = useState(null);
 
-    // Fetch the exchanged student's ID based on the provided exchangeId
-    useEffect(() => {
-        const fetchStudentId = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8080/api/wildSkills/exchange/getExchangeDetails/${exchangeId}`);
-                setStudentId(response.data.studentId);
-            } catch (error) {
-                console.error('Error fetching exchanged student:', error);
-            }
-        };
 
-        fetchStudentId();
-    }, [exchangeId]);
 
     const handleSubmit = async () => {
-        if (!studentId) {
+        if (!exchangeId) {
             alert('Exchanged student not found.');
             return;
         }
 
         try {
-            const response = await axios.post(`http://localhost:8080/api/wildSkills/review/reviewStudent/${userId}/${studentId}`, {
+            const response = await axios.post(`http://localhost:8080/api/wildSkills/review/reviewStudent/${userId}/${exchangeId}`, {
                 rating: rating,
                 comment: comment,
             });

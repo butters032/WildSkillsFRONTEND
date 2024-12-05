@@ -133,7 +133,9 @@ export default function SkillExchange({userId}) {
 
     const handleReviewClick = () => {
         if (currentExchange) {
-            navigate(`/reviews?reviewerId=${userId}&studentId=${currentExchange.studentId}`);
+            navigate(`/reviews`, {
+                state: { userId: userId, exchangeId: id },
+            });
         } else {
             alert("Please select an exchange before leaving a review.");
         }
