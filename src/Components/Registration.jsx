@@ -1,4 +1,4 @@
-import { Card, CardContent, Grid2, Stack, Typography, Box,TextField,Button } from "@mui/material";
+import { Card, CardContent, Grid2, Stack, Typography, Box,TextField,Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
 import axios from "axios";
 import { useRef, useState } from "react";
 
@@ -64,6 +64,15 @@ export default function Registration({ setIsRegistering }) {
         }
             */
     const newStudent = async () => {
+        if(
+            nameRef.current.value == '' &&
+            emailRef.current.value == '' &&
+            passwordRef.current.value == '' &&
+            confirmpasswordRef.current.value == ''
+        ){
+            alert("Fill All Fields");
+            return;
+        }
         if (confirmpasswordRef.current.value !== passwordRef.current.value) {
             alert("Passwords Don't Match");
             return;
@@ -76,7 +85,6 @@ export default function Registration({ setIsRegistering }) {
         //     return;
         // }
     
-        // Encode avatar as Base64
         const avatarFile = avatarRef.current.files[0];
         let avatarBase64 = null;
         
@@ -93,10 +101,9 @@ export default function Registration({ setIsRegistering }) {
         /*
         let avatarBase64 = null;
         if (avatarFile) {
-            // Assume avatarBase64 is your base64-encoded string with the data URL prefix
             //let avatarBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
 
-            // Strip the data URL prefix
+            
             const reader = new FileReader(); 
             reader.readAsDataURL(avatarFile); 
             reader.onloadend = () => {avatarBase64 = (reader.result.split(',')[1]); // This will give you the base64 string without the prefix 
