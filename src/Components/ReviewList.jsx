@@ -2,21 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid2';
-import { Card, CardContent, CardActionArea, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import { Card, CardContent, Typography, Box, IconButton, Rating, Button } from '@mui/material';
+import { Search } from '@mui/icons-material';
 import axios from 'axios';
-import Rating from '@mui/material/Rating';
-import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-const ReviewList = ({userId}) => {
+const ReviewList = ({ userId }) => {
     const [reviews, setReviews] = useState([]);
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
+    const studentId = location.state?.id || 1;
 
     const fetchReviews = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/wildSkills/review/getAllReviews');
+            const response = await axios.get(`http://localhost:8080/api/wildSkills/review/getStudentReviews/${studentId}`);
             console.log("API response:", response.data);
             setReviews(response.data);
         } catch (error) {
@@ -29,76 +30,73 @@ const ReviewList = ({userId}) => {
         fetchReviews();
     }, []);
 
-    const handleClick = (reviewId) => {
-        navigate(`/skill-offerings/${reviewId}`);
+    const handleSearch = (e) => {
+        setSearch(e.target.value);
     };
 
-    const handleUpdate = (reviewId) => {
-        navigate(`/update-review/${reviewId}`);
-    };
-
-    const addReview = (reviewId) => {
-        navigate(`/reviews`);
-    };
-
-    const handleDelete = async (reviewId) => {
-        try {
-            await axios.delete(`http://localhost:8080/api/wildSkills/review/deleteReviewDetails/${reviewId}`);
-            setReviews(reviews.filter(review => review.reviewId !== reviewId));
-            alert('Review deleted successfully');
-        } catch (error) {
-            console.error("Error deleting review:", error);
-            alert('Failed to delete review.');
-        }
-    };
+    const filteredReviews = reviews.filter((review) =>
+        review.revieweeName?.toLowerCase().includes(search.toLowerCase()) ||
+        review.comment?.toLowerCase().includes(search.toLowerCase())
+    );
 
     return (
-        <>
-            <h1>Reviews</h1>
-            <Divider style={{ marginBottom: '50px', backgroundColor: 'black' }} />
-            
-            
-            <Grid container spacing={2}>
-                {reviews.map((review) => (
-                    <Grid item size={4} key={review.reviewId}>
-                        <Card style={{ border: '1px solid black', borderRadius: '10px' }}>
+        <Box sx={{ padding: 3, width: '100vw' }}>
+            <Typography variant="h4" fontWeight="bold" gutterBottom>
+                Student Reviews
+            </Typography>
+            <Divider sx={{ marginBottom: 3 }} />
+            <Box display="flex" alignItems="center" sx={{ marginBottom: 3 }}>
+                <TextField
+                    variant="outlined"
+                    placeholder="Search reviews..."
+                    size="small"
+                    fullWidth
+                    value={search}
+                    onChange={handleSearch}
+                    InputProps={{
+                        endAdornment: (
+                            <IconButton>
+                                <Search />
+                            </IconButton>
+                        ),
+                    }}
+                    sx={{ marginRight: 2 }}
+                />
+            </Box>
+            <Grid container spacing={3}>
+                {filteredReviews.map((review) => (
+                    <Grid item xs={12} sm={6} md={4} key={review.reviewId}>
+                        <Card
+                            sx={{
+                                borderRadius: 2,
+                                boxShadow: 3,
+                                transition: 'transform 0.2s',
+                                '&:hover': { transform: 'scale(1.05)' },
+                            }}
+                        >
                             <CardContent>
-                                <Typography variant="h5">{review.revieweeName || 'Review Title'}</Typography>
-                                <Divider style={{ marginBottom: '15px', marginTop: '5px', backgroundColor: 'black' }} />
-                                <Typography>Review Made by: {review.reviewerName}</Typography>
-                                <Rating precision={0.5} value={review.rating} readOnly />
-                                <Typography variant="body2">{review.comment || 'Sample review content'}</Typography>
-                                <Button 
-                                        variant="outlined" 
-                                        color="primary" 
-                                        onClick={(e) => {
-                                            e.stopPropagation(); 
-                                            handleUpdate(review.reviewId);
-                                        }}
-                                        style={{ marginTop: '10px' }}
-                                        size='small'
-                                    >
-                                        Update
-                                    </Button>
-                                <Button 
-                                        variant="outlined" 
-                                        color="error" 
-                                        onClick={(e) => {
-                                            e.stopPropagation(); 
-                                            handleDelete(review.reviewId);
-                                        }}
-                                        style={{ marginTop: '10px' }}
-                                        size='small'
-                                    >
-                                        Delete
-                                    </Button>
+                                <Typography variant="h6" fontWeight="bold">
+                                    {review.revieweeName || 'Unnamed Review'}
+                                </Typography>
+                                <Divider sx={{ marginY: 1 }} />
+                                <Typography variant="subtitle2" color="textSecondary">
+                                    Reviewed by: {review.reviewerName}
+                                </Typography>
+                                <Box display="flex" alignItems="center" sx={{ marginY: 1 }}>
+                                    <Rating precision={0.5} value={review.rating} readOnly />
+                                    <Typography variant="body2" sx={{ marginLeft: 1 }}>
+                                        {review.rating.toFixed(1)}
+                                    </Typography>
+                                </Box>
+                                <Typography variant="body2" sx={{ marginBottom: 2 }}>
+                                    {review.comment || 'No comment provided.'}
+                                </Typography>
                             </CardContent>
                         </Card>
                     </Grid>
                 ))}
             </Grid>
-            <Button variant="contained" onClick={addReview} style={{marginTop: '10px'}}>Add Review</Button>
-        </>
+        </Box>
     );
 };
 

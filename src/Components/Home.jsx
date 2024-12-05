@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Route, Routes, Link, useNavigate, useLocation 
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid2';
-import { Card, CardContent, CardActionArea, Typography, Grid2, Stack, Avatar, Box } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { Card, CardContent,Button, CardActionArea, Typography, Grid2, Stack, Avatar, Box } from '@mui/material';
+import { useState, useEffect,useRef } from 'react';
 import axios from 'axios';
 import { blue } from '@mui/material/colors';
 //import wiski_banner from '../assets/images/HomeAssets/wiski-banner.png';
@@ -27,6 +27,15 @@ const Home = ({userId}) => {
     const location = useLocation();
     const id = userId;
     const [profilePic,setProfilePic]= useState('');
+    const scrollRef = useRef(null);
+
+    const scroll = (direction) => {
+      if (direction === 'left') {
+        scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+      } else {
+        scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+      }
+    };
 
     //---------------------------
 
@@ -34,6 +43,7 @@ const Home = ({userId}) => {
     const [selectedIds, setSelectedIds] = useState([]);
     const [showCheckboxes, setShowCheckboxes] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [isAll, setisAll]=useState(true);
 
 
     useEffect(() => {
@@ -47,13 +57,30 @@ const Home = ({userId}) => {
     }, [skillOfferings]);
 
     const fetchSkillOfferings = async () => {
-        try {
-            const response = await axios.get('http://localhost:8080/api/wildSkills/skilloffering/getAllSkillOfferingRecord');
-            setSkillOfferings(response.data);
-            setLoading(false);
-        } catch (error) {
-            console.error('Error fetching skill offerings:', error);
-        }
+        if (isAll){
+            try {
+                const response = await axios.get('http://localhost:8080/api/wildSkills/skilloffering/getAllSkillOfferingRecord');
+                setSkillOfferings(response.data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching skill offerings:', error);
+            }
+        }else{
+            try {
+                const response = await axios.get('http://localhost:8080/api/wildSkills/skilloffering/searchByCategory',{
+                    params:{query},
+                    headers: {
+                        'Content-Type': 'application/json', // Setting the Content-Type header
+                        Accept: 'application/json', // Optional but good practice
+                    },
+                });
+                setSkillOfferings(response.data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching skill offerings:', error);
+            }
+        }      
+ 
     };
 
     const fetchCategories = async () => {
@@ -352,7 +379,34 @@ const Home = ({userId}) => {
                             },
                         }}
                     >
-                        <Grid container spacing={27} sx={{ flexWrap: 'nowrap', maxWidth: '90vw' }}>
+                         <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Button onClick={() => scroll('left')}>&lt;</Button>
+                        <Grid container spacing={3} sx={{ flexWrap: 'nowrap', maxWidth: '78vw', overflowX: 'hidden',margin:'auto' }} ref={scrollRef}>
+                            {categories.map((category) => (
+                            <Grid item xs={12} sm={6} md={4} key={category.categoryId}
+                                onClick={() => fetchSkillOfferings(category.name)}
+                                sx={{ cursor: "pointer", flex: '0 0 auto', marginBottom: '10px' }}>
+                                <Card style={{ 
+                                margin: '10px', 
+                                borderRadius: '15px', 
+                                minWidth: 200, 
+                                justifyItems: 'center', 
+                                backgroundColor: '#333333', 
+                                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' 
+                                }}> 
+                                <CardContent sx={{ padding: '16px' }}>
+                                    <Typography variant="h6" sx={{
+                                    color: 'white',
+                                    textAlign: 'center'
+                                    }}>{category.name}</Typography>
+                                </CardContent>
+                                </Card>
+                            </Grid>
+                            ))}
+                        </Grid>
+                        <Button onClick={() => scroll('right')}>&gt;</Button>
+                        </div>
+                       {/* <Grid container spacing={27} sx={{ flexWrap: 'nowrap', maxWidth: '90vw' }}>
                             {categories.map((category) => (
                                 <Grid item xs={12} sm={6} md={4} key={category.categoryId}>
                                     <Card
@@ -370,7 +424,7 @@ const Home = ({userId}) => {
                                     </Card>
                                 </Grid>
                             ))}
-                        </Grid>
+                        </Grid> */}
                     </Box>
     
                     <Typography

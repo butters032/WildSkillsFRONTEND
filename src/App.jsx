@@ -141,7 +141,7 @@ const App = () => {
                         <nav>
                             {authenticated && (
                                 <>
-                                    <TextField 
+                                   {/*} <TextField 
                                     id="outlined-basic" 
                                     variant="outlined" 
                                     size="small" 
@@ -156,7 +156,7 @@ const App = () => {
                                             </InputAdornment>
                                         ),
                                     }}
-                                />
+                                />/*}
                                     {/*<Link to="/categories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Categories</Link>*/}
                                     {userId === 1 && (
                                         <Link to="/adminDashboard" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>

@@ -23,6 +23,17 @@ const GigHome = ({userId}) => {
         }
     });
 
+    const fetchReviews = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/wildSkills/review/getStudentReviews/1');
+            console.log("API response:", response.data);
+            setReviews(response.data);
+        } catch (error) {
+            console.error("Error:", error);
+            alert('Failed to fetch reviews.');
+        }
+    };
+
     const postExchange = (offeringId) => {
         api.post(`/postSkillExchange/${offeringId}`, {
             status: 'Ongoing'
@@ -153,7 +164,9 @@ const GigHome = ({userId}) => {
                             </Box>
                         </Typography>
 
-                        <Button>
+                        <Button
+                            onClick={() => navigate('/reviewList', { state: { id: gigData.studentId } })}
+                        >
                             View All Reviews
                         </Button>
 
