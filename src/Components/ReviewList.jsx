@@ -9,7 +9,7 @@ import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 
-const ReviewList = () => {
+const ReviewList = ({userId}) => {
     const [reviews, setReviews] = useState([]);
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
@@ -57,7 +57,7 @@ const ReviewList = () => {
             <h1>Reviews</h1>
             <Divider style={{ marginBottom: '50px', backgroundColor: 'black' }} />
             
-
+            
             <Grid container spacing={2}>
                 {reviews.map((review) => (
                     <Grid item size={4} key={review.reviewId}>

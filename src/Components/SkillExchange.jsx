@@ -126,7 +126,13 @@ export default function SkillExchange({userId}) {
     }, [isCompleted])
 
     const handleReviewClick = () => {
-        navigate(`/reviews`);
+        if (currentExchange) {
+            navigate(`/reviews`, {
+                state: { userId: userId, exchangeId: id },
+            });
+        } else {
+            alert("Please select an exchange before leaving a review.");
+        }
     };
 
     return (
@@ -318,8 +324,9 @@ export default function SkillExchange({userId}) {
                                             variant="text"
                                             onClick={() => { handleReviewClick() }}
                                             startIcon={<Reviews/>}
-                                            sx={{ maxWidth: '100%', minWidth: 250, alignSelf: 'left', fontWeight: 'bold', color: "#b03d3d", borderColor: "#b03d3d", '&:focus': {outline: 'none'}}}>
-                                            Review Exchange
+                                            sx={{ maxWidth: '100%', minWidth: 250, alignSelf: 'left', fontWeight: 'bold', color: "#b03d3d", borderColor: "#b03d3d", '&:focus': {outline: 'none'}}}
+                                        >
+                                            Review User
                                         </Button>
                                     </Stack>
                                 </Collapse>

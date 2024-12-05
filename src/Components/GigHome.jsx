@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { Typography, Chip, Button, Avatar, Box, Paper, Divider } from '@mui/material';
+import { Typography, Chip, Button, Avatar, Box, Paper, Divider, Rating, Stack } from '@mui/material';
 import { Person, CheckCircle, Cancel } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
@@ -107,6 +107,9 @@ const GigHome = ({userId}) => {
                             <Typography variant="subtitle1" color="textSecondary">
                                 {studentName || 'Loading...'}
                             </Typography>
+                            <Stack direction={'row'}>
+                                <Rating precision={0.5} value='3.5' readOnly /> <Typography>(3.5)</Typography>
+                            </Stack>
                         </Box>
                     </Box>
                     <Divider sx={{ marginBottom: 2 }} />
@@ -149,6 +152,12 @@ const GigHome = ({userId}) => {
                                 )}
                             </Box>
                         </Typography>
+
+                        <Button>
+                            View All Reviews
+                        </Button>
+
+
                         <Button
                             variant="contained"
                             color="primary"
