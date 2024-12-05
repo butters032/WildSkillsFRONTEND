@@ -401,7 +401,7 @@ const Home = ({userId}) => {
                         }}
                     >
                         <Grid container spacing={0} justifyContent="center" style={{ overflowY: 'scroll', maxHeight: '60vh', padding: '20px' }}>
-                            {skillOfferings.map((offering) => (
+                            {skillOfferings.filter((offering) => userId !== offering.studentId).map((offering) => (
                                 <Grid item key={offering.skillOfferingId} xs={12} sm={6} md={6} lg={4} style={{ display: 'flex', justifyContent: 'center', marginRight: '5px', marginLeft: '5px' }}>
                                     <Card
                                         style={{

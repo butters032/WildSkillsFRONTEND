@@ -21,6 +21,7 @@ export default function SkillExchange({userId}) {
     const [openEdit, setOpenEdit] = useState(false)
     const [openComplete, setOpenComplete] = useState(false)
     const [dropDown, setDropDown] = useState(false)
+    const [profilePic,setProfilePic]= useState('');
 
     const navigate = useNavigate();
 
@@ -107,27 +108,20 @@ export default function SkillExchange({userId}) {
         }
     }
 
-    /*const newExchange = (userId) =>{
-        api.post(`/postSkillExchange/${creatorId}`, {
-            status: 'Ongoing',
-            title: '',
-            scheduledStart: '',
-            scheduledEnd: '',
-        })
-        .then((exc) =>{
-            console.log(exc.data);
-            exchangeReload();
-            setTitle('');
-            setScheduledStart('');
-            setScheduledEnd('');
-        })
-        .catch((error) =>{
-            console.log('Error creating Skill Exchange',error)
-        })
-    }*/
-
     //skill exchange display/get
     useEffect(() =>{
+        const currentUser = async (id) => {
+            try {
+                const response = await axios.get(`http://localhost:8080/api/wildSkills/student/getUserStudentRecord?id=${id}`);
+                console.log(response.data);
+                const fetchedStudent = response.data;
+                fetchedStudent.birthdate = parseDate(fetchedStudent.birthdate);
+                setStudent(fetchedStudent);
+                setProfilePic("data:image/png;base64,"+fetchedStudent.avatar);
+            } catch (error) {
+                console.error('Error fetching student data', error);
+            }
+        };
         exchangeReload();
     }, [isCompleted])
 
@@ -166,9 +160,9 @@ export default function SkillExchange({userId}) {
                             onClick={() => { handleExchange(exc.skillExchangeID, exc.status, exc.title, exc.scheduledStart, exc.scheduledEnd) }}>
                             <Stack direction={"row"}>
                                 <Avatar
-                                    alt="profile-pic"
+                                    alt="wiski-banner"
                                     variant="circle"
-                                    src={wiski_banner}
+                                    src={profilePic}
                                     sx={{
                                         width: '55px',
                                         height: '55px',
@@ -194,9 +188,9 @@ export default function SkillExchange({userId}) {
                     <Stack direction="column" spacing={2}>
                         <Stack direction="column">
                             <Avatar
-                                alt="profile-pic"
+                                alt="wiski-banner"
                                 variant="circle"
-                                src={wiski_banner}
+                                src={profilePic}
                                 sx={{
                                     width: '100px',
                                     height: '100px',
