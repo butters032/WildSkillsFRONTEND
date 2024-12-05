@@ -22,6 +22,7 @@ export default function SkillExchange({userId}) {
     const [openComplete, setOpenComplete] = useState(false)
     const [dropDown, setDropDown] = useState(false)
     const [profilePic,setProfilePic]= useState('');
+    const [currentUser,setCurrentUser] = useState('');
 
     const navigate = useNavigate();
 
@@ -118,6 +119,7 @@ export default function SkillExchange({userId}) {
                 fetchedStudent.birthdate = parseDate(fetchedStudent.birthdate);
                 setStudent(fetchedStudent);
                 setProfilePic("data:image/png;base64,"+fetchedStudent.avatar);
+                setCurrentUser(userId);
             } catch (error) {
                 console.error('Error fetching student data', error);
             }
@@ -187,7 +189,7 @@ export default function SkillExchange({userId}) {
                 </Grid2>
 
                 <Grid2>
-                    <Chat />
+                    <Chat setCurrentUser={currentUser}/>
                 </Grid2>
 
                 <Grid2 item sx={{ boxShadow: 3, minHeight: 700, minWidth: 400, maxWidth: 400, borderRadius: 3, backgroundColor: "#f5f5f5", padding: 2 }}>

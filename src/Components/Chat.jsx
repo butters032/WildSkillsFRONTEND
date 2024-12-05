@@ -4,7 +4,7 @@ import axios from 'axios';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 
-const Chat = () => {
+export default function  Chat  ({currentUser}) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const messageRef = useRef();
@@ -13,7 +13,10 @@ const Chat = () => {
   const [clickedMessages, setClickedMessages] = useState({});
   const [originalMessage, setOriginalMessage] = useState('');
   const [stompClient, setStompClient] = useState(null);
+  const [student, setStudent] = useState ({});
+  const [userId, setUserId] = useState ({});
 
+    console.log('Thisis the userid'+ currentUser);
   const api = axios.create({
     baseURL: 'http://localhost:8080/api/wildSkills/message/',
     timeout: 1000,
@@ -23,7 +26,17 @@ const Chat = () => {
     },
   });
 
+  const apiUser = axios.create({
+    baseURL: 'http://localhost:8080/api/wildSkills/student',
+    timeout: 1000,
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+});
+
   useEffect(() => {
+
     const socket = new SockJS('http://localhost:8080/ws');
     const client = new Client({
       webSocketFactory: () => socket,
@@ -46,13 +59,30 @@ const Chat = () => {
 
     // Fetch initial messages
     fetchMessages();
+    const fetchStudent = async (id) => {
+      try {
+          const response = await api.get(`/getUserStudentRecord?id=${id}`);
+          console.log(response.data);
+          const fetchedStudent = response.data;
+          fetchedStudent.birthdate = parseDate(fetchedStudent.birthdate);
+          setStudent(fetchedStudent);
+          //setProfilePic("data:image/png;base64,"+fetchedStudent.avatar);
+          console.log('USer details'+ student);
+      } catch (error) {
+          console.error('Error fetching student data', error);
+      }
+    }
 
+    if (userId) {
+      fetchStudent(userId);
+  }
     return () => {
       if (client.active) {
         client.deactivate();
       }
     };
-  }, []);
+    
+}, [userId]);
 
   const sendMessage = () => {
     const message = messageRef.current.value.trim();
@@ -127,6 +157,8 @@ const Chat = () => {
   };
 
   const fetchMessages = () => {
+    
+
     api
       .get('/getAllMessage')
       .then((response) => {
@@ -263,5 +295,3 @@ const Chat = () => {
     </>
   );
 };
-
-export default Chat;
