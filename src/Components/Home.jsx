@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link, useNavigate, useLocation 
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid2';
-import { Card, CardContent,Button, CardActionArea, Typography, Grid2, Stack, Avatar, Box } from '@mui/material';
+import { Card, CardContent,Button, CardActionArea, Typography, Grid2, Stack, Avatar, Box, ButtonBase } from '@mui/material';
 import { useState, useEffect,useRef } from 'react';
 import axios from 'axios';
 import { blue } from '@mui/material/colors';
@@ -139,6 +139,11 @@ const Home = ({userId}) => {
         }
     }, [id]);
 
+    const handleCategoryClick = (category) => {
+        console.log('Clicked category:', category);
+        navigate('/browsecategories', { state: { category } });;
+    };
+    
 
     const handleNavigateToGigHome = (offering) => {
         navigate(`/gig-home/${offering.skillOfferingId}`, { state: offering });
@@ -252,20 +257,22 @@ const Home = ({userId}) => {
                         <Grid container spacing={2} sx={{ justifyContent: 'center', paddingLeft: '50px' }}>
                             {randomCategories.map((category) => (
                                 <Grid item xs={2} sm={2} md={2} key={category.categoryId}>
-                                    <Card
-                                        style={{
-                                            border: '1px solid black',
-                                            borderRadius: '10px',
-                                            minWidth: 250,
-                                            backgroundImage: `url(${wiski_card_small})`,
-                                        }}
-                                    >
-                                        <CardContent>
-                                            <Typography variant="h6" sx={{ textAlign: 'center' }}>
-                                                {category.name}
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
+                                    <ButtonBase onClick={() => handleCategoryClick(category)}>
+                                        <Card
+                                            style={{
+                                                border: '1px solid black',
+                                                borderRadius: '10px',
+                                                minWidth: 250,
+                                                backgroundImage: `url(${wiski_card_small})`,
+                                            }}
+                                        >
+                                            <CardContent>
+                                                <Typography variant="h6" sx={{ textAlign: 'center' }}>
+                                                    {category.name}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </ButtonBase>
                                 </Grid>
                             ))}
                         </Grid>

@@ -43,11 +43,19 @@ const BrowseCategory = ({userId}) => {
       }
     };
 
+    const { category } = location.state || {};
+    console.log("testt"+category.name);
+
 
     useEffect(() => {
         fetchSkillOfferings();
         fetchCategories();
     }, []);
+
+    useEffect(() => {
+        fetchSkillOfferings(category.name);
+    }, [category]);
+    
 
     const fetchSkillOfferings = async (query) => {
         try {
