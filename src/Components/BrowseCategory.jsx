@@ -44,7 +44,6 @@ const BrowseCategory = ({userId}) => {
     };
 
     const { category } = location.state || {};
-    console.log("testt"+category.name);
 
 
     useEffect(() => {
@@ -53,7 +52,10 @@ const BrowseCategory = ({userId}) => {
     }, []);
 
     useEffect(() => {
-        fetchSkillOfferings(category.name);
+        if(category!=null){
+            fetchSkillOfferings(category.name);  
+        }
+        
     }, [category]);
     
 
