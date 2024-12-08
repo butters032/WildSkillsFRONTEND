@@ -59,13 +59,14 @@ const App = () => {
         }
         else{
             localStorage.removeItem('authId');
-        localStorage.removeItem('userId');
+            localStorage.removeItem('userId');
         //localStorage.removeItem('sessionEnd');
         
-        setAuthId(defaultVal);
-        setUserId(defaultVal);
-        //setSessionEnd(null);
-        setAuthenticated(false);
+            setAuthId(defaultVal);
+            setUserId(defaultVal);
+            //setSessionEnd(null);
+            apiAuth.put(`/putUpdateAuthenticationStatus?authId=${authId}`,false);
+            setAuthenticated(false);
     
         console.log('Logout successfulz');
         }

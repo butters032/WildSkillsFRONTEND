@@ -45,7 +45,7 @@ export default function Login({ setUserId, setAuthId}) {
                 const { studentId, authId } = response.data;
                 if (studentId) {
                     await apiAuth.put(`/putIncrementAuthenticationDetails?authId=${authId.authId}`);
-                    await apiAuth.put(`/putUpdateAuthenticationStatus?authId=${authId.authId}`);
+                    await apiAuth.put(`/putUpdateAuthenticationStatus?authId=${authId.authId}`,true);
 
                     setUserId(studentId);
                     setAuthId(authId.authId);
