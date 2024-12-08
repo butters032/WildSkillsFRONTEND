@@ -375,7 +375,8 @@ const Home = ({userId}) => {
                             overflowX: 'scroll',
                             display: 'flex',
                             height: '100%',
-                            minWidth: '99vw',
+                            minWidth: '93vw',
+                            maxWidth: '93vw',
                             '&::-webkit-scrollbar': {
                                 width: '0.4em',
                             },
@@ -387,10 +388,10 @@ const Home = ({userId}) => {
                                 outline: '1px solid slategrey',
                             },
                         }}
-                    >
+                        >
                          <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Button onClick={() => scroll('left')}>&lt;</Button>
-                        <Grid container spacing={1} sx={{ flexWrap: 'nowrap', maxWidth: '78vw', overflowX: 'hidden',margin:'auto' }} ref={scrollRef}>
+                        <Grid container spacing={1} sx={{ flexWrap: 'nowrap', maxWidth: '85vw', overflowX: 'hidden',margin:'auto' }} ref={scrollRef}>
                             {categories.map((category) => (
                             <Grid item xs={12} sm={6} md={4} key={category.categoryId}
                                 onClick={() => fetchSkillOfferings(category.name)}
@@ -458,7 +459,7 @@ const Home = ({userId}) => {
                         sx={{
                             paddingTop: '20px',
                             paddingBottom: '20px',
-                            paddingLeft: '20px',
+                            //paddingLeft: '20px',
                             display: 'flex',
                             height: '100%',
                         }}
