@@ -32,6 +32,7 @@ const BrowseCategory = ({userId}) => {
     const [selectedIds, setSelectedIds] = useState([]);
     const [showCheckboxes, setShowCheckboxes] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [currCategory, setCurrCategory] = useState('All Skill Exchange');
 
     const scrollRef = useRef(null);
 
@@ -47,13 +48,16 @@ const BrowseCategory = ({userId}) => {
 
 
     useEffect(() => {
-        fetchSkillOfferings();
+        //fetchSkillOfferingsAll();
         fetchCategories();
     }, []);
 
     useEffect(() => {
         if(category!=null){
             fetchSkillOfferings(category.name);  
+        }
+        else{
+            fetchSkillOfferingsAll();
         }
         
     }, [category]);
@@ -69,6 +73,7 @@ const BrowseCategory = ({userId}) => {
                 },
             });
             console.log('Fetched Skill Offerings:', response.data);
+            setCurrCategory(query); 
             setSkillOfferings(response.data);
             setLoading(false);
         } catch (error) {
@@ -80,6 +85,15 @@ const BrowseCategory = ({userId}) => {
         try {
             const response = await axios.get('http://localhost:8080/api/wildSkills/category/getAllCategory');
             setCategories(response.data);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
+
+    const fetchSkillOfferingsAll = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/wildSkills/skilloffering/getAllSkillOfferingRecord');
+            setSkillOfferings(response.data);
         } catch (error) {
             console.error('Error fetching categories:', error);
         }
@@ -149,9 +163,9 @@ const BrowseCategory = ({userId}) => {
             <Grid2
                 container
                 sx={{
-                    backgroundColor: 'black',
+                    backgroundColor: '#222222',
                     paddingLeft:15,
-                    minWidth:'100vw',
+                    minWidth:'99.2vw',
                     minHeight:'90vh'
                 }}>
                     <Stack direction={'column'}>
@@ -180,6 +194,7 @@ const BrowseCategory = ({userId}) => {
                                 overflowX: 'scroll',
                                 display: 'flex',
                                 height: "100%",
+                                maxHeight:"50vh",
                                 '&::-webkit-scrollbar': {
                                     width: '0.4em'
                                 },
@@ -196,32 +211,32 @@ const BrowseCategory = ({userId}) => {
                             }}
                         >
                              <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Button onClick={() => scroll('left')}>&lt;</Button>
-                        <Grid container spacing={1} sx={{ flexWrap: 'nowrap', maxWidth: '78vw', overflowX: 'hidden',margin:'auto' }} ref={scrollRef}>
-                            {categories.map((category) => (
-                            <Grid item xs={12} sm={6} md={4} key={category.categoryId}
-                                onClick={() => fetchSkillOfferings(category.name)}
-                                sx={{ cursor: "pointer", flex: '0 0 auto', marginBottom: '10px' }}>
-                                <Card style={{ 
-                                margin: '10px', 
-                                borderRadius: '15px', 
-                                minWidth: 200, 
-                                justifyItems: 'center', 
-                                backgroundColor: '#333333', 
-                                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' 
-                                }}>
-                                <CardContent sx={{ padding: '16px' }}>
-                                    <Typography variant="h6" sx={{
-                                    color: 'white',
-                                    textAlign: 'center'
-                                    }}>{category.name}</Typography>
-                                </CardContent>
-                                </Card>
-                            </Grid>
-                            ))}
-                        </Grid>
-                        <Button onClick={() => scroll('right')}>&gt;</Button>
-                        </div>
+                                <Button onClick={() => scroll('left')}>&lt;</Button>
+                                <Grid container spacing={1} sx={{ flexWrap: 'nowrap', maxWidth: '78vw', overflowX: 'hidden',margin:'auto' }} ref={scrollRef}>
+                                    {categories.map((category) => (
+                                    <Grid item xs={12} sm={6} md={4} key={category.categoryId}
+                                        onClick={() => fetchSkillOfferings(category.name)}
+                                        sx={{ cursor: "pointer", flex: '0 0 auto', marginBottom: '10px' }}>
+                                        <Card style={{ 
+                                        margin: '10px', 
+                                        borderRadius: '15px', 
+                                        minWidth: 200, 
+                                        justifyItems: 'center', 
+                                        backgroundColor: '#333333', 
+                                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' 
+                                        }}>
+                                        <CardContent sx={{ padding: '16px' }}>
+                                            <Typography variant="h6" sx={{
+                                            color: 'white',
+                                            textAlign: 'center'
+                                            }}>{category.name}</Typography>
+                                        </CardContent>
+                                        </Card>
+                                    </Grid>
+                                    ))}
+                                </Grid>
+                                <Button onClick={() => scroll('right')}>&gt;</Button>
+                                </div>
 
 
                             </Box>
@@ -238,7 +253,7 @@ const BrowseCategory = ({userId}) => {
                                 paddingLeft: '50px',
                                 lineHeight: 1
                             }}>
-                                Popular Services Right Now
+                                {currCategory}
                         </Typography>
                     
                     {/*
@@ -264,56 +279,61 @@ const BrowseCategory = ({userId}) => {
                         sx={{
                             paddingTop: '20px',
                             paddingBottom: '20px',
-                            paddingLeft: '20px',
+                            //paddingLeft: '20px',
+                            maxWidth:"90vw",
                             display: 'flex',
                             height: '100%',
+                            justifyContent: 'center',
+                            alignContent: 'center',
+                            
+                            
                         }}
                     >
-                        <Grid container spacing={0} justifyContent="center" style={{ overflowY: skillOfferings.length > 0 ? 'scroll' : 'hidden', maxHeight: '60vh', padding: '20px' }}>
+                        <Grid container spacing={0} justifyContent="center" alignContent='center'>
                             {skillOfferings.filter((offering) => userId !== offering.studentId).map((offering) => (
-                                <Grid item key={offering.skillOfferingId} xs={12} sm={6} md={6} lg={4} style={{ display: 'flex', justifyContent: 'center', marginRight: '5px', marginLeft: '5px' }}>
+                                <Grid item key={offering.skillOfferingId} xs={12} sm={6} md={6} lg={4} style={{ display: 'flex', justifyContent: 'center', alignContent: 'center',marginRight: '5px', marginLeft: '5px' }}>
                                     <Card
                                         style={{
                                             boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
                                             transition: '0.3s',
-                                            width: '500px',
+                                            width: '400px',
                                             height: '350px',
                                             margin: '20px',
                                             borderRadius: '10px',
                                         }}
                                     >
-                            <CardActionArea
-                                onClick={() => !showCheckboxes && handleNavigateToGigHome(offering)}
-                                style={{ cursor: showCheckboxes ? 'default' : 'pointer' }}
-                            >
-                                <CardContent>
-                                    {showCheckboxes && (
-                                        <Checkbox
-                                            checked={selectedIds.includes(offering.skillOfferingId)}
-                                            onChange={() => {
-                                                setSelectedIds((prev) =>
-                                                    prev.includes(offering.skillOfferingId)
-                                                        ? prev.filter((id) => id !== offering.skillOfferingId)
-                                                        : [...prev, offering.skillOfferingId]
-                                                );
-                                            }}
-                                        />
-                                    )}
-                                    <Typography variant="h6" style={{ fontWeight: 'bold' }}>
-                                        {offering.title}
-                                    </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        {offering.description || "No description available"}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                                    </Card>
-                                </Grid>
+                                    <CardActionArea
+                                        onClick={() => !showCheckboxes && handleNavigateToGigHome(offering)}
+                                        style={{ cursor: showCheckboxes ? 'default' : 'pointer' }}
+                                    >
+                                        <CardContent>
+                                            {showCheckboxes && (
+                                                <Checkbox
+                                                    checked={selectedIds.includes(offering.skillOfferingId)}
+                                                    onChange={() => {
+                                                        setSelectedIds((prev) =>
+                                                            prev.includes(offering.skillOfferingId)
+                                                            ? prev.filter((id) => id !== offering.skillOfferingId)
+                                                            : [...prev, offering.skillOfferingId]
+                                                        );
+                                                    }}
+                                                />
+                                            )}
+                                            <Typography variant="h6" style={{ fontWeight: 'bold' }}>
+                                                {offering.title}
+                                            </Typography>
+                                            <Typography variant="body2" color="textSecondary">
+                                                {offering.description || "No description available"}
+                                            </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            </Grid>
                             ))}
                         </Grid>
                     </Grid>
                 </Stack>
-                </Grid2>
+            </Grid2>
             
         </>
     );
