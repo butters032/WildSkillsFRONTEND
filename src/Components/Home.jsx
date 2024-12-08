@@ -172,7 +172,7 @@ const Home = ({userId}) => {
                     //minHeight: '78vh',
                     //minWidth: '100vw',
                     minHeight: '100vh',
-                    minWidth: '99vw',
+                    minWidth: '99.2vw',
                     display: 'flex',
                 }}
             >
