@@ -383,7 +383,7 @@ const Home = ({userId}) => {
                     >
                          <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Button onClick={() => scroll('left')}>&lt;</Button>
-                        <Grid container spacing={3} sx={{ flexWrap: 'nowrap', maxWidth: '78vw', overflowX: 'hidden',margin:'auto' }} ref={scrollRef}>
+                        <Grid container spacing={1} sx={{ flexWrap: 'nowrap', maxWidth: '78vw', overflowX: 'hidden',margin:'auto' }} ref={scrollRef}>
                             {categories.map((category) => (
                             <Grid item xs={12} sm={6} md={4} key={category.categoryId}
                                 onClick={() => fetchSkillOfferings(category.name)}

@@ -162,7 +162,7 @@ const SkillOffering = ({ userId }) => {
 
 
 return (
-    <div style={{ textAlign: 'center', color: 'black', background: 'linear-gradient(120deg, #000000, #434343)', minHeight: '85vh', padding: '20px', minWidth: '97.8vw' }}>
+    <div style={{ textAlign: 'center', color: 'black', background: 'black', minHeight: '85vh', padding: '20px', minWidth: '97.8vw' }}>
         <div style={{ color: 'white', fontSize: '50px' }}>Skill Offerings</div>
         <Button 
             variant="contained" 

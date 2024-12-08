@@ -77,7 +77,7 @@ const GigHome = ({userId}) => {
                 justifyContent="center"
                 alignItems="center"
                 height="100vh"
-                bgcolor="linear-gradient(120deg, #000000, #434343)"
+                bgcolor="black"
             >
                 <Typography variant="h6" color="white">
                     Loading...
@@ -93,7 +93,7 @@ const GigHome = ({userId}) => {
                 minHeight="83vh"
                 minWidth="99vw"
                 sx={{
-                    background: 'linear-gradient(120deg, #000000, #434343)', 
+                    background: 'black)', 
                     padding: 2, 
                     margin: '0 auto', 
                 }}
@@ -108,9 +108,7 @@ const GigHome = ({userId}) => {
                     }}
                 >
                     <Box display="flex" alignItems="center" mb={3}>
-                        <Avatar sx={{ width: 56, height: 56, bgcolor: '#f68084', marginRight: 2 }}>
-                            <Person />
-                        </Avatar>
+
                         <Box>
                             <Typography variant="h5" fontWeight="bold">
                                 {gigData.title}
