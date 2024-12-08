@@ -61,7 +61,6 @@ const Home = ({userId}) => {
             try {
                 const response = await axios.get('http://localhost:8080/api/wildSkills/skilloffering/getAllSkillOfferingRecord');
                 setSkillOfferings(response.data);
-                setLoading(false);
             } catch (error) {
                 console.error('Error fetching skill offerings:', error);
             }
@@ -75,7 +74,6 @@ const Home = ({userId}) => {
                     },
                 });
                 setSkillOfferings(response.data);
-                setLoading(false);
             } catch (error) {
                 console.error('Error fetching skill offerings:', error);
             }
