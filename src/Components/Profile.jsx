@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {Card,CardContent,Stack,Typography,Button,TextField,Box,Avatar,Grid2,} from "@mui/material";
+import {Card,CardContent,Stack,Typography,
+        Button,TextField,Box,Avatar,Grid2,
+        Dialog,DialogTitle,DialogContent,
+        DialogContentText,DialogActions,} from "@mui/material";
 import axios from "axios";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -22,7 +25,11 @@ export default function Profile({userId}) {
     const [isEditing, setIsEditing] = useState(false);
     const location = useLocation();
     const [profilePic,setProfilePic]= useState('');
-    //const id = location.state?.studentId; 
+    //const id = location.state?.studentId;
+
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogTitle, setDialogTitle] = useState("");
+    const [dialogMessage, setDialogMessage] = useState("");
 
     const id = userId;
 
@@ -59,7 +66,7 @@ export default function Profile({userId}) {
                     console.log(ave);
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('Error');
+                    openDialog("Error", "Failed to fetch student data.");
                 }
             };
         };
@@ -110,7 +117,7 @@ export default function Profile({userId}) {
                     avatar: avatarBase64
                 }));
             } else {
-                alert('Please upload a PNG image');
+                openDialog("Invalid File", "Please upload a PNG image.");
                 return; 
             }
         }
@@ -158,13 +165,25 @@ export default function Profile({userId}) {
         */
         api.delete(`/deleteStudentRecord/${id}`)
         .then(() => {
-            alert("Account Successfully Deleted");
+            openDialog("Success", "Account successfully deleted.");
             console.log("Student record deleted");
         })
         .catch((error) => {
             console.error("Error deleting student record", error);
-            alert("Error deleting student record: " + error.message);
+            openDialog("Error", "Failed to delete account.");
         });
+    };
+
+    const openDialog = (title, message) => {
+        setDialogTitle(title);
+        setDialogMessage(message);
+        setDialogOpen(true);
+    };
+    
+    const closeDialog = () => {
+        setDialogOpen(false);
+        setDialogTitle("");
+        setDialogMessage("");
     };
 
 return (
@@ -335,6 +354,24 @@ return (
                 </Stack>
             </CardContent>
         </Card>
+    <Dialog
+        open={dialogOpen}
+        onClose={closeDialog}
+        aria-labelledby="dialog-title"
+        aria-describedby="dialog-description"
+        >
+        <DialogTitle id="dialog-title">{dialogTitle}</DialogTitle>
+        <DialogContent>
+            <DialogContentText id="dialog-description">
+                {dialogMessage}
+            </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+            <Button onClick={closeDialog} color="primary">
+                OK
+            </Button>
+        </DialogActions>
+    </Dialog>
     </Grid2>
 );
 }

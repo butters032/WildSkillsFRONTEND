@@ -139,6 +139,7 @@ const Home = ({userId}) => {
         }
     }, [id]);
 
+
     const handleNavigateToGigHome = (offering) => {
         navigate(`/gig-home/${offering.skillOfferingId}`, { state: offering });
     };
@@ -338,7 +339,7 @@ const Home = ({userId}) => {
                     backgroundColor: '#222222',
                     paddingTop: 20,
                     paddingLeft: 10,
-                    minWidth: '100vw',
+                    minWidth: '99vw',
                 }}
             >
                 <Stack direction={'column'}>
@@ -367,6 +368,7 @@ const Home = ({userId}) => {
                             overflowX: 'scroll',
                             display: 'flex',
                             height: '100%',
+                            minWidth: '99vw',
                             '&::-webkit-scrollbar': {
                                 width: '0.4em',
                             },

@@ -1,5 +1,8 @@
 import React, { useRef, useState } from "react";
-import { Card, CardContent, Typography, TextField, Button, Box, Grid, Grid2, Stack } from "@mui/material";
+import { Card, CardContent, Typography, TextField, Button, Box, Grid2, Stack,
+        Dialog,DialogTitle,DialogContent,
+        DialogContentText,DialogActions,
+ } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import '../LoginRegister.css';
@@ -15,6 +18,10 @@ export default function Login({ setUserId, setAuthId}) {
     const passwordRef = useRef();
     const navigate = useNavigate();
     const [isRegistering, setIsRegistering] = useState(false);
+
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogTitle, setDialogTitle] = useState("");
+    const [dialogMessage, setDialogMessage] = useState("");
 
     const api = axios.create({
         baseURL: "http://localhost:8080/api/wildSkills/student",
@@ -54,19 +61,31 @@ export default function Login({ setUserId, setAuthId}) {
                         navigate("/");
                     }, 100);
                 } else {
-                    alert("Login failed, no studentId received.");
+                    openDialog("Login failed","no studentId received.");
                 }
             } else {
-                alert("Login Failed: " + response.data.message);
+                openDialog("Login Failed" , response.data.message);
             }
         } catch (error) {
             console.error("Error during login", error);
-            alert("Error during login: " + error.message);
+            openDialog("Error during login " , error.message);
         }
     };
 
     const redirectToReg = () => {
         navigate("/registration");
+    };
+
+    const openDialog = (title, message) => {
+        setDialogTitle(title);
+        setDialogMessage(message);
+        setDialogOpen(true);
+    };
+    
+    const closeDialog = () => {
+        setDialogOpen(false);
+        setDialogTitle("");
+        setDialogMessage("");
     };
 
     return (
@@ -116,7 +135,7 @@ export default function Login({ setUserId, setAuthId}) {
                     
                     <Box
                     sx={{
-                        minWidth:400,
+                        minWidth:750,
                         minHeight:455,
                         color: 'Black',
                         //backgroundColor: "gray",
@@ -133,7 +152,8 @@ export default function Login({ setUserId, setAuthId}) {
                         borderBottomLeftRadius:10,
                         //paddingRight: 30,
                         marginTop:9,
-                        marginRight:2
+                        marginRight:2,
+                        paddingTop: 4
                         
 
                         
@@ -151,7 +171,7 @@ export default function Login({ setUserId, setAuthId}) {
                         <Typography
                             sx={{ fontWeight: 'bold',
                                 color: 'white',
-                                textAlign: 'left',
+                                textAlign: 'center',
                                 fontFamily: 'Etna',
                                 letterSpacing: 10,
                                 textTransform: 'uppercase',
@@ -207,6 +227,7 @@ export default function Login({ setUserId, setAuthId}) {
                                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
                                 fontSize:50,
                                 lineHeight: 1,
+                                paddingLeft:8,
                                 opacity:'100%'
                                 
                             }} 
@@ -342,7 +363,7 @@ export default function Login({ setUserId, setAuthId}) {
                         //backgroundColor:'#ffe6d1'
 
                     }}>
-                        <Registration setIsRegistering={setIsRegistering}/>
+                        <Registration setIsRegistering={setIsRegistering} setDialogOpen={setDialogOpen} setDialogTitle={setDialogTitle} setDialogMessage={setDialogMessage}/>
                     </Grid2>
                     
                     </>
@@ -352,6 +373,24 @@ export default function Login({ setUserId, setAuthId}) {
                 </Grid2>
                 </Stack>
             </Grid2>
+            <Dialog
+                open={dialogOpen}
+                onClose={closeDialog}
+                aria-labelledby="dialog-title"
+                aria-describedby="dialog-description"
+                >
+                <DialogTitle id="dialog-title">{dialogTitle}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="dialog-description">
+                        {dialogMessage}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeDialog} color="primary">
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Grid2>
     );
 }

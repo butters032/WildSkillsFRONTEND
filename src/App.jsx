@@ -102,6 +102,14 @@ const App = () => {
         };
 
         checkAuth(authId);
+
+        const interval = setInterval(()=>{
+            checkAuth(authId);
+
+            
+        },60000);
+
+        return () => clearInterval(interval);
     }, [authId]);
 
     const apiAuth = axios.create({

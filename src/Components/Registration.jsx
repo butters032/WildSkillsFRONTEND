@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 import RegistrationSuccess from "./RegistrationSuccess.jsx";
 
 
-export default function Registration({ setIsRegistering }) {
+export default function Registration({ setIsRegistering,setDialogOpen,setDialogTitle,setDialogMessage }) {
     const nameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
@@ -70,11 +70,17 @@ export default function Registration({ setIsRegistering }) {
             passwordRef.current.value == '' &&
             confirmpasswordRef.current.value == ''
         ){
-            alert("Fill All Fields");
+            //alert("Fill All Fields");
+            setDialogOpen(true);
+            setDialogTitle("Missing Fields");
+            setDialogMessage("Fill All Fields");
             return;
         }
         if (confirmpasswordRef.current.value !== passwordRef.current.value) {
-            alert("Passwords Don't Match");
+            //alert("Passwords Don't Match");
+            setDialogOpen(true);
+            setDialogTitle("Password Mismatch");
+            setDialogMessage("Passwords Don't Match");
             return;
         }
     
@@ -133,12 +139,15 @@ export default function Registration({ setIsRegistering }) {
         try {
             const req = await api.post('/postStudentRecord', studentData);
     
-            alert("Registration Success");
+            //alert("Registration Success");
             console.log(req.data);
             navigate('/login');
         } catch (error) {
             console.error('Error during registration:', error);
-            alert("Error during registration. Please try again.");
+            //alert("Error during registration. Please try again.");
+            setDialogOpen(true);
+            setDialogTitle("Registration Failed");
+            setDialogMessage("Something went wrong dureing registration");
         }
     };
         
@@ -277,7 +286,18 @@ return (
                 <Button
                     onClick={()=>{
                     newStudent();
-                    redirectToReg();
+                    if(
+                        nameRef.current.value != '' &&
+                        emailRef.current.value != '' &&
+                        passwordRef.current.value != '' &&
+                        confirmpasswordRef.current.value != '' &&
+                        (confirmpasswordRef.current.value == passwordRef.current.value)){
+                            setDialogOpen(true);
+                            setDialogTitle("Registration Success");
+                            setDialogMessage("You have succesfully registered!");
+                            redirectToReg();
+                        }
+                    
                 }}
                 variant="contained"
                 color="primary"
