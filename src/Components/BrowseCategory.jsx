@@ -32,7 +32,7 @@ const BrowseCategory = ({userId}) => {
     const [selectedIds, setSelectedIds] = useState([]);
     const [showCheckboxes, setShowCheckboxes] = useState(false);
     const [categories, setCategories] = useState([]);
-    const [currCategory, setCurrCategory] = useState('All');
+    const [currCategory, setCurrCategory] = useState('All Skill Exchange');
 
     const scrollRef = useRef(null);
 
@@ -165,7 +165,7 @@ const BrowseCategory = ({userId}) => {
                 sx={{
                     backgroundColor: '#222222',
                     paddingLeft:15,
-                    minWidth:'99vw',
+                    minWidth:'99.2vw',
                     minHeight:'90vh'
                 }}>
                     <Stack direction={'column'}>
@@ -283,24 +283,15 @@ const BrowseCategory = ({userId}) => {
                             maxWidth:"90vw",
                             display: 'flex',
                             height: '100%',
-                            scrollbarWidth: 'thin',
+                            justifyContent: 'center',
+                            alignContent: 'center',
                             
-                            '&::-webkit-scrollbar': {
-                                width: '0.4em'
-                            },
-                            '&::-webkit-scrollbar-track': {
-                                boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-                                webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
-                            },
-                            '&::-webkit-scrollbar-thumb': {
-                                backgroundColor: 'rgba(0,0,0,.1)',
-                                outline: '1px solid slategrey'
-                            }
+                            
                         }}
                     >
-                        <Grid container spacing={0} justifyContent="center" style={{ overflowY: skillOfferings.length > 0 ? 'scroll' : 'visible', maxHeight: '60vh', padding: '20px' }}>
+                        <Grid container spacing={0} justifyContent="center" alignContent='center'>
                             {skillOfferings.filter((offering) => userId !== offering.studentId).map((offering) => (
-                                <Grid item key={offering.skillOfferingId} xs={12} sm={6} md={6} lg={4} style={{ display: 'flex', justifyContent: 'center', marginRight: '5px', marginLeft: '5px' }}>
+                                <Grid item key={offering.skillOfferingId} xs={12} sm={6} md={6} lg={4} style={{ display: 'flex', justifyContent: 'center', alignContent: 'center',marginRight: '5px', marginLeft: '5px' }}>
                                     <Card
                                         style={{
                                             boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
@@ -311,38 +302,38 @@ const BrowseCategory = ({userId}) => {
                                             borderRadius: '10px',
                                         }}
                                     >
-                            <CardActionArea
-                                onClick={() => !showCheckboxes && handleNavigateToGigHome(offering)}
-                                style={{ cursor: showCheckboxes ? 'default' : 'pointer' }}
-                            >
-                                <CardContent>
-                                    {showCheckboxes && (
-                                        <Checkbox
-                                            checked={selectedIds.includes(offering.skillOfferingId)}
-                                            onChange={() => {
-                                                setSelectedIds((prev) =>
-                                                    prev.includes(offering.skillOfferingId)
-                                                        ? prev.filter((id) => id !== offering.skillOfferingId)
-                                                        : [...prev, offering.skillOfferingId]
-                                                );
-                                            }}
-                                        />
-                                    )}
-                                    <Typography variant="h6" style={{ fontWeight: 'bold' }}>
-                                        {offering.title}
-                                    </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        {offering.description || "No description available"}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                                    </Card>
-                                </Grid>
+                                    <CardActionArea
+                                        onClick={() => !showCheckboxes && handleNavigateToGigHome(offering)}
+                                        style={{ cursor: showCheckboxes ? 'default' : 'pointer' }}
+                                    >
+                                        <CardContent>
+                                            {showCheckboxes && (
+                                                <Checkbox
+                                                    checked={selectedIds.includes(offering.skillOfferingId)}
+                                                    onChange={() => {
+                                                        setSelectedIds((prev) =>
+                                                            prev.includes(offering.skillOfferingId)
+                                                            ? prev.filter((id) => id !== offering.skillOfferingId)
+                                                            : [...prev, offering.skillOfferingId]
+                                                        );
+                                                    }}
+                                                />
+                                            )}
+                                            <Typography variant="h6" style={{ fontWeight: 'bold' }}>
+                                                {offering.title}
+                                            </Typography>
+                                            <Typography variant="body2" color="textSecondary">
+                                                {offering.description || "No description available"}
+                                            </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            </Grid>
                             ))}
                         </Grid>
                     </Grid>
                 </Stack>
-                </Grid2>
+            </Grid2>
             
         </>
     );

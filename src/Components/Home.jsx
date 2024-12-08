@@ -396,21 +396,23 @@ const Home = ({userId}) => {
                             <Grid item xs={12} sm={6} md={4} key={category.categoryId}
                                 onClick={() => fetchSkillOfferings(category.name)}
                                 sx={{ cursor: "pointer", flex: '0 0 auto', marginBottom: '10px' }}>
-                                <Card style={{ 
-                                margin: '10px', 
-                                borderRadius: '15px', 
-                                minWidth: 200, 
-                                justifyItems: 'center', 
-                                backgroundColor: '#333333', 
-                                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' 
-                                }}> 
-                                <CardContent sx={{ padding: '16px' }}>
-                                    <Typography variant="h6" sx={{
-                                    color: 'white',
-                                    textAlign: 'center'
-                                    }}>{category.name}</Typography>
-                                </CardContent>
-                                </Card>
+                                <ButtonBase onClick={() => handleCategoryClick(category)}>  
+                                    <Card style={{ 
+                                    margin: '10px', 
+                                    borderRadius: '15px', 
+                                    minWidth: 200, 
+                                    justifyItems: 'center', 
+                                    backgroundColor: '#333333', 
+                                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' 
+                                    }}> 
+                                    <CardContent sx={{ padding: '16px' }}>
+                                        <Typography variant="h6" sx={{
+                                        color: 'white',
+                                        textAlign: 'center'
+                                        }}>{category.name}</Typography>
+                                    </CardContent>
+                                    </Card>
+                                </ButtonBase>
                             </Grid>
                             ))}
                         </Grid>
@@ -464,7 +466,7 @@ const Home = ({userId}) => {
                             height: '100%',
                         }}
                     >
-                        <Grid container spacing={0} justifyContent="center" style={{ overflowY: 'scroll', maxHeight: '60vh', padding: '20px' }}>
+                        <Grid container spacing={0} justifyContent="center" >
                             {skillOfferings.filter((offering) => userId !== offering.studentId).map((offering) => (
                                 <Grid item key={offering.skillOfferingId} xs={12} sm={6} md={6} lg={4} style={{ display: 'flex', justifyContent: 'center', marginRight: '5px', marginLeft: '5px' }}>
                                     <Card
