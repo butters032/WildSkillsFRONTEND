@@ -8,7 +8,7 @@ import wiski_banner from '../assets/images/HomeAssets/wiski-banner-full.png';
 
 export default function SkillExchange({userId}) {
     const [exchange, setExchange] = useState([])
-    const [id, setId] = useState('');
+    const [id, setId] = useState();
     const [status, setStatus] = useState('');
     const [title, setTitle] = useState('');
     const [scheduledStart, setScheduledStart] = useState('');
@@ -21,6 +21,9 @@ export default function SkillExchange({userId}) {
     const [openEdit, setOpenEdit] = useState(false)
     const [openComplete, setOpenComplete] = useState(false)
     const [dropDown, setDropDown] = useState(false)
+
+    const [chatter, setChatter] = useState();
+    const [profilePics, setProfilePics] = useState({});
     const [profilePic,setProfilePic]= useState('');
     const [currentUser,setCurrentUser] = useState('');
 
@@ -60,7 +63,7 @@ export default function SkillExchange({userId}) {
             scheduledStart,
             scheduledEnd,
         })
-        .then(() =>{
+        .then((response) =>{
             exchangeReload();
             setId('');
             setStatus('');
@@ -71,19 +74,20 @@ export default function SkillExchange({userId}) {
             setCurrentExchange(null);
             setOpenEdit(false);
             setOpenComplete(false);
+            //console.log(response)
         })
         .catch((error) =>{
             console.log('Error editing Skill Exchange',error);
         })
     }
 
-    const handleExchange = (id, status, title, scheduledStart, scheduledEnd) =>{
+    const handleExchange = (id, status, title, scheduledStart, scheduledEnd, chatterId) =>{
         setId(id);
         setStatus(status);
         setTitle(title);
         setScheduledStart(scheduledStart);
         setScheduledEnd(scheduledEnd);
-        setCurrentExchange({ id, status, title, scheduledStart, scheduledEnd });
+        setCurrentExchange({ id, status, title, scheduledStart, scheduledEnd, chatterId });
         setIsSelected(true);
     }
 
@@ -101,7 +105,8 @@ export default function SkillExchange({userId}) {
             api.get('/ongoing')
             .then((exc) => {
                 setExchange(exc.data);
-                console.log(exc);
+                handleProfile(exc.data.chatterId);
+                console.log(exc.data);
             })
             .catch((error) =>{
                 console.log('Error reading Skill Exchange',error);
@@ -109,23 +114,29 @@ export default function SkillExchange({userId}) {
         }
     }
 
+    // Display pp sa ka chat
+    const fetchProfilePic = async (chatterId) => {
+        try {
+            if (!profilePics[chatterId]) { // Avoid duplicate API calls
+                const response = await axios.get(`http://localhost:8080/api/wildSkills/student/getUserStudentRecord?id=${chatterId}`);
+                setProfilePics((prev) => ({...prev, [chatterId]: `data:image/png;base64,${response.data.avatar}`}));
+            }
+        } catch (error) {
+            console.error(`Error fetching profile pic for chatterId ${chatterId}`, error);
+        }
+    };
+
     //skill exchange display/get
     useEffect(() =>{
-        const currentUser = async (id) => {
-            try {
-                const response = await axios.get(`http://localhost:8080/api/wildSkills/student/getUserStudentRecord?id=${id}`);
-                console.log(response.data);
-                const fetchedStudent = response.data;
-                fetchedStudent.birthdate = parseDate(fetchedStudent.birthdate);
-                setStudent(fetchedStudent);
-                setProfilePic("data:image/png;base64,"+fetchedStudent.avatar);
-                setCurrentUser(userId);
-            } catch (error) {
-                console.error('Error fetching student data', error);
-            }
-        };
         exchangeReload();
     }, [isCompleted])
+    useEffect(() =>{
+        exchange.forEach((exc) => {
+            if (exc.chatterId) {
+                fetchProfilePic(exc.chatterId);
+            }
+        });
+    }, [exchange])
 
     const handleReviewClick = () => {
         if (currentExchange) {
@@ -147,7 +158,7 @@ export default function SkillExchange({userId}) {
                         <Button onClick={() => setIsCompleted(true)} sx={{ backgroundColor: isCompleted ? "#f5f5f5":'#e3e3e3', color: '#000', fontWeight: isCompleted ? 'bold':'normal', '&:focus': {outline: 'none'} }}>Completed</Button>
                     </Stack>
 
-                    {exchange.map((exc, index) => (
+                    {exchange.sort((a, b) => b.skillExchangeID - a.skillExchangeID).map((exc, index) => (
                         <Grid2 key={index}
                             sx={{ //boxShadow: 4,
                                 minHeight: 70,
@@ -165,12 +176,12 @@ export default function SkillExchange({userId}) {
                                     boxShadow: 6,
                                 },
                             }}
-                            onClick={() => { handleExchange(exc.skillExchangeID, exc.status, exc.title, exc.scheduledStart, exc.scheduledEnd) }}>
+                            onClick={() => { handleExchange(exc.skillExchangeID, exc.status, exc.title, exc.scheduledStart, exc.scheduledEnd, exc.chatterId) }}>
                             <Stack direction={"row"}>
                                 <Avatar
                                     alt="wiski-banner"
                                     variant="circle"
-                                    src={profilePic}
+                                    src={profilePics[exc.chatterId]}
                                     sx={{
                                         width: '55px',
                                         height: '55px',
@@ -198,7 +209,7 @@ export default function SkillExchange({userId}) {
                             <Avatar
                                 alt="wiski-banner"
                                 variant="circle"
-                                src={profilePic}
+                                src={profilePics[currentExchange?.chatterId]}
                                 sx={{
                                     width: '100px',
                                     height: '100px',
