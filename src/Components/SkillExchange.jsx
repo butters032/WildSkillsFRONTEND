@@ -151,11 +151,11 @@ export default function SkillExchange({userId}) {
     return (
         <>
             <Grid2 container spacing={2} direction="row" sx={{marginTop: 1.5, marginLeft: 2, marginRight: 2, width: '99%', minWidth: 'max-content'}}>
-                <Grid2 item sx={{ boxShadow: 3, minHeight: "100%", minWidth: 400, maxWidth: 400, borderRadius: 3, backgroundColor: "#f5f5f5", overflowY: "auto", overflowX: "hidden" }}>
-                    <Typography variant="h5" sx={{ justifySelf: "left", paddingLeft: 2, paddingTop: 1 }}>Active Exchange</Typography>
+                <Grid2 item sx={{ boxShadow: 3, minHeight: "100%", minWidth: 400, maxWidth: 400, borderRadius: 3, backgroundColor: "#1e1e1e", overflowY: "auto", overflowX: "hidden" }}>
+                    <Typography variant="h5" sx={{ justifySelf: "left", paddingLeft: 2, paddingTop: 1, color: '#ffffff' }}>Active Exchange</Typography>
                     <Stack direction={"row"} sx={{ marginLeft: 1, marginRight: 1, marginTop: 1 }}>
-                        <Button onClick={() => setIsCompleted(false)} sx={{ backgroundColor: isCompleted ? '#e3e3e3':'#f5f5f5', color: '#000', fontWeight: isCompleted ? 'normal':'bold', '&:focus': {outline: 'none'} }}>Ongoing</Button>
-                        <Button onClick={() => setIsCompleted(true)} sx={{ backgroundColor: isCompleted ? "#f5f5f5":'#e3e3e3', color: '#000', fontWeight: isCompleted ? 'bold':'normal', '&:focus': {outline: 'none'} }}>Completed</Button>
+                        <Button onClick={() => setIsCompleted(false)} sx={{ backgroundColor: isCompleted ? '#2c2c2c':'#424242', color: '#ffffff', fontWeight: isCompleted ? 'normal':'bold', '&:focus': {outline: 'none'} }}>Ongoing</Button>
+                        <Button onClick={() => setIsCompleted(true)} sx={{ backgroundColor: isCompleted ? "#424242":'#2c2c2c', color: '#ffffff', fontWeight: isCompleted ? 'bold':'normal', '&:focus': {outline: 'none'} }}>Completed</Button>
                     </Stack>
 
                     {exchange.sort((a, b) => b.skillExchangeID - a.skillExchangeID).map((exc, index) => (
@@ -169,10 +169,10 @@ export default function SkillExchange({userId}) {
                                 marginLeft: 1,
                                 marginRight: 1,
                                 cursor: "pointer",
-                                backgroundColor: "#f5f5f5",
+                                backgroundColor: "#1e1e1e",
                                 transition: "background-color 0.3s, box-shadow 0.3s",
                                 "&:hover": {
-                                    backgroundColor: "#e3e3e3",
+                                    backgroundColor: "#333333",
                                     boxShadow: 6,
                                 },
                             }}
@@ -189,8 +189,8 @@ export default function SkillExchange({userId}) {
                                     }}
                                 />
                                 <Stack direction={"column"} sx={{overflow: "hidden"}}>
-                                    <Typography variant="h5" sx={{whiteSpace: 'nowrap', overflow: "hidden", textOverflow: 'ellipsis', maxWidth: '100%'}}>{exc.title}</Typography>
-                                    <Typography variant="body1" justifySelf={"left"}>{/*<strong>Status: </strong>*/}{exc.status}</Typography>
+                                    <Typography variant="h5" sx={{whiteSpace: 'nowrap', overflow: "hidden", textOverflow: 'ellipsis', maxWidth: '100%', color: '#ffffff'}}>{exc.title}</Typography>
+                                    <Typography variant="body1" justifySelf={"left"} sx={{ color: '#bdbdbd' }}>{/*<strong>Status: </strong>*/}{exc.status}</Typography>
                                 </Stack>
                             </Stack>
                             {/*<Typography variant="body2" justifySelf={"left"}>Scheduled Start: {new Date(exc.scheduledStart).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}</Typography>
@@ -203,7 +203,7 @@ export default function SkillExchange({userId}) {
                     <Chat setCurrentUser={currentUser}/>
                 </Grid2>
 
-                <Grid2 item sx={{ boxShadow: 3, minHeight: 700, minWidth: 400, maxWidth: 400, borderRadius: 3, backgroundColor: "#f5f5f5", padding: 2 }}>
+                <Grid2 item sx={{ boxShadow: 3, minHeight: 700, minWidth: 400, maxWidth: 400, borderRadius: 3, backgroundColor: "#1e1e1e", padding: 2 }}>
                     <Stack direction="column" spacing={2}>
                         <Stack direction="column">
                             <Avatar
@@ -217,34 +217,34 @@ export default function SkillExchange({userId}) {
                                     marginBottom: 1
                                 }}
                             />
-                            <Typography variant="h5" sx={{ alignSelf: "center", textAlign: "center", fontWeight: 'bold'}}>
+                            <Typography variant="h5" sx={{ alignSelf: "center", textAlign: "center", fontWeight: 'bold', color: '#ffffff'}}>
                                 {currentExchange ? currentExchange.title : 'Select an Exchange'}
                             </Typography>
-                            <Typography variant="body1" sx={{ alignSelf: "center", color: '#555', marginBottom: 2 }}>
+                            <Typography variant="body1" sx={{ alignSelf: "center", color: '#9e9e9e', marginBottom: 2 }}>
                                 {currentExchange ? currentExchange.status : ''}
                             </Typography>
                             
                             {isSelected && (
-                                <Stack direction="row" alignItems="center" sx={{ alignSelf: "center", color: '#555'}}>
+                                <Stack direction="row" alignItems="center" sx={{ alignSelf: "center", color: '#9e9e9e'}}>
                                     <CalendarMonth sx={{marginRight: 1}}/>
-                                    <Typography variant="body1" sx={{ alignSelf: "center", color: '#555' }}>
+                                    <Typography variant="body1" sx={{ alignSelf: "center", color: '#9e9e9e' }}>
                                         Scheduled Start:
                                     </Typography>
                                 </Stack>
                             )}
-                            <Typography variant="body1" sx={{ alignSelf: "center", color: '#555' }}>
+                            <Typography variant="body1" sx={{ alignSelf: "center", color: '#9e9e9e' }}>
                                     {currentExchange ? new Date(currentExchange.scheduledStart).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }) : ''}
                             </Typography>
 
                             {isSelected && (
-                                <Stack direction="row" alignItems="center" sx={{ alignSelf: "center", color: '#555', marginTop: 2 }}>
+                                <Stack direction="row" alignItems="center" sx={{ alignSelf: "center", color: '#9e9e9e', marginTop: 2 }}>
                                     <CalendarMonth sx={{marginRight: 1}}/>
-                                    <Typography variant="body1" sx={{ alignSelf: "center", color: '#555' }}>
+                                    <Typography variant="body1" sx={{ alignSelf: "center", color: '#9e9e9e' }}>
                                         Scheduled End:
                                     </Typography>
                                 </Stack>
                             )}
-                            <Typography variant="body1" sx={{ alignSelf: "center", color: '#555', marginBottom: 2 }}>
+                            <Typography variant="body1" sx={{ alignSelf: "center", color: '#9e9e9e', marginBottom: 2 }}>
                                 {currentExchange ? new Date(currentExchange.scheduledEnd).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }) : ''}
                             </Typography>
                         </Stack>
@@ -255,7 +255,7 @@ export default function SkillExchange({userId}) {
                                     variant="text"
                                     onClick={() => setDropDown(!dropDown)}
                                     endIcon={dropDown ? <ArrowDropUp/> : <ArrowDropDown/>}
-                                    sx={{ maxWidth: '100%', minWidth: 250, alignSelf: 'left', fontWeight: 'bold', color: "#b03d3d", borderColor: "#b03d3d", '&:focus': {outline: 'none'}}}
+                                    sx={{ maxWidth: '100%', minWidth: 250, alignSelf: 'left', fontWeight: 'bold', color: "#ffffff", borderColor: "#b03d3d", '&:focus': {outline: 'none'}}}
                                 >
                                     Exchange Actions
                                 </Button>
@@ -265,7 +265,7 @@ export default function SkillExchange({userId}) {
                                             variant="text"
                                             onClick={() => setOpenEdit(true)}
                                             startIcon={<CalendarMonth/>}
-                                            sx={{ maxWidth: '100%', minWidth: 250, alignSelf: 'left', fontWeight: 'bold', color: "#b03d3d", borderColor: "#b03d3d", '&:focus': {outline: 'none'}}}>
+                                            sx={{ maxWidth: '100%', minWidth: 250, alignSelf: 'left', fontWeight: 'bold', color: "#ffffff", borderColor: "#b03d3d", '&:focus': {outline: 'none'}}}>
                                             Set Schedule
                                         </Button>
                                         <Dialog open={openEdit} onClose={() => setOpenEdit(false)}>
@@ -301,7 +301,7 @@ export default function SkillExchange({userId}) {
                                             variant="text"
                                             onClick={() => setOpenComplete(true)}
                                             startIcon={<Check/>}
-                                            sx={{ maxWidth: '100%', minWidth: 250, alignSelf: 'left', fontWeight: 'bold', color: "#b03d3d", borderColor: "#b03d3d", '&:focus': {outline: 'none'}}}>
+                                            sx={{ maxWidth: '100%', minWidth: 250, alignSelf: 'left', fontWeight: 'bold', color: "#ffffff", borderColor: "#b03d3d", '&:focus': {outline: 'none'}}}>
                                             Complete Exchange
                                         </Button>
                                         <Dialog open={openComplete} onClose={() => setOpenComplete(false)}>
@@ -319,7 +319,7 @@ export default function SkillExchange({userId}) {
                                             variant="text"
                                             onClick={() => setOpenDelete(true)}
                                             startIcon={<Delete/>}
-                                            sx={{ maxWidth: '100%', minWidth: 250, alignSelf: 'left', fontWeight: 'bold', color: "#b03d3d", borderColor: "#b03d3d", '&:focus': {outline: 'none'}}}>
+                                            sx={{ maxWidth: '100%', minWidth: 250, alignSelf: 'left', fontWeight: 'bold', color: "#ffffff", borderColor: "#b03d3d", '&:focus': {outline: 'none'}}}>
                                             Cancel Exchange
                                         </Button>
                                         <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
@@ -337,7 +337,7 @@ export default function SkillExchange({userId}) {
                                             variant="text"
                                             onClick={() => { handleReviewClick() }}
                                             startIcon={<Reviews/>}
-                                            sx={{ maxWidth: '100%', minWidth: 250, alignSelf: 'left', fontWeight: 'bold', color: "#b03d3d", borderColor: "#b03d3d", '&:focus': {outline: 'none'}}}
+                                            sx={{ maxWidth: '100%', minWidth: 250, alignSelf: 'left', fontWeight: 'bold', color: "#ffffff", borderColor: "#b03d3d", '&:focus': {outline: 'none'}}}
                                         >
                                             Review User
                                         </Button>

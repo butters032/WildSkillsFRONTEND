@@ -186,7 +186,7 @@ export default function  Chat  ({currentUser}) {
         container
         spacing={2}
         direction="column"
-        sx={{ justifyContent: 'right', marginTop: '0%', backgroundColor: '#FFFFFF', borderRadius: 5 }}
+        sx={{ justifyContent: 'right', marginTop: '0%', backgroundColor: '#1e1e1e', borderRadius: 5 }}
       >
         <Grid2
           sx={{
@@ -196,7 +196,7 @@ export default function  Chat  ({currentUser}) {
             maxWidth: 1050,
             width: 1050,
             borderRadius: 5,
-            backgroundColor: '#FFFFFF',
+            backgroundColor: '#1e1e1e',
             overflow: 'auto',
           }}
         >
