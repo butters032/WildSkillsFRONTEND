@@ -91,7 +91,8 @@ export default function Registration({ setIsRegistering,setDialogOpen,setDialogT
         //     return;
         // }
     
-        const avatarFile = avatarRef.current.files[0];
+        //const avatarFile = avatarRef.current.files[0];
+        const avatarFile = null;
         let avatarBase64 = null;
         
         if (avatarFile) {
@@ -262,7 +263,7 @@ return (
         />
 
 
-        <Box>
+        {/*<Box>
             <Typography variant="body1" fontWeight="medium" mb={1}>
                 Profile Picture
             </Typography>
@@ -275,7 +276,7 @@ return (
                 Upload Avatar
                 <input ref={avatarRef} hidden accept="image/*" type="file" />
             </Button>
-        </Box>
+        </Box>*/}
 
 
         <Grid2 container spacing={2}
