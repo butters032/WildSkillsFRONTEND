@@ -40,8 +40,8 @@ const ReviewList = ({ userId }) => {
 
     return (
         <Box sx={{ padding: 3, width: '100vw' }}>
-            <Typography variant="h4" fontWeight="bold" gutterBottom>
-                {reviews && reviews.length > 0 ? reviews[0].revieweeName : "No reviews available for this user yet"}
+            <Typography variant="h4" fontWeight="bold" gutterBottom sx={{color: '#ffffff'}}>
+                {reviews && reviews.length > 0 ? reviews[0].revieweeName+"'s Reviews" : "No reviews available for this user yet"}
             </Typography>
             <Divider sx={{ marginBottom: 3 }} />
             <Box display="flex" alignItems="center" sx={{ marginBottom: 3 }}>
@@ -55,11 +55,22 @@ const ReviewList = ({ userId }) => {
                     InputProps={{
                         endAdornment: (
                             <IconButton>
-                                <Search />
+                                <Search sx={{ color: 'white'}}/>
                             </IconButton>
                         ),
+                    style: { color: 'white' }
                     }}
-                    sx={{ marginRight: 2 }}
+                    sx={{ marginRight: 2,
+                        '& .MuiOutlinedInput-root': { 
+                            '& fieldset': { 
+                                borderColor: '#bdbdbd', 
+                            }, '&:hover fieldset': { 
+                                borderColor: '#bdbdbd',
+                            }, '&.Mui-focused fieldset': { 
+                                borderColor: '#bdbdbd', 
+                            }, 
+                        } 
+                    }}
                 />
             </Box>
             <Grid container spacing={3}>
@@ -74,19 +85,19 @@ const ReviewList = ({ userId }) => {
                             }}
                         >
                             <CardContent>
-                                <Typography variant="h6" fontWeight="bold">
+                                <Box display="flex" alignItems="center" sx={{ marginY: 1 }}>
+                                    <Rating precision={0.5} value={review.rating} readOnly />
+                                    <Typography variant="body2" sx={{ marginLeft: 1, fontSize: 20 }}>
+                                        {review.rating.toFixed(1)}
+                                    </Typography>
+                                </Box>
+                                {/*<Typography variant="h6" fontWeight="bold">
                                     {review.revieweeName || 'Unnamed Review'}
-                                </Typography>
+                                </Typography>*/}
                                 <Divider sx={{ marginY: 1 }} />
                                 <Typography variant="subtitle2" color="textSecondary">
                                     Reviewed by: {review.reviewerName}
                                 </Typography>
-                                <Box display="flex" alignItems="center" sx={{ marginY: 1 }}>
-                                    <Rating precision={0.5} value={review.rating} readOnly />
-                                    <Typography variant="body2" sx={{ marginLeft: 1 }}>
-                                        {review.rating.toFixed(1)}
-                                    </Typography>
-                                </Box>
                                 <Typography variant="body2" sx={{ marginBottom: 2 }}>
                                     {review.comment || 'No comment provided.'}
                                 </Typography>
