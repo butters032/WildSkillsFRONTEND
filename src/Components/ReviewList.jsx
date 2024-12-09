@@ -22,7 +22,6 @@ const ReviewList = ({ userId }) => {
             setReviews(response.data);
         } catch (error) {
             console.error("Error:", error);
-            alert('Failed to fetch reviews.');
         }
     };
 
@@ -42,7 +41,7 @@ const ReviewList = ({ userId }) => {
     return (
         <Box sx={{ padding: 3, width: '100vw' }}>
             <Typography variant="h4" fontWeight="bold" gutterBottom>
-                Student Reviews
+                {reviews && reviews.length > 0 ? reviews[0].revieweeName : "No reviews available for this user yet"}
             </Typography>
             <Divider sx={{ marginBottom: 3 }} />
             <Box display="flex" alignItems="center" sx={{ marginBottom: 3 }}>

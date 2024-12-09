@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
@@ -11,11 +11,12 @@ import Paper from '@mui/material/Paper';
 import { useLocation } from 'react-router-dom';
 
 const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.background.paper,
     ...theme.typography.body2,
-    padding: theme.spacing(1),
+    padding: theme.spacing(3),
     textAlign: 'center',
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.primary,
+    boxShadow: theme.shadows[3],
 }));
 
 const Review = () => {
@@ -24,8 +25,6 @@ const Review = () => {
 
     const [rating, setRating] = useState(2.5);
     const [comment, setComment] = useState('');
-
-
 
     const handleSubmit = async () => {
         if (!exchangeId) {
@@ -47,55 +46,81 @@ const Review = () => {
         }
     };
 
-    const debugtest = () => {
-        console.log(userId + " and " + exchangeId)
-    };
+    const CustomRating = styled(Rating)({
+        '& .MuiRating-icon': {
+            fontSize: '50px',
+            marginBottom: '20px'
+        },
+    });
 
     return (
-        <div style={{ border: '2px solid black', borderRadius: '10px', padding: '50px', marginTop: '10px' }}>
-            <h1>Rate your Experience</h1>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Item>
-                        <div>
-                            <Rating
+        <div
+            style={{
+                minHeight: '80vh',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#f5f5f5',
+                width: '100vw'
+            }}
+        >
+            <Box
+                sx={{
+                    border: '1px solid #ddd',
+                    borderRadius: '12px',
+                    padding: '40px',
+                    maxWidth: '500px',
+                    width: '90%',
+                    backgroundColor: '#fff',
+                    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+                }}
+            >
+                <Typography variant="h4" gutterBottom align="center" sx={{ fontWeight: 'bold' }}>
+                    Rate Your Experience
+                </Typography>
+                <Divider sx={{ margin: '20px 0' }} />
+                <Grid container spacing={3} justifyContent="center">
+                    <Grid item xs={12}>
+                        <Item>
+                            <Box sx={{ textAlign: 'center' }}>
+                            <CustomRating
                                 name="half-rating"
                                 value={rating}
                                 precision={0.5}
                                 onChange={(event, newValue) => setRating(newValue)}
-                                style={{ fontSize: '75px' }}
-                            />
-                            <br />
-                            <TextField
-                                id="outlined-multiline-static"
-                                multiline
-                                rows={4}
-                                placeholder="Comment"
-                                value={comment}
-                                onChange={(e) => setComment(e.target.value)}
-                                style={{ marginTop: '10px', width: '380px' }}
-                            />
-                            <br />
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={handleSubmit}
-                                style={{ marginTop: '15px' }}
-                            >
-                                Submit Review
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={debugtest}
-                                style={{ marginTop: '15px' }}
-                            >
-                                debug button
-                            </Button>
-                        </div>
-                    </Item>
+                            />;
+                                <TextField
+                                    id="outlined-multiline-static"
+                                    label="Write your comment"
+                                    multiline
+                                    rows={4}
+                                    placeholder="Share your experience..."
+                                    value={comment}
+                                    onChange={(e) => setComment(e.target.value)}
+                                    fullWidth
+                                    sx={{
+                                        marginBottom: '20px',
+                                        '& .MuiOutlinedInput-root': { borderRadius: '8px' },
+                                    }}
+                                />
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleSubmit}
+                                    sx={{
+                                        marginTop: '15px',
+                                        padding: '10px 20px',
+                                        borderRadius: '8px',
+                                        textTransform: 'none',
+                                    }}
+                                >
+                                    Submit Review
+                                </Button>
+                            </Box>
+                        </Item>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </Box>
         </div>
     );
 };
