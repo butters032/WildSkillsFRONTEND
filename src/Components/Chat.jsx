@@ -4,7 +4,7 @@ import axios from 'axios';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 
-export default function  Chat  ({currentUser}) {
+export default function  Chat  ({userId, chatId}) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const messageRef = useRef();
@@ -14,11 +14,12 @@ export default function  Chat  ({currentUser}) {
   const [originalMessage, setOriginalMessage] = useState('');
   const [stompClient, setStompClient] = useState(null);
   const [student, setStudent] = useState ({});
-  const [userId, setUserId] = useState ({});
+    
+  console.log('Thisis the user id '+ userId);
+  console.log('This is the Chat ' + chatId)
 
-    console.log('Thisis the userid'+ currentUser);
   const api = axios.create({
-    baseURL: 'http://localhost:8080/api/wildSkills/message/',
+    baseURL: 'http://localhost:8080/api/wildSkills/',
     timeout: 1000,
     headers: {
       'Content-Type': 'application/json',
@@ -26,24 +27,15 @@ export default function  Chat  ({currentUser}) {
     },
   });
 
-  const apiUser = axios.create({
-    baseURL: 'http://localhost:8080/api/wildSkills/student',
-    timeout: 1000,
-    headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-    }
-});
-
   useEffect(() => {
-
     const socket = new SockJS('http://localhost:8080/ws');
     const client = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
       onConnect: () => {
         console.log('Connected to WebSocket');
-        client.subscribe('/topic/chat', (messageOutput) => {
+        client.subscribe(`/topic/chat/${chatId}`, (messageOutput) => {
+          console.log('Received message:', messageOutput.body);
           const newMessage = JSON.parse(messageOutput.body);
           setMessages((prevMessages) => [...prevMessages, newMessage]);
         });
@@ -53,36 +45,23 @@ export default function  Chat  ({currentUser}) {
       },
       debug: (str) => console.log(str),
     });
-
+  
     client.activate();
     setStompClient(client);
+  
+    console.log('Messages ' + fetchMessages(chatId));
 
-    // Fetch initial messages
-    fetchMessages();
-    const fetchStudent = async (id) => {
-      try {
-          const response = await api.get(`/getUserStudentRecord?id=${id}`);
-          console.log(response.data);
-          const fetchedStudent = response.data;
-          fetchedStudent.birthdate = parseDate(fetchedStudent.birthdate);
-          setStudent(fetchedStudent);
-          //setProfilePic("data:image/png;base64,"+fetchedStudent.avatar);
-          console.log('USer details'+ student);
-      } catch (error) {
-          console.error('Error fetching student data', error);
-      }
+    if (chatId){
+      fetchMessages(chatId);
     }
-
-    if (userId) {
-      fetchStudent(userId);
-  }
+  
     return () => {
       if (client.active) {
         client.deactivate();
       }
     };
     
-}, [userId]);
+  }, [chatId]);  
 
   const sendMessage = () => {
     const message = messageRef.current.value.trim();
@@ -93,10 +72,11 @@ export default function  Chat  ({currentUser}) {
 
     if (stompClient && stompClient.connected) {
       stompClient.publish({
-        destination: '/app/sendMessage', // Destination in your backend
+        destination: `/app/sendMessage/${chatId}`, // Destination in your backend
         body: JSON.stringify({ message }),
       });
       messageRef.current.value = ''; // Clear input field
+      console.log('Message sent:', message);
     } else {
       console.error('STOMP client is not connected');
     }
@@ -119,7 +99,7 @@ export default function  Chat  ({currentUser}) {
     };
 
     api
-      .put(`/putMessageDetails/${currentMessageId}`, updatedMessage)
+      .put(`message/putMessageDetails/${currentMessageId}`, updatedMessage)
       .then((response) => {
         setMessages((prevMessages) =>
           prevMessages.map((msg) =>
@@ -156,22 +136,19 @@ export default function  Chat  ({currentUser}) {
     }
   };
 
-  const fetchMessages = () => {
-    
-
-    api
-      .get('/getAllMessage')
-      .then((response) => {
-        setMessages(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching messages:', error);
-      });
-  };
+  const fetchMessages = (chatId) => { 
+    api .get(`message/getMessages/${chatId}`) 
+      .then((response) => { 
+        console.log('Fetched messages:', response.data); // Log fetched messages setMessages(response.data); 
+        }) 
+        .catch((error) => { 
+          console.error('Error fetching messages:', error); 
+        });
+      };
 
   const deleteMessage = (id) => {
     api
-      .delete(`/deleteMessageDetails/${id}`)
+      .delete(`message/deleteMessageDetails/${id}`)
       .then(() => {
         fetchMessages();
       })
@@ -224,16 +201,18 @@ export default function  Chat  ({currentUser}) {
               onClick={() => handleClickMessage(msg.messageId)}
             >
               <Typography style={{ color: 'white' }} variant="body1" justifySelf="left">
-                {msg.message}{' '}
+                {msg.message || 'No message content'}{' '}
                 {clickedMessages[msg.messageId] && (
                   <>
                     <br />
                     <span style={{ color: 'lightgray', marginLeft: '10px' }}>
-                      {new Date(msg.timeStamp).toLocaleString('en-US', {
-                        hour: 'numeric',
-                        minute: '2-digit',
-                        hour12: true,
-                      })}
+                      {msg.timeStamp
+                        ? new Date(msg.timeStamp).toLocaleString('en-US', {
+                          hour: 'numeric',
+                          minute: '2-digit',
+                          hour12: true,
+                      })
+                    : 'No timestamp'}
                     </span>
                     <br />
                     <span style={{ color: 'lightgray', marginLeft: '10px' }}>

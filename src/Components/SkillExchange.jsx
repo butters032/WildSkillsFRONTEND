@@ -25,7 +25,7 @@ export default function SkillExchange({userId}) {
     const [chatter, setChatter] = useState();
     const [profilePics, setProfilePics] = useState({});
     const [profilePic,setProfilePic]= useState('');
-    const [currentUser,setCurrentUser] = useState('');
+    const [chatId, setChatId] = useState('');
 
     const navigate = useNavigate();
 
@@ -81,7 +81,7 @@ export default function SkillExchange({userId}) {
         })
     }
 
-    const handleExchange = (id, status, title, scheduledStart, scheduledEnd, chatterId) =>{
+    const handleExchange = (id, status, title, scheduledStart, scheduledEnd, chatterId, chatId) =>{
         setId(id);
         setStatus(status);
         setTitle(title);
@@ -89,6 +89,8 @@ export default function SkillExchange({userId}) {
         setScheduledEnd(scheduledEnd);
         setCurrentExchange({ id, status, title, scheduledStart, scheduledEnd, chatterId });
         setIsSelected(true);
+        setChatId(chatId);
+       //console.log(chatId);
     }
 
     const exchangeReload = () => {
@@ -129,6 +131,7 @@ export default function SkillExchange({userId}) {
     //skill exchange display/get
     useEffect(() =>{
         exchangeReload();
+        //console.log(exchange);
     }, [isCompleted])
     useEffect(() =>{
         exchange.forEach((exc) => {
@@ -147,6 +150,9 @@ export default function SkillExchange({userId}) {
             alert("Please select an exchange before leaving a review.");
         }
     };
+    
+    
+
 
     return (
         <>
@@ -176,7 +182,7 @@ export default function SkillExchange({userId}) {
                                     boxShadow: 6,
                                 },
                             }}
-                            onClick={() => { handleExchange(exc.skillExchangeID, exc.status, exc.title, exc.scheduledStart, exc.scheduledEnd, exc.chatterId) }}>
+                            onClick={() => { handleExchange(exc.skillExchangeID, exc.status, exc.title, exc.scheduledStart, exc.scheduledEnd, exc.chatterId, exc.chatId) }}>
                             <Stack direction={"row"}>
                                 <Avatar
                                     alt="wiski-banner"
@@ -200,7 +206,7 @@ export default function SkillExchange({userId}) {
                 </Grid2>
 
                 <Grid2>
-                    <Chat setCurrentUser={currentUser}/>
+                    <Chat userId={userId} chatId={chatId}/>
                 </Grid2>
 
                 <Grid2 item sx={{ boxShadow: 3, minHeight: 700, minWidth: 400, maxWidth: 400, borderRadius: 3, backgroundColor: "#1e1e1e", padding: 2 }}>

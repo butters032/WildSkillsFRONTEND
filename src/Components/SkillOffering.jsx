@@ -160,7 +160,18 @@ const SkillOffering = ({ userId }) => {
         scrollContainer.current.scrollBy({ left: 250, behavior: 'smooth' });
     };
 
+    const createChat = (id) => {
+        axios.post(`http://localhost:5173/sendMessage/{chatId}`, null, {
+            params: {
+                studentIds: [userId],
+                skillExchangeID: id,
+            }
+        })
+      }
 
+    const getExchange = () => {
+        axios.get(`http://localhost:8080/api/wildSkills/skillExchange/exchange/${id}`)
+    }
 return (
     <div style={{ textAlign: 'center', color: 'black', background: 'black', minHeight: '85vh', padding: '20px', minWidth: '97.8vw' }}>
         <div style={{ color: 'white', fontSize: '50px' }}>Skill Offerings</div>
