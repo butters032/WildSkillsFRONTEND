@@ -18,7 +18,7 @@ import ReviewList from './Components/ReviewList';
 import UpdateReview from './Components/ReviewUpdate';
 import BrowseCategory from './Components/BrowseCategory';
 import SearchOffering from './Components/SearchOffering';
-import { Button } from '@mui/material';
+import { Button, Grid2, Stack, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import wiski_logo from './assets/images/HomeAssets/wiski-logo.png';
 import { Buffer } from 'buffer';
@@ -36,7 +36,19 @@ const App = () => {
     const [userId, setUserId] = useState(() => localStorage.getItem('userId') || 'blank');
     const [authId, setAuthId] = useState(() => localStorage.getItem('authId') || 'blank');
     const [authDetails, setAuthDetails] = useState({});
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState(''); 
+    const [tempQuery, setTempQuery] = useState('');
+
+    const handleKeyDown = (e) => { if (e.key === 'Enter') { 
+        setQuery(tempQuery);
+        console.log('Search triggered with query:', tempQuery);
+    } 
+    }; 
+    
+    const handleSearchIconClick = () => { 
+        setQuery(tempQuery);
+        console.log('Search triggered with query:', tempQuery); 
+    };
     
 
     const defaultVal = 'blank';
@@ -121,6 +133,12 @@ const App = () => {
         }
     });
 
+
+    const handleCategory = (category) => {
+        console.log('Clicked category:', category);
+        navigate('/browsecategories', { state: { category } });;
+    };
+
     /*
     const logoutHandle = async () => {
         localStorage.removeItem('authId');
@@ -140,84 +158,89 @@ const App = () => {
         <>
             <Router>
                 <div>
-                    <div className="apptxt" style={{ borderBottom: "solid 2px", paddingBottom: 20, backgroundColor: "#b03d3d" }}>
-                        <Link to="/" className="apptxt" style={{ marginLeft: '15%', marginTop: 10 }}>
-                            <img src={wiski_logo} alt="Wiski Logo" style={{ width: 'auto', height: '50px' }} />
-                        </Link>
-                    </div>
+                    <Grid2><Stack direction={'row'}>
+                                 
+                        <div className="apptxt" style={{ borderBottom: "solid 2px", paddingBottom: 20, backgroundColor: "#b03d3d" }}>
+                            <Link to="/" className="apptxt" style={{ marginLeft: '15%', marginTop: 10 }}>
+                                <img src={wiski_logo} alt="Wiski Logo" style={{ width: 'auto', height: '50px' }} />
+                            </Link>
+                        </div>
 
-                    <div className="routetxt">
-                        <nav>
-                            {authenticated && (
-                                <>
-                                   {/*} <TextField 
-                                    id="outlined-basic" 
-                                    variant="outlined" 
-                                    size="small" 
-                                    placeholder="What service are you looking for today?" 
-                                    style={{ width: '400px', marginBottom: '10px', border: '1px solid white', borderRadius: '6px', backgroundColor: 'white' }}
-                                    value={query} // Bind state to input value
-                                    onChange={(e) => setQuery(e.target.value)} // Update query state
-                                    InputProps={{
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <SearchIcon  style={{ cursor: 'pointer' }} />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />/*}
-                                    {/*<Link to="/categories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Categories</Link>*/}
-                                    {userId === 1 && (
-                                        <Link to="/adminDashboard" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>
-                                            Admin Dashboard
-                                        </Link>
-                                    )}
-                                    <Link to="/browsecategories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Browse Categories</Link>
-                                    <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Offerings</Link>
-                                    <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Exchange</Link>
-                                    <Link to="/reviewList" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Reviews</Link>
-                                    <Link to="/profile" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Profile</Link>
+                        <div className="routetxt">
+                            <nav>
+                                {authenticated && (
+                                    <>
+                                    { <TextField 
+                                        id="outlined-basic" 
+                                        variant="outlined" 
+                                        size="small" 
+                                        placeholder="What service are you looking for today?" 
+                                        style={{ width: '400px', marginBottom: '10px', border: '1px solid white', borderRadius: '6px', backgroundColor: 'white' }}
+                                        value={tempQuery} 
+                                        onChange={(e) => setTempQuery(e.target.value)}
+                                        onKeyDown={handleKeyDown}
+                                        InputProps={{
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <SearchIcon style={{ cursor: 'pointer' }} onClick={handleSearchIconClick} />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                    />
+                                    }
+                                        {/*<Link to="/categories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Categories</Link>*/}
+                                        {userId === 1 && (
+                                            <Link to="/adminDashboard" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>
+                                                Admin Dashboard
+                                            </Link>
+                                        )}
+                                        <Link to="/browsecategories" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Browse Categories</Link>
+                                        <Link to="/skill-offerings" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Offerings</Link>
+                                        <Link to="/skill-exchange" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Skill Exchange</Link>
+                                        <Link to="/profile" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Profile</Link>
 
-                                    <Link to="/login" style={{ margin: '10px', textDecoration: 'none', color: 'white' }} onClick={() => updateAuthentication(false)}>Logout</Link>
+                                        <Link to="/login" style={{ margin: '10px', textDecoration: 'none', color: 'white' }} onClick={() => updateAuthentication(false)}>Logout</Link>
 
-                                    {/*<Link to="/login" style={{ margin: '10px', textDecoration: 'none', color: 'white' }} onClick={()=>updateAuthentication(false)}>Logout</Link>*/}
+                                        {/*<Link to="/login" style={{ margin: '10px', textDecoration: 'none', color: 'white' }} onClick={()=>updateAuthentication(false)}>Logout</Link>*/}
 
 
-                                   {/*<Link to="/adminDashboard" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Admin</Link>*/}
+                                    {/*<Link to="/adminDashboard" style={{ margin: '10px', textDecoration: 'none', color: 'white' }}>Admin</Link>*/}
 
-                                    
+                                        
 
-                                    {/*<Button onClick={()=>updateAuthentication(false)} style={{ color: 'white' }}>Logout</Button>*/}
+                                        {/*<Button onClick={()=>updateAuthentication(false)} style={{ color: 'white' }}>Logout</Button>*/}
 
-                                </>
-                            )}
-                        </nav>
-                    </div>
+                                    </>
+                                )}
+                            </nav>
+                            
+                        </div>
 
-                    <Routes>
-                        <Route path="/" element={authenticated ? <Home userId={userId}/> : <Navigate to="/login" />} />
-                        {/*<Route path="/categories" element={authenticated ? <Category userId={userId}/> : <Navigate to="/login" />} />*/}
-                        <Route path="/browsecategories" element={authenticated ? <BrowseCategory userId={userId}/> : <Navigate to="/login" />} />
-                        <Route path="/skill-offerings" element={authenticated ? <SkillOffering userId={userId}/> : <Navigate to="/login" />} />
-                        <Route path="/registration" element={<Registration userId={userId}/>} />
-                        <Route path="/skill-exchange" element={authenticated ? <SkillExchange userId={userId}/> : <Navigate to="/login" />} />
-                        <Route path="/gig/:id" element={authenticated ? <Gig userId={userId} /> : <Navigate to="/login" />} />
-                        <Route path="/gig-home/:id" element={authenticated ? <GigHome userId={userId} /> : <Navigate to="/login" />} />
-                        <Route path="/search/" element={authenticated ? <SearchOffering query={query} userId={userId} /> : <Navigate to="/login" />} />
-                        <Route path="/chat" element={authenticated ? <Chat userId={userId}/> : <Navigate to="/login" />} />
-                        <Route path="/reviews" element={authenticated ? <Review userId={userId}/> : <Navigate to="/login" />} />
-                        <Route path="/reviewList" element={authenticated ? <ReviewList userId={userId}/> : <Navigate to="/login" />} />
-                        <Route path="/update-review/:id" element={authenticated ? <UpdateReview userId={userId}/> : <Navigate to="/login" />} />
-                        <Route path="/profile" element={authenticated ? <Profile userId={userId}/> : <Navigate to="/login" />} />
+                        <Routes>
+                            <Route path="/" element={authenticated ? <Home userId={userId}/> : <Navigate to="/login" />} />
+                            {/*<Route path="/categories" element={authenticated ? <Category userId={userId}/> : <Navigate to="/login" />} />*/}
+                            <Route path="/browsecategories" element={authenticated ? <BrowseCategory userId={userId}/> : <Navigate to="/login" />} />
+                            <Route path="/skill-offerings" element={authenticated ? <SkillOffering userId={userId}/> : <Navigate to="/login" />} />
+                            <Route path="/registration" element={<Registration userId={userId}/>} />
+                            <Route path="/skill-exchange" element={authenticated ? <SkillExchange userId={userId}/> : <Navigate to="/login" />} />
+                            <Route path="/gig/:id" element={authenticated ? <Gig userId={userId} /> : <Navigate to="/login" />} />
+                            <Route path="/gig-home/:id" element={authenticated ? <GigHome userId={userId} /> : <Navigate to="/login" />} />
+                            <Route path="/search/" element={authenticated ? <SearchOffering query={query} userId={userId} /> : <Navigate to="/login" />} />
+                            <Route path="/chat" element={authenticated ? <Chat userId={userId}/> : <Navigate to="/login" />} />
+                            <Route path="/reviews" element={authenticated ? <Review userId={userId}/> : <Navigate to="/login" />} />
+                            <Route path="/reviewList" element={authenticated ? <ReviewList userId={userId}/> : <Navigate to="/login" />} />
+                            <Route path="/update-review/:id" element={authenticated ? <UpdateReview userId={userId}/> : <Navigate to="/login" />} />
+                            <Route path="/profile" element={authenticated ? <Profile userId={userId}/> : <Navigate to="/login" />} />
 
-                        <Route path="/login" element={authenticated ? <Navigate to="/" /> : <Login setUserId={setUserId} setAuthId={setAuthId}/>} />
+                            <Route path="/login" element={authenticated ? <Navigate to="/" /> : <Login setUserId={setUserId} setAuthId={setAuthId}/>} />
 
-                        <Route path="/login" element={authenticated ?  <Navigate to="/" /> :<Login setUserId={setUserId} setAuthId={setAuthId}/>} />
+                            <Route path="/login" element={authenticated ?  <Navigate to="/" /> :<Login setUserId={setUserId} setAuthId={setAuthId}/>} />
 
-                        <Route path="/categories" element={authenticated && userId === 1 ? <Category userId={userId}/> : <Navigate to="/login" />} />
-                        <Route path="/adminDashboard" element={authenticated && userId === 1 ? (<Dashboard userId={userId} />) : (<Navigate to={authenticated ? "/" : "/login"} />)}/>   
+                            <Route path="/categories" element={authenticated && userId === 1 ? <Category userId={userId}/> : <Navigate to="/login" />} />
+                            <Route path="/adminDashboard" element={authenticated && userId === 1 ? (<Dashboard userId={userId} />) : (<Navigate to={authenticated ? "/" : "/login"} />)}/>   
 
-                    </Routes>
+                         </Routes>
+                    </Stack></Grid2>
                 </div>
             </Router>
         </>

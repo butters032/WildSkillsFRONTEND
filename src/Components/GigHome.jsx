@@ -12,6 +12,7 @@ const GigHome = ({userId}) => {
     const [gigData, setGigData] = useState(location.state || null); 
     const [studentName, setStudentName] = useState('');
     const [showFullDescription, setShowFullDescription] = useState(false);
+    const [averageRating, setAverageRating] = useState(null);
     const navigate = useNavigate();
 
     const api = axios.create({
@@ -46,6 +47,22 @@ const GigHome = ({userId}) => {
             console.log('Error creating Skill Exchange',error);
         })
     }
+
+    useEffect(() => {
+        if (gigData?.studentId) {
+            const fetchAverageRating = async () => {
+                try {
+                    const response = await axios.get(
+                        `http://localhost:8080/api/wildSkills/review/getAve/${gigData.studentId}`
+                    );
+                    setAverageRating(response.data || 0);
+                } catch (error) {
+                    console.error('Error fetching average rating:', error);
+                }
+            };
+            fetchAverageRating();
+        }
+    }, [gigData?.studentId]);
 
     useEffect(() => {
         const fetchGigData = async () => {
@@ -117,7 +134,10 @@ const GigHome = ({userId}) => {
                                 {studentName || 'Loading...'}
                             </Typography>
                             <Stack direction={'row'}>
-                                <Rating precision={0.5} value='3.5' readOnly /> <Typography>(3.5)</Typography>
+                                <Rating precision={0.5} value={averageRating} readOnly />
+                                <Typography variant="body2" sx={{ marginLeft: 1 }}>
+                                    ({averageRating ? averageRating : "No reviews yet"})
+                                </Typography>
                             </Stack>
                         </Box>
                     </Box>
