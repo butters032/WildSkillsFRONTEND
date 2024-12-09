@@ -184,6 +184,7 @@ const GigHome = ({userId}) => {
 
                         <Button
                             onClick={() => navigate('/reviewList', { state: { id: gigData.studentId } })}
+                            sx={{color:'#b03d3d'}}
                         >
                             View All Reviews
                         </Button>

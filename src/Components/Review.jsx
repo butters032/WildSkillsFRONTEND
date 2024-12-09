@@ -60,7 +60,7 @@ const Review = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: '#f5f5f5',
+                backgroundColor: '#121212',
                 width: '100vw'
             }}
         >
@@ -112,6 +112,7 @@ const Review = () => {
                                         padding: '10px 20px',
                                         borderRadius: '8px',
                                         textTransform: 'none',
+                                        backgroundColor: '#b03d3d'
                                     }}
                                 >
                                     Submit Review
