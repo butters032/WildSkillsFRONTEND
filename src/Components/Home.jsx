@@ -169,8 +169,8 @@ const Home = ({userId}) => {
                     backgroundRepeat: 'no-repeat',
                     //minHeight: '78vh',
                     //minWidth: '100vw',
-                    minHeight: '100vh',
-                    minWidth: '99.2vw',
+                    minHeight: '89vh',
+                    minWidth: '100vw',
                     display: 'flex',
                 }}
             >
@@ -338,7 +338,7 @@ const Home = ({userId}) => {
                 </Box>
             </Grid2>
     
-            <Grid
+            {/*<Grid
                 container
                 sx={{
                     backgroundColor: '#222222',
@@ -416,25 +416,6 @@ const Home = ({userId}) => {
                         </Grid>
                         <Button onClick={() => scroll('right')}>&gt;</Button>
                         </div>
-                       {/* <Grid container spacing={27} sx={{ flexWrap: 'nowrap', maxWidth: '90vw' }}>
-                            {categories.map((category) => (
-                                <Grid item xs={12} sm={6} md={4} key={category.categoryId}>
-                                    <Card
-                                        style={{
-                                            minWidth: 200,
-                                            justifyItems: 'center',
-                                            backgroundColor: '#333333',
-                                        }}
-                                    >
-                                        <CardContent>
-                                            <Typography variant="h6" sx={{ color: 'white', textAlign: 'center' }}>
-                                                {category.name}
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                            ))}
-                        </Grid> */}
                     </Box>
     
                     <Typography
@@ -508,7 +489,7 @@ const Home = ({userId}) => {
                         </Grid>
                     </Grid>
                 </Stack>
-            </Grid>
+            </Grid>*/}
         </>
     );
     

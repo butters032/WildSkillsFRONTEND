@@ -68,7 +68,8 @@ export default function Registration({ setIsRegistering,setDialogOpen,setDialogT
             nameRef.current.value == '' &&
             emailRef.current.value == '' &&
             passwordRef.current.value == '' &&
-            confirmpasswordRef.current.value == ''
+            confirmpasswordRef.current.value == '' &&
+            gender == ''
         ){
             //alert("Fill All Fields");
             setDialogOpen(true);
@@ -92,7 +93,7 @@ export default function Registration({ setIsRegistering,setDialogOpen,setDialogT
         // }
     
         //const avatarFile = avatarRef.current.files[0];
-        const avatarFile = null;
+        const avatarFile = '';
         let avatarBase64 = null;
         
         if (avatarFile) {

@@ -72,7 +72,7 @@ const Category = ({ onCategoriesChange }) => {
     };
 
     return (
-        <Box sx={{ width: '95vw', margin: '20px auto', textAlign: 'center', alignContent: 'center', justifyContent: 'center', padding:'50px' }}>
+        <Box sx={{ height: '73vh', width: '95vw', margin: '20px auto', textAlign: 'center', alignContent: 'center', justifyContent: 'center', padding:'50px',backgroundColor:'#ffffff' }}>
             <Typography variant="h4" gutterBottom>
                 Categories
             </Typography>
@@ -128,7 +128,18 @@ const Category = ({ onCategoriesChange }) => {
                 <TextField
                     label="Category Name"
                     value={newCategoryName}
-                    style={{width: '10vw'}}
+                    style={{color: '#ffffff'}}
+                    sx={{ marginRight: 2,
+                        '& .MuiOutlinedInput-root': { 
+                            '& fieldset': { 
+                                borderColor: '#bdbdbd', 
+                            }, '&:hover fieldset': { 
+                                borderColor: '#bdbdbd',
+                            }, '&.Mui-focused fieldset': { 
+                                borderColor: '#bdbdbd', 
+                            }, 
+                        } 
+                    }}
                     onChange={(e) => setNewCategoryName(e.target.value)}
                     required
                 />

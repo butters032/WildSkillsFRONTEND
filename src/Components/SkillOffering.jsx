@@ -173,7 +173,7 @@ const SkillOffering = ({ userId }) => {
         axios.get(`http://localhost:8080/api/wildSkills/skillExchange/exchange/${id}`)
     }
 return (
-    <div style={{ textAlign: 'center', color: 'black', background: 'black', minHeight: '85vh', padding: '20px', minWidth: '97.8vw' }}>
+    <div style={{ textAlign: 'center', color: 'black', background: '#222222', minHeight: '85vh', padding: '20px', minWidth: '97.8vw' }}>
         <div style={{ color: 'white', fontSize: '50px' }}>Skill Offerings</div>
         <Button 
             variant="contained" 
