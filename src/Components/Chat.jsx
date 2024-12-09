@@ -34,7 +34,7 @@ export default function  Chat  ({userId, chatId}) {
       reconnectDelay: 5000,
       onConnect: () => {
         console.log('Connected to WebSocket');
-        client.subscribe(`/topic/chat/${chatId}`, (messageOutput) => {
+        client.subscribe(`/topic/chat/`, (messageOutput) => {
           console.log('Received message:', messageOutput.body);
           const newMessage = JSON.parse(messageOutput.body);
           setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -72,7 +72,7 @@ export default function  Chat  ({userId, chatId}) {
 
     if (stompClient && stompClient.connected) {
       stompClient.publish({
-        destination: `/app/sendMessage/${chatId}`, // Destination in your backend
+        destination: `/app/sendMessage/`, // Destination in your backend
         body: JSON.stringify({ message }),
       });
       messageRef.current.value = ''; // Clear input field
@@ -137,7 +137,7 @@ export default function  Chat  ({userId, chatId}) {
   };
 
   const fetchMessages = (chatId) => { 
-    api .get(`message/getMessages/${chatId}`) 
+    api .get(`message/getAllMessage`) 
       .then((response) => { 
         console.log('Fetched messages:', response.data); // Log fetched messages setMessages(response.data); 
         }) 
