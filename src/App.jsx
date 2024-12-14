@@ -175,10 +175,11 @@ const App = () => {
                                         variant="outlined" 
                                         size="small" 
                                         placeholder="What service are you looking for today?" 
-                                        style={{ width: '400px', marginBottom: '10px', border: '1px solid white', borderRadius: '6px', backgroundColor: 'white' }}
+                                        style={{ width: '400px', marginBottom: '10px', border: '1px solid white', borderRadius: '6px', backgroundColor: 'white', opacity:0 }}
                                         value={tempQuery} 
                                         onChange={(e) => setTempQuery(e.target.value)}
                                         onKeyDown={handleKeyDown}
+                                        disabled
                                         InputProps={{
                                             endAdornment: (
                                                 <InputAdornment position="end">

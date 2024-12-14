@@ -11,6 +11,8 @@ import { blue } from '@mui/material/colors';
 import wiski_banner from '../assets/images/HomeAssets/wiski-banner-full.png';
 import wiski_cat from '../assets/images/HomeAssets/wiski-cat.png';
 import wiski_card_small from '../assets/images/HomeAssets/wiski-small-card.png';
+import {  InputAdornment } from '@mui/material/';
+import SearchIcon from '@mui/icons-material/Search'; 
 
 
 //for the font
@@ -33,8 +35,26 @@ const BrowseCategory = ({userId}) => {
     const [showCheckboxes, setShowCheckboxes] = useState(false);
     const [categories, setCategories] = useState([]);
     const [currCategory, setCurrCategory] = useState('All Skill Exchange');
+    
 
     const scrollRef = useRef(null);
+
+        const [query, setQuery] = useState(''); 
+        const [tempQuery, setTempQuery] = useState('');
+    
+        const handleKeyDown = (e) => { if (e.key === 'Enter') { 
+            setQuery(tempQuery);
+            console.log('Search triggered with query:', tempQuery);
+            fetchSkill(query);
+        } 
+        }; 
+        
+        const handleSearchIconClick = () => { 
+            setQuery(tempQuery);
+            console.log('Search triggered with query:', tempQuery);
+            fetchSkill(query);
+        };
+        
 
     const scroll = (direction) => {
       if (direction === 'left') {
@@ -96,6 +116,24 @@ const BrowseCategory = ({userId}) => {
             setSkillOfferings(response.data);
         } catch (error) {
             console.error('Error fetching categories:', error);
+        }
+    };
+
+    const fetchSkill = async (tempQuery) => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/wildSkills/skilloffering/search',{
+                params:{query},
+                headers: {
+                    'Content-Type': 'application/json', 
+                    Accept: 'application/json', 
+                },
+            });
+            console.log('Fetched Skill Offerings:', response.data);
+            //setCurrCategory(tempQuery); 
+            setSkillOfferings(response.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching skill offerings:', error);
         }
     };
 
@@ -169,6 +207,24 @@ const BrowseCategory = ({userId}) => {
                     minHeight:'90vh'
                 }}>
                     <Stack direction={'column'}>
+                        <TextField 
+                            
+                            id="outlined-basic" 
+                            variant="outlined" 
+                            size="small" 
+                            placeholder="What service are you looking for today?" 
+                            style={{ width: '400px', marginBottom: '10px', border: '1px solid white', borderRadius: '6px', backgroundColor: 'white', marginTop:'60px',alignSelf: 'center'}}
+                            value={tempQuery} 
+                            onChange={(e) => setTempQuery(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <SearchIcon style={{ cursor: 'pointer' }} onClick={handleSearchIconClick} />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
                         <Typography
                             sx={{
                                 fontWeight: 'bold',

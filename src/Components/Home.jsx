@@ -275,6 +275,18 @@ const Home = ({userId}) => {
                             ))}
                         </Grid>
                     </Box>
+                    <Box
+                        sx={{
+                            paddingLeft: 25,
+                            paddingTop: 10,
+                            maxWidth: 600,
+                            justifyContent: 'center',
+                        }}
+                    >
+
+
+                    </Box>
+                    
                 </Stack>
     
                 <Box sx={{ display: 'flex', flexGrow: 1, justifyContent: 'flex-end', paddingRight: '120px' }}>
