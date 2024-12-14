@@ -33,6 +33,7 @@ export default function Registration({ setIsRegistering,setDialogOpen,setDialogT
     const [birthdate, setBirthdate] = useState(new Date());
     const [gender, setGender] = useState('');
     const navigate = useNavigate();
+    const [verified,setVerified] = useState(false);
 
     const api = axios.create({
         baseURL: 'http://localhost:8080/api/wildSkills/student',
@@ -64,17 +65,27 @@ export default function Registration({ setIsRegistering,setDialogOpen,setDialogT
         }
             */
     const newStudent = async () => {
-        if(
-            nameRef.current.value == '' &&
-            emailRef.current.value == '' &&
-            passwordRef.current.value == '' &&
-            confirmpasswordRef.current.value == '' &&
-            gender == ''
-        ){
-            //alert("Fill All Fields");
+        if (
+            nameRef.current.value === '' || 
+            emailRef.current.value === '' || 
+            passwordRef.current.value === '' || 
+            confirmpasswordRef.current.value === '' || 
+            gender === ''
+        ) {
             setDialogOpen(true);
             setDialogTitle("Missing Fields");
             setDialogMessage("Fill All Fields");
+            setVerified(false);
+            return;
+        }
+        if (
+            emailRef.current.value.includes("@yahoo.com")==false &&
+            emailRef.current.value.includes("@gmail.com")==false
+        ) {
+            setDialogOpen(true);
+            setDialogTitle("Invalid Email");
+            setDialogMessage("Email must be a valid email address i.e (@yahoo.com or @gmail.com)");
+            setVerified(false);
             return;
         }
         if (confirmpasswordRef.current.value !== passwordRef.current.value) {
@@ -82,9 +93,9 @@ export default function Registration({ setIsRegistering,setDialogOpen,setDialogT
             setDialogOpen(true);
             setDialogTitle("Password Mismatch");
             setDialogMessage("Passwords Don't Match");
+            setVerified(false);
             return;
         }
-    
         // Validate email (optional logic)
         // const emailExists = await checkEmailExists(emailRef.current.value);
         // if (emailExists) {
@@ -143,6 +154,7 @@ export default function Registration({ setIsRegistering,setDialogOpen,setDialogT
     
             //alert("Registration Success");
             console.log(req.data);
+            setVerified(true);
             navigate('/login');
         } catch (error) {
             console.error('Error during registration:', error);
@@ -288,12 +300,7 @@ return (
                 <Button
                     onClick={()=>{
                     newStudent();
-                    if(
-                        nameRef.current.value != '' &&
-                        emailRef.current.value != '' &&
-                        passwordRef.current.value != '' &&
-                        confirmpasswordRef.current.value != '' &&
-                        (confirmpasswordRef.current.value == passwordRef.current.value)){
+                    if(verified===true){
                             setDialogOpen(true);
                             setDialogTitle("Registration Success");
                             setDialogMessage("You have succesfully registered!");
