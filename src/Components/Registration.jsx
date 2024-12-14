@@ -155,6 +155,10 @@ export default function Registration({ setIsRegistering,setDialogOpen,setDialogT
             //alert("Registration Success");
             console.log(req.data);
             setVerified(true);
+            setDialogOpen(true);
+                            setDialogTitle("Registration Success");
+                            setDialogMessage("You have succesfully registered!");
+                            redirectToReg();
             navigate('/login');
         } catch (error) {
             console.error('Error during registration:', error);
@@ -300,12 +304,6 @@ return (
                 <Button
                     onClick={()=>{
                     newStudent();
-                    if(verified===true){
-                            setDialogOpen(true);
-                            setDialogTitle("Registration Success");
-                            setDialogMessage("You have succesfully registered!");
-                            redirectToReg();
-                        }
                     
                 }}
                 variant="contained"

@@ -26,6 +26,7 @@ export default function SkillExchange({userId}) {
     const [profilePics, setProfilePics] = useState({});
     const [profilePic,setProfilePic]= useState('');
     const [chatId, setChatId] = useState('');
+    
 
     const navigate = useNavigate();
 
@@ -107,7 +108,7 @@ export default function SkillExchange({userId}) {
             api.get('/ongoing')
             .then((exc) => {
                 setExchange(exc.data);
-                handleProfile(exc.data.chatterId);
+                //handleProfile(exc.data.chatterId);
                 console.log(exc.data);
             })
             .catch((error) =>{
