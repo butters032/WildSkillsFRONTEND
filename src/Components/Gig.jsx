@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent,Box, Typography, Avatar,Chip,Paper, IconButton, TextField,Divider, Button, Switch, FormControlLabel } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Edit from '@mui/icons-material/Edit';
 import Save from '@mui/icons-material/Save';
+import { Close } from '@mui/icons-material';
 import Person from '@mui/icons-material/Person';
 import axios from 'axios';
 
@@ -71,6 +72,10 @@ const Gig = ({userId}) => {
         setIsEditing(true);
     };
 
+    const handleCloseClick = () => {
+        navigate('/skill-offerings');
+    };
+
     const handleSaveClick = async () => {
         const skillOfferingData = {
             title: editTitle,
@@ -121,6 +126,10 @@ const Gig = ({userId}) => {
                     </Box>
                     <IconButton color="primary" onClick={handleEditClick} sx={{ marginLeft: 'auto' }}>
                         <Edit />
+                    </IconButton>
+                    
+                    <IconButton color="primary" onClick={handleCloseClick}>
+                        <Close />
                     </IconButton>
                 </Box>
                 <Divider sx={{ marginBottom: 2 }} />

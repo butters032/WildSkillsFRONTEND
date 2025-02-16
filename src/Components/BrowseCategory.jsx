@@ -34,7 +34,7 @@ const BrowseCategory = ({userId}) => {
     const [selectedIds, setSelectedIds] = useState([]);
     const [showCheckboxes, setShowCheckboxes] = useState(false);
     const [categories, setCategories] = useState([]);
-    const [currCategory, setCurrCategory] = useState('All Skill Exchange');
+    const [currCategory, setCurrCategory] = useState('All Skill Offerings');
     
 
     const scrollRef = useRef(null);
@@ -42,18 +42,17 @@ const BrowseCategory = ({userId}) => {
         const [query, setQuery] = useState(''); 
         const [tempQuery, setTempQuery] = useState('');
     
-        const handleKeyDown = (e) => { if (e.key === 'Enter') { 
-            setQuery(tempQuery);
+        const handleKeyDown = (e) => {
+            if (e.key === 'Enter') {
+              console.log('Search triggered with query:', tempQuery);
+              fetchSkill(tempQuery);
+            }
+          };
+          
+          const handleSearchIconClick = () => {
             console.log('Search triggered with query:', tempQuery);
-            fetchSkill(query);
-        } 
-        }; 
-        
-        const handleSearchIconClick = () => { 
-            setQuery(tempQuery);
-            console.log('Search triggered with query:', tempQuery);
-            fetchSkill(query);
-        };
+            fetchSkill(tempQuery);
+          };
         
 
     const scroll = (direction) => {
@@ -119,23 +118,22 @@ const BrowseCategory = ({userId}) => {
         }
     };
 
-    const fetchSkill = async (tempQuery) => {
+    const fetchSkill = async (searchQuery) => {
         try {
-            const response = await axios.get('http://localhost:8080/api/wildSkills/skilloffering/search',{
-                params:{query},
-                headers: {
-                    'Content-Type': 'application/json', 
-                    Accept: 'application/json', 
-                },
-            });
-            console.log('Fetched Skill Offerings:', response.data);
-            //setCurrCategory(tempQuery); 
-            setSkillOfferings(response.data);
-            setLoading(false);
+          const response = await axios.get('http://localhost:8080/api/wildSkills/skilloffering/search', {
+            params: { query: searchQuery },
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+          });
+          console.log('Fetched Skill Offerings:', response.data);
+          setSkillOfferings(response.data);
+          setLoading(false);
         } catch (error) {
-            console.error('Error fetching skill offerings:', error);
+          console.error('Error fetching skill offerings:', error);
         }
-    };
+      };
 
     //---------------------------
 
@@ -207,95 +205,73 @@ const BrowseCategory = ({userId}) => {
                     minHeight:'90vh'
                 }}>
                     <Stack direction={'column'}>
-                        <TextField 
-                            
-                            id="outlined-basic" 
-                            variant="outlined" 
-                            size="small" 
-                            placeholder="What service are you looking for today?" 
-                            style={{ width: '400px', marginBottom: '10px', border: '1px solid white', borderRadius: '6px', backgroundColor: 'white', marginTop:'60px',alignSelf: 'center'}}
-                            value={tempQuery} 
-                            onChange={(e) => setTempQuery(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            InputProps={{
+                        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ padding: '60px 50px 20px' }}>
+                            {/* Search Bar on the left */}
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                size="small"
+                                placeholder="What service are you looking for today?"
+                                value={tempQuery}
+                                onChange={(e) => setTempQuery(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <SearchIcon style={{ cursor: 'pointer' }} onClick={handleSearchIconClick} />
+                                    <SearchIcon style={{ cursor: 'pointer' }} onClick={handleSearchIconClick} />
                                     </InputAdornment>
                                 ),
-                            }}
-                        />
-                        <Typography
-                            sx={{
-                                fontWeight: 'bold',
-                                color: 'white',
-                                textAlign: 'left',
-                                fontFamily: 'Proxima Nova',
-                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                fontSize: 30,
-                                paddingTop:'30px',
-                                paddingBottom:'20px',
-                                paddingLeft: '50px',
-                                lineHeight: 1
-                            }}>
-                                Browse Categories
-                        </Typography>
-                        <Box
-                            container
-                            sx={{
-                                //backgroundColor: 'white',
-                                paddingTop: '20px',
-                                paddingBottom: '20px',
-                                paddingLeft: '20px',
-                                overflowX: 'scroll',
-                                display: 'flex',
-                                height: "100%",
-                                maxHeight:"50vh",
-                                '&::-webkit-scrollbar': {
-                                    width: '0.4em'
-                                },
-                                '&::-webkit-scrollbar-track': {
-                                    boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-                                    webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
-                                },
-                                '&::-webkit-scrollbar-thumb': {
-                                    backgroundColor: 'rgba(0,0,0,.1)',
-                                    outline: '1px solid slategrey'
-                                }
+                                }}
+                                sx={{
+                                width: '400px',
+                                backgroundColor: 'white',
+                                borderRadius: '6px',
+                                }}
+                            />
 
-                                
-                            }}
-                        >
-                             <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Button onClick={() => scroll('left')}>&lt;</Button>
-                                <Grid container spacing={1} sx={{ flexWrap: 'nowrap', maxWidth: '78vw', overflowX: 'hidden',margin:'auto' }} ref={scrollRef}>
-                                    {categories.map((category) => (
-                                    <Grid item xs={12} sm={6} md={4} key={category.categoryId}
-                                        onClick={() => fetchSkillOfferings(category.name)}
-                                        sx={{ cursor: "pointer", flex: '0 0 auto', marginBottom: '10px' }}>
-                                        <Card style={{ 
-                                        margin: '10px', 
-                                        borderRadius: '15px', 
-                                        minWidth: 200, 
-                                        justifyItems: 'center', 
-                                        backgroundColor: '#333333', 
-                                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' 
-                                        }}>
-                                        <CardContent sx={{ padding: '16px' }}>
-                                            <Typography variant="h6" sx={{
+                            {/* Category Buttons on the right */}
+                            <Box sx={{ display: 'flex', alignItems: 'center', overflowX: 'auto', maxWidth: '60vw' }}>
+                                <Grid container spacing={1} sx={{ flexWrap: 'nowrap' }} ref={scrollRef}>
+                                {categories.map((category) => (
+                                    <Grid
+                                    item
+                                    key={category.categoryId}
+                                    sx={{ flex: '0 0 auto', margin: '0 10px', cursor: 'pointer' }}
+                                    onClick={() => fetchSkillOfferings(category.name)}
+                                    >
+                                    <Card
+                                        sx={{
+                                        borderRadius: '15px',
+                                        minWidth: 150,
+                                        height: '40px',
+                                        backgroundColor: '#333333',
+                                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        padding: '0 8px',
+                                        }}
+                                    >
+                                        <CardContent sx={{ padding: 0, '&:last-child': { paddingBottom: 0 } }}>
+                                        <Typography
+                                            variant="body2"
+                                            sx={{
                                             color: 'white',
-                                            textAlign: 'center'
-                                            }}>{category.name}</Typography>
+                                            textAlign: 'center',
+                                            fontSize: '0.8rem',
+                                            padding: 0,
+                                            margin: 0,
+                                            }}
+                                        >
+                                            {category.name}
+                                        </Typography>
                                         </CardContent>
-                                        </Card>
+                                    </Card>
                                     </Grid>
-                                    ))}
+                                ))}
                                 </Grid>
-                                <Button onClick={() => scroll('right')}>&gt;</Button>
-                                </div>
-
-
                             </Box>
+                        </Stack>
                         <Typography
                             sx={{
                                 fontWeight: 'bold',
