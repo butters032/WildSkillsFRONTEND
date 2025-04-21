@@ -1,22 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button, Grid2, Stack, Typography } from '@mui/material';
 import axios from 'axios';
-import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
 
-export default function  Chat  ({userId, chatId}) {
+export default function Chat({ userId }) {
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
   const messageRef = useRef();
   const [isEditing, setIsEditing] = useState(false);
   const [currentMessageId, setCurrentMessageId] = useState(null);
   const [clickedMessages, setClickedMessages] = useState({});
   const [originalMessage, setOriginalMessage] = useState('');
-  const [stompClient, setStompClient] = useState(null);
-  const [student, setStudent] = useState ({});
-    
-  console.log('Thisis the user id '+ userId);
-  console.log('This is the Chat ' + chatId)
 
   const api = axios.create({
     baseURL: 'http://localhost:8080/api/wildSkills/',
@@ -27,61 +19,41 @@ export default function  Chat  ({userId, chatId}) {
     },
   });
 
-  useEffect(() => {
-    const socket = new SockJS('http://localhost:8080/ws');
-    const client = new Client({
-      webSocketFactory: () => socket,
-      reconnectDelay: 5000,
-      onConnect: () => {
-        console.log('Connected to WebSocket');
-        client.subscribe(`/topic/chat/`, (messageOutput) => {
-          console.log('Received message:', messageOutput.body);
-          const newMessage = JSON.parse(messageOutput.body);
-          setMessages((prevMessages) => [...prevMessages, newMessage]);
-        });
-      },
-      onWebSocketError: (error) => {
-        console.error('WebSocket error:', error);
-      },
-      debug: (str) => console.log(str),
-    });
-  
-    client.activate();
-    setStompClient(client);
-  
-    console.log('Messages ' + fetchMessages(chatId));
+  // Fetch all messages
+  const fetchMessages = () => {
+    api
+      .get('message/getAllMessage') // Fetch all messages
+      .then((response) => {
+        console.log('Fetched messages:', response.data);
+        setMessages(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching messages:', error);
+      });
+  };
 
-    if (chatId){
-      fetchMessages(chatId);
-    }
-  
-    return () => {
-      if (client.active) {
-        client.deactivate();
-      }
-    };
-    
-  }, [chatId]);  
-
+  // Send a new message
   const sendMessage = () => {
     const message = messageRef.current.value.trim();
+
     if (message === '') {
       console.log('Message is blank');
       return;
     }
 
-    if (stompClient && stompClient.connected) {
-      stompClient.publish({
-        destination: `/app/sendMessage/`, // Destination in your backend
-        body: JSON.stringify({ message }),
+    // Send the message to the backend
+    api
+      .post('message/postMessageRecord', { message }) // Save the message
+      .then(() => {
+        fetchMessages(); // Refresh messages after sending
+        messageRef.current.value = ''; // Clear the input field
+      })
+      .catch((error) => {
+        console.error('Error sending message:', error.response?.data || error.message);
       });
-      messageRef.current.value = ''; // Clear input field
-      console.log('Message sent:', message);
-    } else {
-      console.error('STOMP client is not connected');
-    }
   };
 
+  // Edit an existing message
   const editMessage = () => {
     const message = messageRef.current.value.trim();
 
@@ -94,27 +66,35 @@ export default function  Chat  ({userId, chatId}) {
     }
 
     const updatedMessage = {
-      messageId: currentMessageId,
       message: message,
     };
 
     api
-      .put(`message/putMessageDetails/${currentMessageId}`, updatedMessage)
-      .then((response) => {
-        setMessages((prevMessages) =>
-          prevMessages.map((msg) =>
-            msg.messageId === currentMessageId ? { ...msg, message } : msg
-          )
-        );
-        messageRef.current.value = '';
+      .put(`message/putMessageDetails/${currentMessageId}`, updatedMessage) // Update the message
+      .then(() => {
+        fetchMessages(); // Refresh messages after editing
+        messageRef.current.value = ''; // Clear the input field
         setIsEditing(false);
         setCurrentMessageId(null);
       })
       .catch((error) => {
-        console.error('Error editing Message', error);
+        console.error('Error editing message:', error);
       });
   };
 
+  // Delete a message
+  const deleteMessage = (id) => {
+    api
+      .delete(`message/deleteMessageDetails/${id}`) // Delete the message
+      .then(() => {
+        fetchMessages(); // Refresh messages after deletion
+      })
+      .catch((error) => {
+        console.error('Error deleting message:', error);
+      });
+  };
+
+  // Handle editing a message
   const handleEditMessage = (messageId, message) => {
     setCurrentMessageId(messageId);
     setOriginalMessage(message);
@@ -122,6 +102,7 @@ export default function  Chat  ({userId, chatId}) {
     setIsEditing(true);
   };
 
+  // Handle toggling message options
   const handleClickMessage = (id) => {
     setClickedMessages((prevState) => ({
       ...prevState,
@@ -129,6 +110,7 @@ export default function  Chat  ({userId, chatId}) {
     }));
   };
 
+  // Handle Enter key for sending or editing messages
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -136,26 +118,10 @@ export default function  Chat  ({userId, chatId}) {
     }
   };
 
-  const fetchMessages = (chatId) => { 
-    api .get(`message/getAllMessage`) 
-      .then((response) => { 
-        console.log('Fetched messages:', response.data); // Log fetched messages setMessages(response.data); 
-        }) 
-        .catch((error) => { 
-          console.error('Error fetching messages:', error); 
-        });
-      };
-
-  const deleteMessage = (id) => {
-    api
-      .delete(`message/deleteMessageDetails/${id}`)
-      .then(() => {
-        fetchMessages();
-      })
-      .catch((error) => {
-        console.error('Error deleting message:', error);
-      });
-  };
+  // Fetch messages when the component mounts
+  useEffect(() => {
+    fetchMessages();
+  }, []);
 
   return (
     <>
@@ -208,11 +174,11 @@ export default function  Chat  ({userId, chatId}) {
                     <span style={{ color: 'lightgray', marginLeft: '10px' }}>
                       {msg.timeStamp
                         ? new Date(msg.timeStamp).toLocaleString('en-US', {
-                          hour: 'numeric',
-                          minute: '2-digit',
-                          hour12: true,
-                      })
-                    : 'No timestamp'}
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true,
+                          })
+                        : 'No timestamp'}
                     </span>
                     <br />
                     <span style={{ color: 'lightgray', marginLeft: '10px' }}>
@@ -273,4 +239,4 @@ export default function  Chat  ({userId, chatId}) {
       </Grid2>
     </>
   );
-};
+}
